@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progression · Historia</title>
+<meta name="description" content="Métiers, niveau, statistiques, zones, spécialités, rangs et passe d'aventure : comment on progresse sur Historia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Historia">
+<meta property="og:title" content="Historia · Progression">
+<meta property="og:description" content="Métiers, niveau, statistiques, zones, spécialités et rangs : comment on progresse sur Historia.">
+<meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.png">
+<meta property="og:url" content="https://antaooo.github.io/historia-site/progression.html">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10241A">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body class="page-interne">
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<div class="progression" aria-hidden="true"><i id="progression"></i></div>
+
+<header class="entete" id="entete">
+  <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
+  <nav class="nav" id="nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a><a href="progression.html" aria-current="page">Progression</a><a href="galerie.html">Galerie</a><a href="#">Wiki</a><a href="#">Nouveautés</a><a href="#">Boutique</a>
+  </nav>
+  <div class="entete-droite">
+    <span class="en-ligne"><span class="point" aria-hidden="true"></span><b>[n]</b>&nbsp;en ligne</span>
+    <a href="index.html#finale" class="bouton bouton-or bouton-petit">Jouer</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<nav class="sommaire" aria-label="Sommaire de la page">
+  <a href="#metiers">Métiers</a><a href="#stats">Statistiques</a><a href="#zones">Zones</a><a href="#specialites">Spécialités</a><a href="#rangs">Rangs</a><a href="#passe">Passe</a>
+</nav>
+
+<main id="contenu">
+  <section class="bandeau bandeau-haut">
+    <div class="decor" data-theme="plaines" aria-hidden="true"></div>
+    <div class="conteneur bandeau-contenu">
+      <p class="numero">Progression</p>
+      <h1 class="h1-page">Écris ta propre légende</h1>
+      <p class="sous-texte">Un seul niveau, de 0 à 100, nourri par quatre métiers. Plus il monte, plus tu deviens fort, et plus le monde s'ouvre devant toi.</p>
+      <span class="etiquette">En préparation · les chiffres peuvent encore bouger</span>
+    </div>
+  </section>
+
+  <!-- MÉTIERS -->
+  <section class="section-page" id="metiers" aria-labelledby="metiers-h">
+    <div class="decor decor-voile" data-theme="aube" aria-hidden="true"></div>
+    <div class="conteneur grille-2col">
+      <div>
+        <p class="numero">01 · Métiers</p>
+        <h2 id="metiers-h">Un niveau, quatre métiers</h2>
+        <p class="sous-texte">Tout le monde pratique les quatre. Chaque métier monte en jouant, et ton niveau global est leur somme. Chaque niveau de métier donne aussi des points pour ses talents.</p>
+        <div class="metiers-cartes">
+          <article class="carte-verre"><h3>Mineur</h3><p>Creuser, extraire, trouver les filons. Talents : fortune, solidité des pioches…</p></article>
+          <article class="carte-verre"><h3>Artisan</h3><p>Fabriquer, assembler, entretenir l'équipement. 3 à 5 talents à 3 niveaux.</p></article>
+          <article class="carte-verre"><h3>Cuisinier</h3><p>Préparer les plats qui font tenir les héros. 3 à 5 talents à 3 niveaux.</p></article>
+          <article class="carte-verre"><h3>Chasseur</h3><p>Traquer les créatures et leurs seigneurs. 3 à 5 talents à 3 niveaux.</p></article>
+        </div>
+      </div>
+      <div class="calculateur carte-verre" aria-labelledby="calc-h">
+        <h3 id="calc-h">Essaie : règle tes métiers</h3>
+        <div class="reglages" id="reglages"></div>
+        <div class="total"><span>Niveau global</span><b id="total">40</b></div>
+        <div class="barre-metiers" id="barre-metiers" aria-hidden="true"></div>
+        <p class="note">Exemple avec 25 niveaux par métier. Le maximum de chaque métier reste à fixer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATISTIQUES -->
+  <section class="section-page" id="stats" aria-labelledby="stats-h">
+    <div class="decor decor-voile" data-theme="jungle" aria-hidden="true"></div>
+    <div class="conteneur">
+      <p class="numero">02 · Statistiques</p>
+      <h2 id="stats-h">Cinq statistiques à répartir</h2>
+      <p class="sous-texte">Chaque niveau te donne des points à placer où tu veux. Guerrier increvable, chasseur rapide, aventurier chanceux : à toi de choisir.</p>
+      <div class="stats" id="stats-liste"></div>
+      <p class="points-restants">Points restants : <b id="points">10</b> <button type="button" class="lien-bouton" id="remise">Tout reprendre</button></p>
+    </div>
+  </section>
+
+  <!-- ZONES -->
+  <section class="section-page" id="zones" aria-labelledby="zones-h">
+    <div class="decor decor-voile" data-theme="steppe" aria-hidden="true"></div>
+    <div class="conteneur">
+      <p class="numero">03 · Zones</p>
+      <h2 id="zones-h">Plus loin, plus dangereux</h2>
+      <p class="sous-texte">Le monde est découpé en anneaux de 500 blocs autour du centre. Dans chacun, les créatures ont l'un de 5 niveaux tirés au hasard. Au bout du monde, à 10 000 blocs, elles atteignent le niveau 100. Les boss suivent la même règle, avec un niveau plancher.</p>
+      <div class="zones carte-verre">
+        <label for="distance" class="curseur-label">Distance au centre : <b id="distance-val">2 000</b> blocs</label>
+        <input type="range" id="distance" class="curseur" min="0" max="10000" step="50" value="2000">
+        <div class="anneaux" id="anneaux" aria-hidden="true"></div>
+        <p class="zone-info" id="zone-info" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPÉCIALITÉS -->
+  <section class="section-page" id="specialites" aria-labelledby="spe-h">
+    <div class="decor decor-voile" data-theme="cimes" aria-hidden="true"></div>
+    <div class="conteneur">
+      <p class="numero">04 · Spécialités</p>
+      <h2 id="spe-h">Deux spécialités, aux niveaux 30 et 60</h2>
+      <p class="sous-texte">Elles permettent de fabriquer ou d'acheter des consommables très puissants, à peu d'utilisations. Choisis-en deux :</p>
+      <div class="specialites" id="specialites-liste" role="group" aria-label="Choisir deux spécialités"></div>
+      <p class="choix" id="choix" aria-live="polite">Aucune spécialité choisie.</p>
+    </div>
+  </section>
+
+  <!-- RANGS, MONNAIES, RAFFINAGE -->
+  <section class="section-page" id="rangs" aria-labelledby="rangs-h">
+    <div class="decor decor-voile" data-theme="royaume" aria-hidden="true"></div>
+    <div class="conteneur">
+      <p class="numero">05 · Rangs et exploits</p>
+      <h2 id="rangs-h">Gravis les rangs</h2>
+      <p class="sous-texte">Ton rang monte avec ton niveau et tes exploits : boss vaincus, donjons, étages de la Tour. Il débloque les services de la capitale. Voici les blasons des rangs actuels ; la liste définitive en comptera 13.</p>
+      <ol class="echelle" id="echelle"></ol>
+      <div class="trois-col">
+        <article class="carte-verre"><h3>Deux monnaies</h3><p>La monnaie courante se gagne avec les métiers, les quêtes et les votes. La monnaie d'exploit ne s'obtient qu'au combat difficile : boss, donjons, Tour.</p></article>
+        <article class="carte-verre"><h3>Raffinage</h3><p>Chaque objet légendaire est lié à un métier. Seul le talent de raffinage de ce métier permet de le faire monter, jusqu'à 5 étoiles.</p></article>
+        <article class="carte-verre"><h3>Rien ne s'achète</h3><p>La puissance se gagne en jouant. La boutique ne vend que des cosmétiques, des titres et la piste premium du passe.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASSE -->
+  <section class="section-page" id="passe" aria-labelledby="passe-h">
+    <div class="decor decor-voile" data-theme="sakuras" aria-hidden="true"></div>
+    <div class="conteneur grille-2col">
+      <div>
+        <p class="numero">06 · Saisons</p>
+        <h2 id="passe-h">Le passe d'aventure</h2>
+        <p class="sous-texte">Chaque saison apporte ses quêtes et ses 100 paliers. La piste gratuite donne tout ce qui compte pour progresser ; la piste premium n'ajoute que des cosmétiques.</p>
+        <a class="bouton bouton-or" href="index.html#finale">Rejoindre l'aventure</a>
+      </div>
+      <figure class="capture carte-verre"><img src="img/captures/passe.png" alt="Menus du passe d'aventure en jeu : accueil, paliers et quêtes" loading="lazy"><figcaption>Maquette des menus du passe, en jeu</figcaption></figure>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur pied-in">
+    <span class="marque marque-petite"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</span>
+    <nav aria-label="Liens du pied de page"><a href="progression.html">Progression</a><a href="galerie.html">Galerie</a><a href="#">Wiki</a><a href="#">Boutique</a><a href="#">Voter</a><a href="#">Mentions légales</a></nav>
+    <p>Serveur non officiel : ni approuvé par Mojang ou Microsoft, ni associé à eux.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="pixel.js"></script>
+<script src="commun.js"></script>
+<script src="extras.js"></script>
+<script src="progression.js"></script>
+</body>
+</html>

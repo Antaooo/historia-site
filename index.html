@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Historia · Le royaume t'attend</title>
+<meta name="description" content="Historia, serveur Minecraft d'aventure en français : un monde fait main, plus de 500 créatures et plus de 100 boss légendaires.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Historia">
+<meta property="og:title" content="Historia · Le royaume t'attend">
+<meta property="og:description" content="Serveur Minecraft d'aventure en français : un monde fait main, plus de 500 créatures et plus de 100 boss légendaires.">
+<meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.png">
+<meta property="og:url" content="https://antaooo.github.io/historia-site/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10241A">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<div class="progression" aria-hidden="true"><i id="progression"></i></div>
+
+<header class="entete" id="entete">
+  <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
+  <nav class="nav" id="nav" aria-label="Navigation principale">
+    <a href="index.html" aria-current="page">Accueil</a><a href="progression.html">Progression</a><a href="galerie.html">Galerie</a><a href="#">Wiki</a><a href="#">Nouveautés</a><a href="#">Boutique</a>
+  </nav>
+  <div class="entete-droite">
+    <span class="en-ligne"><span class="point" aria-hidden="true"></span><b>[n]</b>&nbsp;en ligne</span>
+    <a href="#finale" class="bouton bouton-or bouton-petit">Jouer</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<nav class="chapitres" aria-label="Chapitres de la présentation">
+  <a href="#ouverture" data-chap="0"><span>Ouverture</span></a>
+  <a href="#monde" data-chap="1"><span>I · Le monde</span></a>
+  <a href="#creatures" data-chap="2"><span>II · Les créatures</span></a>
+  <a href="#legendes" data-chap="3"><span>III · Les légendes</span></a>
+  <a href="#progression-chap" data-chap="4"><span>IV · Ta légende</span></a>
+  <a href="#tour" data-chap="5"><span>V · La Tour</span></a>
+  <a href="#galerie" data-chap="6"><span>VI · Galerie</span></a>
+  <a href="#finale" data-chap="7"><span>Rejoindre</span></a>
+</nav>
+
+<main id="contenu">
+
+<!-- ================= OUVERTURE ================= -->
+<section class="ouverture chap" id="ouverture" data-chap="0" aria-labelledby="titre">
+  <div class="decor" id="decor-ouverture" data-theme="royaume" aria-hidden="true"></div>
+  <div class="ouverture-contenu">
+    <p class="sur-titre revele">Serveur Minecraft d'aventure · Java 26.2</p>
+    <h1 id="titre" class="titre-or revele">Historia</h1>
+    <p class="accroche revele">Un royaume dessiné à la main. Plus de 500 créatures.<br>Plus de 100 boss tapis dans leurs antres.</p>
+    <div class="ouverture-actions revele">
+      <button type="button" class="ip" data-copier="historia.mine.fun" aria-label="Copier l'adresse historia.mine.fun">
+        <span class="ip-adresse">historia.mine.fun</span><span class="ip-copier">Copier</span>
+      </button>
+      <a href="#monde" class="bouton bouton-verre">Commencer la visite<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m0 0-6-6m6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+  <div class="indice-defiler" aria-hidden="true"><span></span>Défile</div>
+</section>
+
+<!-- ================= I · LE MONDE ================= -->
+<section class="monde chap" id="monde" data-chap="1" aria-roledescription="carrousel" aria-labelledby="monde-h">
+  <div class="monde-entete">
+    <p class="numero">Chapitre I</p>
+    <h2 id="monde-h">Un monde <em>fait main</em></h2>
+  </div>
+  <div class="piste" id="piste" aria-live="polite"></div>
+  <button type="button" class="fleche fleche-monde fleche-g" data-biome="-1" aria-label="Biome précédent"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button type="button" class="fleche fleche-monde fleche-d" data-biome="1" aria-label="Biome suivant"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <div class="points-biomes" id="points-biomes" role="group" aria-label="Choisir un biome"></div>
+  <a class="monde-wiki" href="galerie.html">64 biomes · voir la galerie →</a>
+</section>
+
+<!-- ================= II · LES CRÉATURES ================= -->
+<section class="scene chap" id="creatures" data-chap="2" data-scene="creatures" style="--ecrans: 2.6" aria-labelledby="creatures-h">
+  <div class="scene-pin creatures-pin">
+    <div class="decor decor-voile" data-theme="plaines" aria-hidden="true"></div>
+    <div class="mosaique" id="mosaique" aria-hidden="true"></div>
+    <div class="creatures-texte">
+      <p class="numero">Chapitre II</p>
+      <p class="compteur" id="compteur" aria-hidden="true">0</p>
+      <h2 id="creatures-h">créatures à découvrir</h2>
+      <p class="boss-plus"><b>+ de 100</b> boss légendaires</p>
+      <p class="sous-texte">Elfes, nains, gobelins, vikings, pirates, morts-vivants, golems, bêtes des abysses… Triées sur le volet, et plus redoutables à mesure que tu t'éloignes du centre du royaume.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= III · LES LÉGENDES ================= -->
+<section class="legendes chap" id="legendes" data-chap="3" aria-labelledby="legendes-h">
+  <div class="decor decor-voile" data-theme="cimes" aria-hidden="true"></div>
+  <div class="legendes-halo" id="halo" aria-hidden="true"></div>
+  <div class="conteneur legendes-grille">
+    <div class="legendes-texte">
+      <p class="numero">Chapitre III</p>
+      <h2 id="legendes-h">Une légende par biome</h2>
+      <p class="sous-texte">Plus de 100 boss règnent sur le royaume, chacun dans son antre. Leur repaire n'est écrit nulle part.</p>
+      <div class="fiche" aria-live="polite">
+        <p class="fiche-lieu" id="fiche-lieu">Falaises blanches</p>
+        <p class="fiche-nom" id="fiche-nom">Le Minotaure</p>
+        <p class="fiche-titre" id="fiche-titre">Gardien du labyrinthe</p>
+        <div class="fiche-stats">
+          <div><span>Points de vie</span><b id="fiche-pv">1 250</b></div>
+          <div><span>Danger</span><span class="jauge" aria-hidden="true"><i id="fiche-danger"></i></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="scene-boss">
+      <div class="socle" aria-hidden="true"></div>
+      <img id="boss-image" class="boss-image" src="img/boss/p_lr_minotaur.png" alt="Le Minotaure">
+    </div>
+  </div>
+  <div class="conteneur">
+    <div class="selecteur-barre">
+      <button type="button" class="fleche" data-pas="-1" aria-label="Légende précédente"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="selecteur" id="selecteur" role="tablist" aria-label="Choisir une légende"></div>
+      <button type="button" class="fleche" data-pas="1" aria-label="Légende suivante"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= IV · TA LÉGENDE ================= -->
+<section class="progression-chap chap" id="progression-chap" data-chap="4" aria-labelledby="prog-h">
+  <div class="decor decor-voile" data-theme="grottes" aria-hidden="true"></div>
+  <div class="conteneur prog-grille">
+    <div class="prog-texte">
+      <p class="numero">Chapitre IV</p>
+      <h2 id="prog-h">Écris ta propre légende</h2>
+      <p class="sous-texte">Quatre métiers font ton niveau, de 0 à 100. Plus il monte, plus tu peux t'aventurer loin du centre, là où vivent les créatures les plus dangereuses.</p>
+      <div class="metiers" role="group" aria-label="Métiers">
+        <button type="button" class="metier actif" data-metier="Mineur" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7c4-3.5 11-4 16-2-3 .5-6 1.5-8 3"/><path d="M12 8 4 20"/></svg><span>Mineur</span></button>
+        <button type="button" class="metier" data-metier="Artisan" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4l6 6-3 3-6-6z"/><path d="M11 7 3 15l3 3 8-8"/></svg><span>Artisan</span></button>
+        <button type="button" class="metier" data-metier="Cuisinier" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7c0-1.5 1-1.5 1-3M12 7c0-1.5 1-1.5 1-3M16 7c0-1.5 1-1.5 1-3"/></svg><span>Cuisinier</span></button>
+        <button type="button" class="metier" data-metier="Chasseur" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><path d="M14 5h5v5"/><path d="M5 19c-1-6 2-11 7-14M5 19c6 1 11-2 14-7"/></svg><span>Chasseur</span></button>
+      </div>
+      <label class="curseur-label" for="niveau">Ton niveau : <b id="niveau-val">25</b></label>
+      <input type="range" id="niveau" min="0" max="100" value="25" class="curseur">
+      <ul class="paliers">
+        <li data-palier="30">Niv. 30 · première spécialité</li>
+        <li data-palier="60">Niv. 60 · seconde spécialité</li>
+        <li data-palier="100">Niv. 100 · le bout du monde</li>
+      </ul>
+    </div>
+    <div class="radar-cadre">
+      <div class="carte-mc">
+        <span class="axe axe-n">Z −10 000</span><span class="axe axe-s">Z +10 000</span><span class="axe axe-o">X −10 000</span><span class="axe axe-e">X +10 000</span>
+        <canvas id="carte" width="161" height="161" role="img" aria-label="Carte du royaume vue du dessus : la zone accessible à ton niveau autour de la capitale"></canvas>
+      </div>
+      <p class="radar-legende" id="radar-legende">Jusqu'à 2 500 blocs du centre · créatures de niveau 25</p>
+      <a class="bouton bouton-verre" href="progression.html">Tout sur la progression →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= V · LA TOUR ================= -->
+<section class="scene chap" id="tour" data-chap="5" data-scene="tour" style="--ecrans: 2.4" aria-labelledby="tour-h">
+  <div class="scene-pin tour-pin">
+    <div class="decor decor-voile" data-theme="steppe" aria-hidden="true"></div>
+    <div class="conteneur tour-grille">
+      <div class="tour-texte">
+        <p class="numero">Chapitre V · bientôt</p>
+        <h2 id="tour-h">Quarante étages.<br>Un boss à chacun.</h2>
+        <p class="sous-texte">Et avant la Tour : quatre donjons en trois difficultés, quatre raids à affronter en groupe.</p>
+        <p class="etage">Étage <b id="etage">1</b> / 40</p>
+        <span class="etiquette">En construction</span>
+      </div>
+      <svg class="tour-svg" id="tour-svg" viewBox="0 0 300 760" aria-hidden="true"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINALE ================= -->
+<section class="galerie-chap chap" id="galerie" data-chap="6" aria-labelledby="galerie-h">
+  <div class="decor decor-voile" data-theme="sakuras" aria-hidden="true"></div>
+  <div class="conteneur">
+    <div class="galerie-entete">
+      <div><p class="numero">Chapitre VI</p><h2 id="galerie-h">Le royaume en images</h2></div>
+      <a class="bouton bouton-or" href="galerie.html">Toute la galerie →</a>
+    </div>
+    <div class="mur" id="mur"></div>
+  </div>
+</section>
+
+<section class="faq-chap chap" id="faq" data-chap="7" aria-labelledby="faq-h">
+  <div class="decor decor-voile" data-theme="prairie" aria-hidden="true"></div>
+  <div class="conteneur faq-grille">
+    <div><p class="numero">Questions fréquentes</p><h2 id="faq-h">Avant de partir à l'aventure</h2><p class="sous-texte">Une autre question ? On répond sur le Discord.</p></div>
+    <div class="faq">
+      <details><summary>Quelle version de Minecraft faut-il ?</summary><p>Minecraft Java Edition, version 26.2. Le serveur n'accepte pas l'édition Bedrock pour l'instant.</p></details>
+      <details><summary>Faut-il installer des mods ?</summary><p>Non. Le pack de ressources se télécharge tout seul à la connexion : il apporte les créatures, les menus et les musiques. Les mods d'optimisation (Sodium, Iris…) fonctionnent ; les mods de triche sont interdits.</p></details>
+      <details><summary>Le serveur est-il gratuit ?</summary><p>Oui, entièrement. La boutique ne vend que des cosmétiques, des titres et la piste premium du passe : tout ce qui rend plus fort se gagne en jouant.</p></details>
+      <details><summary>Quand ouvre le serveur ?</summary><p>Une bêta fermée arrive d'abord, puis l'ouverture à tous. Les dates sont annoncées sur le Discord.</p></details>
+      <details><summary>J'étais sur Historia en 2023, que se passe-t-il ?</summary><p>Le monde est entièrement neuf et l'économie repart de zéro pour tout le monde. Les anciens joueurs seront les premiers invités à la bêta fermée.</p></details>
+      <details><summary>Je ne vois pas les créatures, que faire ?</summary><p>Le pack de ressources a sûrement été refusé. Dans la liste des serveurs, clique sur Historia, puis Modifier, et règle « Packs de ressources » sur « Activés ».</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINALE ================= -->
+<section class="finale chap" id="finale" data-chap="7" aria-labelledby="finale-h">
+  <div class="decor" data-theme="aube" aria-hidden="true"></div>
+  <div class="conteneur finale-contenu">
+    <h2 id="finale-h" class="titre-or titre-or-moyen">Le royaume t'attend</h2>
+    <ol class="etapes">
+      <li><b>1</b>Lance Minecraft <strong>Java 26.2</strong></li>
+      <li><b>2</b>Ajoute le serveur <strong>historia.mine.fun</strong></li>
+      <li><b>3</b>Accepte le pack de ressources</li>
+    </ol>
+    <div class="ouverture-actions">
+      <button type="button" class="ip" data-copier="historia.mine.fun" aria-label="Copier l'adresse historia.mine.fun"><span class="ip-adresse">historia.mine.fun</span><span class="ip-copier">Copier</span></button>
+      <a href="https://discord.gg/" class="bouton bouton-discord">Rejoindre le Discord</a>
+    </div>
+    <p class="anciens">Tu étais là en 2023 ? Les anciens joueurs seront les premiers invités à la bêta fermée.</p>
+  </div>
+</section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur pied-in">
+    <span class="marque marque-petite"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</span>
+    <nav aria-label="Liens du pied de page"><a href="progression.html">Progression</a><a href="galerie.html">Galerie</a><a href="#">Wiki</a><a href="#">Feuille de route</a><a href="#">Nouveautés</a><a href="#">Boutique</a><a href="#">Voter</a><a href="#">Règlement</a><a href="#">Mentions légales</a></nav>
+    <p>Serveur non officiel : ni approuvé par Mojang ou Microsoft, ni associé à eux.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="pixel.js"></script>
+<script src="commun.js"></script>
+<script src="extras.js"></script>
+<script src="accueil.js"></script>
+</body>
+</html>
