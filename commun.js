@@ -53,3 +53,16 @@
     demarrer() { monterTout(); defiler(); if (!calme) requestAnimationFrame(boucle); },
   };
 })();
+
+// sommaire des pages intérieures : section en cours, rangé en descendant, effacé sur le pied de page
+(() => {
+  const s = document.querySelector(".sommaire"); if (!s) return;
+  const liens = [...s.querySelectorAll('a[href^="#"]')], cibles = liens.map(a => document.getElementById(a.getAttribute("href").slice(1))).filter(Boolean);
+  const pied = document.querySelector(".pied"); let dernier = scrollY, piedVisible = false;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) liens.forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
+  cibles.forEach(c => io.observe(c));
+  if (pied) new IntersectionObserver(es => { piedVisible = es[0].isIntersecting; maj(); }).observe(pied);
+  function maj() { const y = scrollY, descend = y > dernier + 4, monte = y < dernier - 4; if (descend || monte || piedVisible) s.classList.toggle("range", piedVisible || (descend && y > 300)); if (descend || monte) dernier = y; }
+  addEventListener("scroll", () => requestAnimationFrame(maj), { passive: true });
+  s.addEventListener("focusin", () => s.classList.remove("range"));
+})();

@@ -636,3 +636,13 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 }
 .creatures-lien { display: inline-block; margin-top: 16px; font-family: var(--titre); color: var(--or-clair); text-shadow: 2px 2px 0 rgba(0, 0, 0, .45); pointer-events: auto; }
 .visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ouverture : lisibilité sur le ciel clair et parcours selon le visiteur */
+.ouverture .accroche { text-shadow: 0 2px 0 rgba(20, 30, 60, .55), 0 0 24px rgba(20, 30, 60, .55); font-weight: 600; }
+.bouton-visite { background: rgba(13, 11, 34, .55); border-color: rgba(255, 255, 255, .35); }
+.bouton-visite:hover { background: rgba(13, 11, 34, .75); }
+.ouverture-nouveau { position: relative; z-index: 3; margin-top: 18px; padding: 8px 16px; border-radius: 999px; background: rgba(13, 11, 34, .5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 14px; color: rgba(255, 255, 255, .9); }
+.ouverture-nouveau a { color: var(--or-clair); font-weight: 700; }
+@media (max-width: 700px) { .ouverture-nouveau { font-size: 13px; text-align: center; border-radius: 16px; } .ouverture-actions .bouton-visite { display: none; } }
+/* légende de la carte du chapitre progression : lisible sur le décor */
+.radar-legende { display: inline-block; padding: 8px 16px; border-radius: 14px; background: rgba(13, 11, 34, .72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: rgba(255, 255, 255, .9); }

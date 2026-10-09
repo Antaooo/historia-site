@@ -263,3 +263,23 @@
 .compagnon b { font-family: var(--titre); font-weight: 400; font-size: 15px; line-height: 1.2; }
 .compagnon small { font-size: 12px; color: var(--texte-doux); }
 .bestiaire-note { text-align: center; margin-top: 24px; }
+/* sommaire flottant : se range en descendant, revient en remontant, s'efface sur le pied de page, montre la section en cours */
+.sommaire { transition: transform .35s cubic-bezier(.2, .7, .2, 1), opacity .25s; }
+.sommaire.range { transform: translate(-50%, 140%); opacity: 0; pointer-events: none; }
+.sommaire a[aria-current="true"] { background: var(--or); color: #2A1A00; }
+@media (prefers-reduced-motion: reduce) { .sommaire { transition: opacity .2s; } .sommaire.range { transform: translateX(-50%); } }
+/* bestiaire sur téléphone : fiches horizontales compactes (portrait à gauche) */
+@media (max-width: 600px) {
+  .bestiaire { grid-template-columns: 1fr; gap: 14px; }
+  .fiche-boss { display: grid; grid-template-columns: 104px 1fr; column-gap: 14px; row-gap: 2px; padding: 14px; align-items: start; }
+  .fiche-boss-portrait { grid-row: 1 / span 3; width: 104px; margin: 0; border-radius: 12px; }
+  .fiche-boss-famille { font-size: 11px; }
+  .fiche-boss-nom { font-size: 18px; }
+  .fiche-boss-titre { font-size: 14px; }
+  .fiche-boss-lieu, .fiche-boss-texte { grid-column: 1 / -1; }
+  .fiche-boss-texte { font-size: 14px; }
+  .compagnons { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .compagnon { padding: 8px 6px 10px; }
+  .compagnon b { font-size: 12px; }
+  .compagnon small { display: none; }
+}
