@@ -302,3 +302,18 @@
   .specialites, .trois-col { grid-template-columns: minmax(0, 1fr) !important; }
 }
 @media (max-width: 600px) { .echelle { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px; align-items: stretch; } .echelle li { padding: 10px 4px; min-width: 0; margin: 0 !important; } .echelle span { font-size: 12px; } }
+/* journal : frise chronologique (ligne dorée, un jalon par entrée, la plus récente mise en avant) */
+.journal { position: relative; }
+.journal::before { content: ""; position: absolute; left: 191px; top: 30px; bottom: 30px; width: 2px; background: linear-gradient(var(--or), rgba(242, 193, 78, .15)); }
+.journal-entree { position: relative; grid-template-columns: 170px 1fr; column-gap: 44px; }
+.journal-entree::before { content: ""; position: absolute; left: 186px; top: 30px; width: 12px; height: 12px; transform: rotate(45deg); background: #1A2E24; border: 2px solid var(--or); z-index: 1; }
+.journal-entree:first-child::before { background: var(--or); box-shadow: 0 0 0 6px rgba(242, 193, 78, .2); }
+.journal-entree:first-child .carte-verre { border-color: rgba(242, 193, 78, .6); }
+.journal-entree:first-child .h2-petit::after { content: "Nouveau"; display: inline-block; vertical-align: middle; margin-left: 12px; padding: 3px 9px; border-radius: 8px; font-size: 12px; letter-spacing: .08em; background: var(--or); color: #2A1A00; }
+@media (max-width: 760px) {
+  .journal::before { left: 5px; top: 8px; }
+  .journal-entree { padding-left: 26px; column-gap: 0; grid-template-columns: minmax(0, 1fr); }
+  .journal-entree time { text-align: left; position: static; padding-top: 0; }
+  .journal-entree:first-child .h2-petit::after { margin: 6px 0 0; display: table; }
+  .journal-entree::before { left: 0; top: 4px; }
+}
