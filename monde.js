@@ -4,7 +4,8 @@
 // Pixel.monde.rendre(largeurVue) -> { W, H, couches: [{ canvas, s }], anims, surf, debuts, biomeA(x, y), particules(ctx, t, x0, x1) }
 "use strict";
 (() => {
-  const { Toile, sprite, lueur, rgb, mix, ton, alea, bruit, BAYER, PARTICULES } = Pixel.outils;
+  const { Toile, sprite, lueur, mix, ton, alea, bruit, BAYER, PARTICULES } = Pixel.outils;
+  const memo = new Map(), rgb = h => { let c = memo.get(h); if (!c) { c = Pixel.outils.rgb(h); memo.set(h, c); } return c; }; // couleurs décodées une seule fois
   const H = 180, BL = 2, MER = Math.round(H * 0.78); // hauteur logique, taille d'un bloc, niveau de la mer
 
   // ---------- les biomes, dans l'ordre de la frise : des cimes jusqu'à l'océan ----------
@@ -144,7 +145,9 @@
     // 1. ciel : il suit le sol, chaque biome a son ciel au-dessus de lui (dégradé lissé d'un biome à l'autre, comme en marchant)
     { const t = new Toile(W, H), haut = [], bas = [];
       for (let x = 0; x < W; x++) { haut.push(melange("ciel", x, 40)); bas.push(melange("brume", x, 40)); }
-      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const f = Math.min(1, y / (H * 0.7)), bande = Math.floor(f * 12 + BAYER[y & 3][x & 3] * 0.95) / 12; t.px(x, y, mix(ton(haut[x], -0.06), bas[x], bande)); }
+      // écriture directe dans l'image : 13 teintes précalculées par colonne (le ciel compte des centaines de milliers de pixels)
+      const teintes = haut.map((h, x) => { const h2 = ton(h, -0.06); return Array.from({ length: 13 }, (_, k) => mix(h2, bas[x], k / 12)); }), d = t.d;
+      for (let y = 0; y < H; y++) { const f = Math.min(1, y / (H * 0.7)) * 12; for (let x = 0; x < W; x++) { const c = teintes[x][Math.min(12, Math.floor(f + BAYER[y & 3][x & 3] * 0.95))], i = (y * W + x) * 4; d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255; } }
       couches.push({ canvas: t.toile(), s: 1 }); }
 
     // 2. soleil carré et nuages, très loin : ils glissent à peine
@@ -172,8 +175,9 @@
 
     // 5. brume du biome, posée sur les lointains : elle suit le sol et donne à chaque biome son atmosphère
     { const t = new Toile(W, H);
+      const d = t.d;
       for (let x = 0; x < W; x++) { const b = BIOMES[indexA(x)], c = melange("brume", x, 30), force = 0.45 + (b.brumeForte || 0);
-        for (let y = Math.round(H * 0.3); y < H; y++) { const a = Math.min(1, (y - H * 0.3) / (H * 0.42)) * force; t.px(x, y, c, a); } }
+        for (let y = Math.round(H * 0.3); y < H; y++) { const a = Math.min(1, (y - H * 0.3) / (H * 0.42)) * force, i = (y * W + x) * 4; d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = Math.min(255, a * 255); } }
       couches.push({ canvas: t.toile(), s: 1 }); }
 
     // 6. le sol, en coupe : blocs de surface, terre, roche et minerais, eau ou lave, végétation
