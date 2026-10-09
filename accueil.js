@@ -6,41 +6,103 @@
   const lisse = t => 1 - Math.pow(1 - t, 3);
   const fmt = n => n.toLocaleString("fr-FR").replace(/ | /g, " ");
 
-  /* ---------- I · carrousel des biomes ---------- */
-  const piste = $("#piste"), BIOMES = Pixel.BIOMES, points = $("#points-biomes");
-  // teinte du cadre de la légende, par biome
+  /* ---------- I · le monde : une frise continue de biomes, une infobulle par biome ---------- */
+  const piste = $("#piste"), points = $("#points-biomes"), monde = $("#monde"), bulle = $("#infobulle"), courant = $("#monde-courant");
+  // ordre de la frise : du cœur du royaume vers le nord, puis le sud chaud, jusqu'à l'océan
+  const ORDRE = ["plaines", "falaises", "boreale", "lunaire", "sakuras", "jungle", "desert", "caldeira", "abysses"];
+  const BIOMES = ORDRE.map(id => Pixel.BIOMES.find(b => b.id === id)).filter(Boolean), NB = BIOMES.length;
+  // teinte de la fenêtre de la légende, par biome
   const TEINTES = { plaines: "#7FC25A", falaises: "#BFD8EE", jungle: "#3FA66A", lunaire: "#9A7AE0", sakuras: "#F4A6C6", caldeira: "#FF7A2A", abysses: "#2F8FC5", desert: "#E8B25A", boreale: "#8FD0E8" };
-  piste.innerHTML = BIOMES.map((b, i) => `
-    <article class="biome" aria-roledescription="diapositive" aria-label="${i + 1} sur ${BIOMES.length} : ${b.nom}">
-      <div class="decor" data-theme="${b.id}" aria-hidden="true"></div>
-      <div class="biome-texte">
-        <p class="biome-num">${String(i + 1).padStart(2, "0")} / ${String(BIOMES.length).padStart(2, "0")}</p>
-        <h3>${b.nom}</h3>
-        <p>${b.texte}</p>
-        <p class="biome-pastilles"><span>${b.creatures}</span></p>
-      </div>
-      <figure class="fenetre-boss biome-cadre" style="--c:${TEINTES[b.id] || "#F2C14E"}">
-        <img src="img/boss/p_${b.portrait}.png" alt="" loading="lazy" width="320" height="320">
-        <figcaption><small>Légende du biome</small><b>${b.boss}</b></figcaption>
-      </figure>
-    </article>`).join("");
-  points.innerHTML = BIOMES.map((b, i) => `<button type="button" class="point-biome" aria-label="${b.nom}" aria-current="${i === 0}"><span>${b.nom}</span></button>`).join("");
-  const biomes = $$(".biome"), pts = [...points.children];
-  let ib = 0;
-  function biome(i) {
-    ib = (i + BIOMES.length) % BIOMES.length;
-    piste.style.transform = `translate3d(${-ib * 100}%,0,0)`;
-    // rendu à la demande : le biome affiché et ses deux voisins seulement
-    if (monde.dataset.vu) for (const d of [-1, 0, 1]) Historia.monter(biomes[(ib + d + BIOMES.length) % BIOMES.length].querySelector(".decor"));
-    biomes.forEach((b, k) => { b.classList.toggle("actif", k === ib); b.setAttribute("aria-hidden", k !== ib);
-      couchesDe(b.querySelector(".decor")).forEach(c => { c.style.transform = `translate3d(${(k - ib) * c.dataset.profondeur * -8}%,0,0)`; }); });
-    pts.forEach((p, k) => p.setAttribute("aria-current", k === ib));
+  piste.style.setProperty("--n", NB);
+  piste.innerHTML = BIOMES.map((b, i) => `<div class="troncon" style="--i:${i}"><div class="decor" data-theme="${b.id}" aria-hidden="true"></div>
+    <button type="button" class="repere" data-i="${i}" aria-describedby="infobulle" aria-expanded="false"><span>${b.nom}</span></button></div>`).join("");
+  points.innerHTML = BIOMES.map((b, i) => `<button type="button" class="point-biome" data-i="${i}" aria-label="Aller à : ${b.nom}" aria-current="${i === 0}"><span>${b.nom}</span></button>`).join("");
+  const troncons = $$(".troncon"), reperes = $$(".repere"), pts = [...points.children], fleches = $$("[data-biome]");
+  let off = 0, ouverte = -1, glisse = false;
+  const largeur = () => piste.offsetWidth / NB, vue = () => monde.clientWidth;
+  const borneOff = o => borne(o, 0, Math.max(0, piste.offsetWidth - vue()));
+
+  function aller(o) {
+    off = borneOff(o); const seg = largeur(), V = vue();
+    piste.style.transform = `translate3d(${-off}px,0,0)`;
+    troncons.forEach((t, k) => {
+      const debut = k * seg, el = t.querySelector(".decor");
+      // rendu à la demande : les biomes à l'écran et leurs voisins proches seulement
+      if (monde.dataset.vu && debut + seg * 1.3 > off - V * 0.6 && debut - seg * 0.3 < off + V * 1.6) Historia.monter(el);
+      // parallaxe : chaque biome glisse légèrement selon sa place dans la vue
+      const d = borne((debut + seg / 2 - off - V / 2) / V, -1, 1);
+      couchesDe(el).forEach(c => { c.style.transform = `translate3d(${-d * c.dataset.profondeur * 5}%,0,0)`; });
+    });
+    const centre = Math.min(NB - 1, Math.floor((off + V / 2) / seg));
+    pts.forEach((p, k) => p.setAttribute("aria-current", k === centre));
+    if (courant.textContent !== BIOMES[centre].nom) courant.textContent = BIOMES[centre].nom;
+    fleches[0].disabled = off <= 1; fleches[1].disabled = off >= borneOff(1e9) - 1;
+    if (ouverte >= 0) placer(ouverte);
   }
-  pts.forEach((p, k) => p.addEventListener("click", () => biome(k)));
-  $$("[data-biome]").forEach(b => b.addEventListener("click", () => biome(ib + Number(b.dataset.biome))));
-  let bx = null; const monde = $("#monde");
-  monde.addEventListener("pointerdown", e => { if (!e.target.closest("button, a")) bx = e.clientX; });
-  monde.addEventListener("pointerup", e => { if (bx !== null && Math.abs(e.clientX - bx) > 60) biome(ib + (e.clientX < bx ? 1 : -1)); bx = null; });
+  const pas = s => aller(off + s * vue() * 0.88);
+
+  // infobulle : nom, description, légende du biome dans sa fenêtre, créatures
+  function remplir(i) {
+    const b = BIOMES[i];
+    bulle.style.setProperty("--c", TEINTES[b.id] || "#F2C14E");
+    bulle.innerHTML = `<figure class="fenetre-boss bulle-boss"><img src="img/boss/p_${b.portrait}.png" alt="" width="320" height="320"></figure>
+      <div class="bulle-texte"><p class="bulle-num">${String(i + 1).padStart(2, "0")} / ${String(NB).padStart(2, "0")}</p><h3>${b.nom}</h3>
+      <p>${b.texte}</p><p class="bulle-legende">Légende · <b>${b.boss}</b></p><p class="bulle-creatures">${b.creatures}</p></div>`;
+  }
+  // l'infobulle se pose sous le repère du biome, sans sortir de l'écran
+  function placer(i) {
+    const mr = monde.getBoundingClientRect(), seg = largeur(), l = bulle.offsetWidth;
+    const cx = i * seg + seg / 2 - off, haut = reperes[i].offsetTop + reperes[i].offsetHeight;
+    const gauche = borne(cx - l / 2, 16, mr.width - l - (mr.width > 1000 ? 96 : 16));
+    bulle.style.left = `${gauche}px`; bulle.style.top = `${haut + 14}px`;
+    bulle.style.setProperty("--fleche", `${borne(cx - gauche, 24, l - 24)}px`);
+  }
+  function montrer(i) {
+    if (i === ouverte) return;
+    if (ouverte >= 0) reperes[ouverte].setAttribute("aria-expanded", "false");
+    ouverte = i; remplir(i); reperes[i].setAttribute("aria-expanded", "true");
+    bulle.hidden = false; placer(i); requestAnimationFrame(() => bulle.classList.add("visible"));
+  }
+  function cacher() {
+    if (ouverte < 0) return;
+    reperes[ouverte].setAttribute("aria-expanded", "false"); ouverte = -1; bulle.classList.remove("visible");
+  }
+  bulle.addEventListener("transitionend", e => { if (e.propertyName === "opacity" && ouverte < 0) bulle.hidden = true; });
+  const biomeSous = x => Math.min(NB - 1, Math.max(0, Math.floor((x - monde.getBoundingClientRect().left + off) / largeur())));
+
+  // survol à la souris : l'infobulle du biome sous le curseur
+  const horsFrise = ".points-biomes, .fleche, .monde-wiki, .monde-entete, .infobulle";
+  monde.addEventListener("pointermove", e => { if (e.pointerType === "mouse" && !glisse && !e.target.closest(horsFrise)) montrer(biomeSous(e.clientX)); });
+  monde.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") cacher(); });
+  reperes.forEach((r, i) => { r.addEventListener("focus", () => montrer(i)); r.addEventListener("blur", () => { if (!monde.matches(":hover")) cacher(); }); });
+  addEventListener("keydown", e => { if (e.key === "Escape") cacher(); });
+
+  // glisser (souris ou doigt) ; un toucher sans glisser ouvre ou ferme l'infobulle du biome touché
+  let x0 = 0, off0 = 0, bouge = false;
+  piste.addEventListener("pointerdown", e => { glisse = true; bouge = false; x0 = e.clientX; off0 = off; piste.setPointerCapture(e.pointerId); });
+  piste.addEventListener("pointermove", e => {
+    if (!glisse) return;
+    if (!bouge && Math.abs(e.clientX - x0) > 6) { bouge = true; monde.classList.add("glisse"); if (e.pointerType === "mouse") cacher(); }
+    if (bouge) aller(off0 - (e.clientX - x0));
+  });
+  const lacher = e => {
+    if (!glisse) return; glisse = false; monde.classList.remove("glisse");
+    if (!bouge && e.pointerType !== "mouse") { const i = biomeSous(e.clientX); i === ouverte ? cacher() : montrer(i); }
+  };
+  piste.addEventListener("pointerup", lacher); piste.addEventListener("pointercancel", lacher);
+  piste.addEventListener("click", e => { if (bouge) { e.preventDefault(); e.stopPropagation(); } }, true);
+  document.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse" && !monde.contains(e.target)) cacher(); });
+  // pavé tactile : défilement horizontal
+  let roue;
+  monde.addEventListener("wheel", e => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault(); monde.classList.add("glisse"); aller(off + e.deltaX);
+    clearTimeout(roue); roue = setTimeout(() => monde.classList.remove("glisse"), 120);
+  }, { passive: false });
+
+  pts.forEach((p, k) => p.addEventListener("click", () => { aller(k * largeur() + largeur() / 2 - vue() / 2); montrer(k); }));
+  fleches.forEach(b => b.addEventListener("click", () => { cacher(); pas(Number(b.dataset.biome)); }));
+  addEventListener("resize", () => aller(off));
 
   /* ---------- III · les peuples : bannières à retourner ---------- */
   const PEUPLES = [
@@ -48,9 +110,9 @@
     ["Nains", "dwarf_knight", "#8A8A96", "Maîtres des profondeurs", "Pics de granit · Grottes", "Sous les montagnes, des mines creusées pendant des siècles, des ponts jetés au-dessus des gouffres et une porte scellée que personne n'a jamais rouverte. Chevaliers, chasseurs, forgerons et prêtres gardent ce qui reste du royaume nain."],
     ["Gobelins", "goblin_king", "#6F9A2A", "Pillards des plaines", "Plaines · Savane · Steppe", "Petits, verts et toujours en bande. Armés de poêles, de cuillères et de gourdins, ils sortent de leurs camps et de leurs champignonnières pour piller tout ce qui brille. Un chaman les galvanise, et leur roi les mène."],
     ["Vikings", "viking", "#4C78A8", "Guerriers du grand nord", "Taïga · Forêt boréale", "Retranchés derrière leurs palissades et leurs longues maisons, ils ne craignent ni le froid ni la mort. Ils obéissent à Bjorn l'Exalté, et chaque raid qu'ils mènent devient un chant."],
-    ["Pirates et créatures marines", "pirate_captain", "#2F7FA5", "Écumeurs des côtes", "Côtes · Abysses", "Épaves échouées, coffres enterrés, sanctuaire englouti. Le capitaine et son équipage pillent les rivages, des crabes géants gardent les plages, et au fond de l'eau, quelque chose de bien plus grand attend."],
-    ["Morts-vivants", "mortos", "#5F8F7A", "Ceux qui ne reposent pas", "Désert · Landes · Forêts", "Le tombeau d'Anubis et ses momies, l'ossuaire, le cimetière où dort le dragon Mortos, l'église du gardien Kriger. Dans ce royaume, les morts ne restent pas toujours sous terre."],
-    ["Démons", "lillith", "#A23A3A", "Enfants des rituels", "Caldeira · Terres brûlées", "Invoqués par des rituels oubliés, ils obéissent à Lillith. Là où son cercle d'invocation s'allume, les diablotins ne sont jamais loin, et les faucheurs non plus."],
+    ["Pirates et créatures marines", "pirate_captain", "#2F7FA5", "Écumeurs des côtes", "Côtes · Abysses", "Épaves échouées, criques de pirates, coffres enterrés. Le capitaine et son équipage pillent les rivages, des crabes géants gardent les plages, et au fond de l'eau, quelque chose de bien plus grand attend."],
+    ["Morts-vivants", "mortos", "#5F8F7A", "Ceux qui ne reposent pas", "Désert · Marais maudit · Forêts", "Le tombeau d'Anubis et ses momies, l'ossuaire, le cimetière où dort le dragon Mortos, l'église du gardien Kriger. Dans ce royaume, les morts ne restent pas toujours sous terre."],
+    ["Démons", "lillith", "#A23A3A", "Enfants des rituels", "Bois hanté · Terres cendrées", "Invoqués par des rituels oubliés, ils obéissent à Lillith. Là où son cercle d'invocation s'allume, les diablotins ne sont jamais loin, et les faucheurs non plus."],
     ["Esprits de la forêt", "skog", "#3F9D8F", "Âmes de la nature", "Forêts · Vallée des sakuras", "Skog, l'esprit des chênes et des bouleaux. Glume, gardien des champignons géants. Hana, dans la vallée des sakuras. Ils protègent la nature, et se souviennent de chaque arbre abattu."],
     ["Golems", "amethystgolem", "#6AA7C7", "Colosses nés des géodes", "Grottes · Géodes", "Améthyste, diamant, émeraude, quartz, redstone : chaque gemme a son colosse. Ils dorment dans la pierre, jusqu'au jour où un mineur creuse un peu trop près."],
   ];
@@ -221,7 +283,7 @@
   const chaps = $$(".chap");
   addEventListener("keydown", e => {
     if (e.target.closest("input, textarea, [role=tablist]")) return;
-    if (visibles.has("monde") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { biome(ib + (e.key === "ArrowRight" ? 1 : -1)); e.preventDefault(); return; }
+    if (visibles.has("monde") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { cacher(); pas(e.key === "ArrowRight" ? 1 : -1); e.preventDefault(); return; }
     const sens = ["ArrowDown", "PageDown"].includes(e.key) ? 1 : ["ArrowUp", "PageUp"].includes(e.key) ? -1 : 0;
     if (!sens) return;
     const y = scrollY + 2, debuts = chaps.map(c => c.offsetTop);
@@ -237,10 +299,10 @@
   const mur = $("#mur");
   mur.innerHTML = MUR.map(([t, id, nom, taille]) => `<a class="brique brique-${t}${taille ? " " + taille : ""}" href="galerie.html" data-t="${t}" data-id="${id}"><span class="brique-image">${t === "boss" ? `<img src="img/boss/p_${id}.png" alt="" loading="lazy">` : t === "jeu" ? `<img src="${id}" alt="" loading="lazy">` : ""}</span><span class="brique-nom">${nom}</span></a>`).join("");
   $$(".brique-biome").forEach(b => { const grand = b.classList.contains("grand"), large = b.classList.contains("large"); Historia.imageDiffere(b.querySelector(".brique-image"), b.dataset.id, grand || large ? 420 : 220, grand ? 300 : 180); });
-  // le carrousel des biomes n'est dessiné que lorsqu'on s'en approche
+  // la frise des biomes n'est dessinée que lorsqu'on s'en approche
   piste.dataset.aLaDemande = "1";
-  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { monde.dataset.vu = "1"; biome(ib); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
+  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { monde.dataset.vu = "1"; aller(off); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
 
   Historia.demarrer();
-  biome(0); legende(0);
+  aller(0); legende(0);
 })();

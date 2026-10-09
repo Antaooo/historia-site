@@ -413,15 +413,15 @@
   };
 
   const BIOMES = [
-    { id: "plaines", nom: "Plaines", texte: "Prairies ondulantes, bosquets de chênes, villages et moulins au bord des lacs. Le cœur paisible du royaume.", boss: "Kriger", portrait: "kriger", creatures: "Villageois, gobelins, rats" },
+    { id: "plaines", nom: "Plaines", texte: "Prairies ondulantes, bosquets de chênes, haies bocagères et hameaux. Le cœur paisible du royaume.", boss: "Kriger", portrait: "kriger", creatures: "Villageois, gobelins, rats" },
     { id: "falaises", nom: "Falaises blanches", texte: "De grandes parois éclatantes de calcite, des cascades, et des replats d'herbe semés de fleurs blanches.", boss: "Minotaure", portrait: "lr_minotaur", creatures: "Nains, golems, rats pestiférés" },
     { id: "jungle", nom: "Jungle ancestrale", texte: "Arbres géants et lianes, cascades, et des temples engloutis par la mousse.", boss: "Roi des ents", portrait: "ent_king", creatures: "Ents, sylvains, kobolds" },
     { id: "lunaire", nom: "Forêt lunaire", texte: "Un bois elfique au crépuscule éternel. Troncs blancs, feuillages violets, et des cristaux d'améthyste qui luisent au sol.", boss: "Druidesse elfe", portrait: "elven_druid", creatures: "Elfes, sylvains, hydres du Vide" },
-    { id: "sakuras", nom: "Vallée des sakuras", texte: "Cerisiers étagés, sol de pétales roses, jardins de mousse et eau limpide. Un carillon à vent, quelque part.", boss: "Hana", portrait: "hana", creatures: "Esprits, fées, kitsunes" },
-    { id: "caldeira", nom: "Caldeira", texte: "Un cratère de basalte noir, des lacs de lave contenus, des fumerolles. La lumière y est rouge, l'air chargé d'étincelles.", boss: "Flamental", portrait: "flamental", creatures: "Démons, faucheurs, élémentaires" },
-    { id: "abysses", nom: "Abysses", texte: "Un océan profond. Des forêts de kelp, des coraux, et des cheminées de magma qui crachent des colonnes de bulles.", boss: "Kraken", portrait: "kraken", creatures: "Pirates, crabes, léviathans" },
+    { id: "sakuras", nom: "Vallée des sakuras", texte: "Cerisiers étagés, tapis de pétales roses, bambous et mousse, nénuphars sur l'eau limpide.", boss: "Hana", portrait: "hana", creatures: "Esprits, fées, kitsunes" },
+    { id: "caldeira", nom: "Caldeira", texte: "Un cratère de basalte noir, des lacs de lave contenus, des orgues de basalte. La lumière y est rouge, l'air chargé d'étincelles.", boss: "Flamental", portrait: "flamental", creatures: "Démons, faucheurs, élémentaires" },
+    { id: "abysses", nom: "Abysses", texte: "Un océan profond. Des forêts de kelp géant, des ossements de léviathan, et des cheminées de magma qui crachent des colonnes de bulles.", boss: "Kraken", portrait: "kraken", creatures: "Pirates, crabes, léviathans" },
     { id: "desert", nom: "Désert", texte: "Un désert écrasé de chaleur, des oasis de palmiers. Le tombeau d'Anubis attend quelque part sous le sable.", boss: "Anubis", portrait: "lr_anubis", creatures: "Momies, scorpions, scolopendres" },
-    { id: "boreale", nom: "Forêt boréale", texte: "Épicéas enneigés, clairières de congères, aurores dans le ciel. Des hurlements de loups, au loin.", boss: "Yéti", portrait: "lr_yeti", creatures: "Vikings, loups, wendigos" },
+    { id: "boreale", nom: "Forêt boréale", texte: "Épicéas enneigés, bouleaux tordus, clairières de congères. Des hurlements de loups, au loin.", boss: "Yéti", portrait: "lr_yeti", creatures: "Vikings, loups, wendigos" },
   ];
 
   window.Pixel = { monter, image, THEMES, BIOMES };

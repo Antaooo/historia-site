@@ -3,8 +3,9 @@
 (() => {
   const { $, $$ } = Historia;
   const NOMS = { plaines: "Plaines", falaises: "Falaises blanches", jungle: "Jungle ancestrale", lunaire: "Forêt lunaire", sakuras: "Vallée des sakuras", caldeira: "Caldeira", abysses: "Abysses", desert: "Désert", boreale: "Forêt boréale", prairie: "Prairie alpine", lande: "Lande de bruyère", marais: "Marais maudit", grottes: "Grottes de cristal", steppe: "Steppe embrasée", royaume: "Le royaume", cimes: "Cimes au couchant", aube: "L'aube sur la capitale", crepuscule: "Le royaume au crépuscule" };
+  const PAYSAGES = ["royaume", "cimes", "aube", "crepuscule"]; // compositions, pas des biomes du jeu
   const ELEMENTS = [
-    ...Object.keys(NOMS).map(id => ({ type: "biome", id, titre: NOMS[id], legende: "Biome · pixel art Historia" })),
+    ...Object.keys(NOMS).map(id => ({ type: "biome", id, titre: NOMS[id], legende: PAYSAGES.includes(id) ? "Paysage · pixel art Historia" : "Biome · pixel art Historia" })),
     ...[["lr_minotaur", "Le Minotaure", "Falaises blanches"], ["phoenix", "Le Phénix", "Sources ardentes"], ["kraken", "Le Kraken", "Abysses"], ["tiamat", "Tiamat", "Grottes de cristal"], ["lr_anubis", "Anubis", "Désert"], ["ent_king", "Roi des ents", "Jungle ancestrale"], ["medusa", "Méduse", "Falaises côtières"], ["azriel", "Azriel", "Bois hanté"]]
       .map(([p, t, l]) => ({ type: "legende", src: `img/boss/p_${p}.png`, titre: t, legende: `Légende · ${l}` })),
     { type: "jeu", src: "img/captures/menus.png", titre: "Carnet du voyageur", legende: "En jeu · menus du bestiaire" },

@@ -66,16 +66,20 @@
 </section>
 
 <!-- ================= I · LE MONDE ================= -->
-<section class="monde chap" id="monde" data-chap="1" aria-roledescription="carrousel" aria-labelledby="monde-h">
+<section class="monde chap" id="monde" data-chap="1" aria-labelledby="monde-h">
   <div class="monde-entete">
     <p class="numero">Chapitre I</p>
     <h2 id="monde-h">Un monde <em>fait main</em></h2>
   </div>
-  <div class="piste" id="piste" aria-live="polite"></div>
-  <button type="button" class="fleche fleche-monde fleche-g" data-biome="-1" aria-label="Biome précédent"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-  <button type="button" class="fleche fleche-monde fleche-d" data-biome="1" aria-label="Biome suivant"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-  <div class="points-biomes" id="points-biomes" role="group" aria-label="Choisir un biome"></div>
-  <a class="monde-wiki" href="galerie.html">64 biomes · voir la galerie →</a>
+  <div class="piste frise" id="piste"></div>
+  <div class="infobulle" id="infobulle" role="tooltip" hidden></div>
+  <div class="monde-commandes">
+    <button type="button" class="fleche fleche-monde fleche-g" data-biome="-1" aria-label="Faire défiler vers la gauche"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <p class="monde-courant" id="monde-courant" aria-live="polite"></p>
+    <div class="points-biomes" id="points-biomes" role="group" aria-label="Choisir un biome"></div>
+    <button type="button" class="fleche fleche-monde fleche-d" data-biome="1" aria-label="Faire défiler vers la droite"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <a class="monde-wiki" href="galerie.html">78 biomes · voir la galerie →</a>
 </section>
 
 <!-- ================= II · LES CRÉATURES ================= -->
