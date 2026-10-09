@@ -64,4 +64,7 @@
   }
   $$("#familles .filtre").forEach(b => b.addEventListener("click", () => { famille = b.dataset.famille; $$("#familles .filtre").forEach(x => x.setAttribute("aria-pressed", x === b)); filtrer(); }));
   recherche.addEventListener("input", filtrer);
+  // bestiaire.html#famille=Démons : ouvre directement une famille
+  const voulu = decodeURIComponent((location.hash.match(/famille=([^&]+)/) || [])[1] || "");
+  const bouton = $("#familles .filtre").find(x => x.dataset.famille === voulu); if (voulu && bouton) bouton.click();
 })();
