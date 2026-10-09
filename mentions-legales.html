@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mentions légales · Historia</title>
+<meta name="description" content="Mentions légales et données personnelles du site Historia.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Historia">
+<meta property="og:title" content="Historia · Mentions légales">
+<meta property="og:description" content="Mentions légales et données personnelles du site Historia.">
+<meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.jpg">
+<meta property="og:url" content="https://antaooo.github.io/historia-site/mentions-legales.html">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10241A">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body class="page-interne">
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<div class="progression" aria-hidden="true"><i id="progression"></i></div>
+
+<header class="entete" id="entete">
+  <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
+  <nav class="nav" id="nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="nouveautes.html">Nouveautés</a><a href="galerie.html">Galerie</a><a href="boutique.html">Boutique</a>
+  </nav>
+  <div class="entete-droite">
+    <span class="en-ligne" hidden><span class="point" aria-hidden="true"></span><b></b></span>
+    <a href="index.html#finale" class="bouton bouton-or bouton-petit">Jouer</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="bandeau bandeau-haut">
+    <div class="decor" data-theme="prairie" aria-hidden="true"></div>
+    <div class="conteneur bandeau-contenu">
+      <p class="numero">Informations</p>
+      <h1 class="h1-page">Mentions légales</h1>
+      <p class="sous-texte">Qui édite le site, où il est hébergé, et ce qu'il fait (ou ne fait pas) de tes données.</p>
+    </div>
+  </section>
+
+  <section class="section-page" id="mentions">
+    <div class="decor decor-voile" data-theme="prairie" aria-hidden="true"></div>
+    <div class="conteneur">
+      <div class="texte-legal">
+        <article class="carte-verre" id="editeur"><h2 class="h2-petit">Éditeur</h2>
+          <p>Historia est un projet de serveur Minecraft amateur, édité par un particulier, sans activité commerciale à ce jour. Comme le permet la loi pour la confiance dans l'économie numérique (article 6, III, 2), l'éditeur non professionnel ne publie pas son identité : elle est connue de l'hébergeur.</p>
+          <p>Pour toute question ou demande, écris-nous sur le <a href="https://discord.gg/">Discord du serveur</a>.</p></article>
+        <article class="carte-verre" id="hebergeur"><h2 class="h2-petit">Hébergeur</h2>
+          <p>GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis · <a href="https://github.com">github.com</a></p></article>
+        <article class="carte-verre" id="donnees"><h2 class="h2-petit">Données personnelles</h2>
+          <ul>
+            <li><b>Aucun compte, aucun formulaire, aucun cookie, aucune mesure d'audience.</b></li>
+            <li>Ton navigateur garde seulement tes petites préférences, sur ton appareil : la fermeture du bandeau de la bêta, par exemple. Rien ne nous est envoyé.</li>
+            <li>Pour afficher le statut du serveur en direct, ta visite interroge le service public mcsrvstat.us, qui voit ton adresse IP comme n'importe quel site.</li>
+            <li>Les polices et les images sont hébergées sur le site lui-même : aucun appel à Google ni à un autre service de polices.</li>
+            <li>Les liens vers Discord mènent à un service tiers, soumis à ses propres règles.</li>
+          </ul></article>
+        <article class="carte-verre" id="droits"><h2 class="h2-petit">Propriété intellectuelle</h2>
+          <p>Minecraft est une marque de Mojang AB. Historia est un serveur non officiel : il n'est ni approuvé par Mojang ou Microsoft, ni associé à eux.</p>
+          <p>Musique : « Majestic Hills », Kevin MacLeod (incompetech.com), licence CC BY 4.0. Polices : Monocraft (Idrees Hassan) et Figtree (The Figtree Project Authors), licence SIL OFL 1.1. Les paysages en pixel art du site sont dessinés par le site lui-même.</p></article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur pied-in">
+    <span class="marque marque-petite"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</span>
+    <nav aria-label="Liens du pied de page"><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="galerie.html">Galerie</a><a href="nouveautes.html">Nouveautés</a><a href="feuille-de-route.html">Feuille de route</a><a href="boutique.html">Boutique</a><a href="voter.html">Voter</a><a href="reglement.html">Règlement</a><a href="mentions-legales.html">Mentions légales</a></nav>
+    <p>Serveur non officiel : ni approuvé par Mojang ou Microsoft, ni associé à eux.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="pixel.js"></script>
+<script src="commun.js"></script>
+<script src="extras.js"></script>
+<script>Historia.demarrer();</script>
+</body>
+</html>

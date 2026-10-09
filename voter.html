@@ -3,15 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bientôt · Historia</title>
-<meta name="description" content="Cette page d'Historia se prépare.">
-<meta name="robots" content="noindex">
+<title>Voter · Historia</title>
+<meta name="description" content="Voter pour Historia sur les sites de classement : bientôt.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Historia">
+<meta property="og:title" content="Historia · Voter">
+<meta property="og:description" content="Voter pour Historia sur les sites de classement : bientôt.">
+<meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.jpg">
+<meta property="og:url" content="https://antaooo.github.io/historia-site/voter.html">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10241A">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="pages.css">
 </head>
 <body class="page-interne">
 <a class="evitement" href="#contenu">Aller au contenu</a>
+<div class="progression" aria-hidden="true"><i id="progression"></i></div>
 
 <header class="entete" id="entete">
   <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
@@ -26,15 +36,25 @@
 </header>
 
 <main id="contenu">
-  <section class="bandeau bandeau-haut bientot">
-    <div class="decor" data-theme="prairie" aria-hidden="true"></div>
+  <section class="bandeau bandeau-haut">
+    <div class="decor" data-theme="plaines" aria-hidden="true"></div>
     <div class="conteneur bandeau-contenu">
-      <p class="numero">En préparation</p>
-      <h1 class="h1-page" id="bientot-titre">Bientôt dans le royaume</h1>
-      <p class="sous-texte" id="bientot-texte">Cette page se prépare. Les nouvelles arrivent d'abord sur le Discord.</p>
-      <div class="ouverture-actions" style="justify-content: flex-start">
-        <a class="bouton bouton-or" href="index.html">Retour à l'accueil</a>
-        <a class="bouton bouton-verre" href="galerie.html">Voir la galerie</a>
+      <p class="numero">Voter · bientôt</p>
+      <h1 class="h1-page">Fais grimper Historia</h1>
+      <p class="sous-texte">Un vote par jour, un coup de pouce pour le royaume. Les votes ouvriront avec le serveur.</p>
+      <span class="etiquette">Ouvre avec le serveur</span>
+    </div>
+  </section>
+
+  <section class="section-page" id="voter">
+    <div class="decor decor-voile" data-theme="plaines" aria-hidden="true"></div>
+    <div class="conteneur">
+      <div class="texte-legal">
+        <article class="carte-verre"><h2 class="h2-petit">À quoi sert un vote ?</h2>
+          <p>Les sites de classement de serveurs Minecraft mettent en avant ceux qui reçoivent le plus de votes. Chaque vote aide Historia à se faire connaître, et à faire grandir la communauté.</p></article>
+        <article class="carte-verre"><h2 class="h2-petit">Quand ?</h2>
+          <p>Les liens de vote ouvriront avec le serveur. Les récompenses de vote seront annoncées à ce moment-là, et resteront raisonnables : elles ne remplaceront jamais l'aventure.</p>
+          <a class="bouton bouton-discord" href="https://discord.gg/">Être prévenu sur le Discord</a></article>
       </div>
     </div>
   </section>
@@ -51,11 +71,6 @@
 <script src="pixel.js"></script>
 <script src="commun.js"></script>
 <script src="extras.js"></script>
-<script>
-  // nom de la page demandée (?page=…), affiché tel quel en texte
-  const page = new URLSearchParams(location.search).get("page");
-  if (page) { const nom = page.slice(0, 40); document.getElementById("bientot-titre").textContent = nom + " : bientôt"; document.title = nom + " · bientôt · Historia"; }
-  Historia.demarrer();
-</script>
+<script>Historia.demarrer();</script>
 </body>
 </html>
