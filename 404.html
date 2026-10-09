@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perdu dans les grottes · Historia</title>
+<meta name="robots" content="noindex">
+<script>
+  // la page peut être servie depuis n'importe quel chemin : les liens partent de la racine du site
+  document.write('<base href="' + (location.pathname.indexOf("/historia-site/") === 0 ? "/historia-site/" : "/") + '">');
+</script>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body class="page-interne">
+<a class="evitement" href="#contenu">Aller au contenu</a>
+
+<header class="entete" id="entete">
+  <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
+  <nav class="nav" id="nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="nouveautes.html">Nouveautés</a><a href="galerie.html">Galerie</a>
+  </nav>
+  <div class="entete-droite">
+    <a href="index.html#finale" class="bouton bouton-or bouton-petit">Jouer</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="bandeau bandeau-haut">
+    <div class="decor" data-theme="grottes" aria-hidden="true"></div>
+    <div class="conteneur bandeau-contenu">
+      <p class="numero">Erreur 404</p>
+      <h1 class="h1-page">Perdu dans les grottes</h1>
+      <p class="sous-texte">Cette page n'existe pas, ou elle s'est effondrée. Pas de panique : rallume une torche et remonte vers la surface.</p>
+      <div class="ouverture-actions" style="justify-content: flex-start">
+        <a class="bouton bouton-or" href="index.html">Revenir à l'accueil</a>
+        <a class="bouton bouton-verre" href="guide.html">Lire le guide</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur pied-in">
+    <span class="marque marque-petite"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</span>
+    <p>Serveur non officiel : ni approuvé par Mojang ou Microsoft, ni associé à eux.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="pixel.js"></script>
+<script src="commun.js"></script>
+<script src="extras.js"></script>
+<script>Historia.demarrer();</script>
+</body>
+</html>
