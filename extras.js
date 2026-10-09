@@ -62,6 +62,19 @@
     }).catch(() => {});
   }
 
+  // pages intérieures : un dernier appel avant le pied de page (adresse à copier, Discord)
+  const piedPage = document.querySelector(".pied");
+  if (piedPage && document.body.classList.contains("page-interne") && !document.body.classList.contains("admin") && !/404|bientot/.test(location.pathname)) {
+    const cta = document.createElement("section"); cta.className = "appel-final"; cta.setAttribute("aria-labelledby", "appel-h");
+    cta.innerHTML = `<div class="decor decor-voile" data-theme="aube" aria-hidden="true"></div>
+      <div class="conteneur appel-contenu"><p class="numero">Prêt à partir ?</p><h2 id="appel-h">Le royaume t'attend</h2>
+      <p class="sous-texte">Minecraft Java 26.2, aucun mod à installer. La bêta fermée se prépare sur le Discord.</p>
+      <div class="appel-actions"><button type="button" class="ip" data-copier="${ADRESSE}" aria-label="Copier l'adresse ${ADRESSE}"><span class="ip-adresse">${ADRESSE}</span><span class="ip-copier">Copier</span></button>
+      <a class="bouton bouton-discord" href="${DISCORD}">Rejoindre le Discord</a></div></div>`;
+    piedPage.before(cta);
+    cta.querySelector("[data-copier]").addEventListener("click", async () => { try { await navigator.clipboard.writeText(ADRESSE); Historia.annoncer("Adresse copiée · " + ADRESSE); } catch { Historia.annoncer("Adresse · " + ADRESSE); } });
+  }
+
   // réglages du back-office : lien Discord et bandeau d'annonce
   fetch("donnees/config.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(c => {
     if (!c) return;

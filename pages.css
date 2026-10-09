@@ -317,3 +317,10 @@
   .journal-entree:first-child .h2-petit::after { margin: 6px 0 0; display: table; }
   .journal-entree::before { left: 0; top: 4px; }
 }
+/* dernier appel avant le pied de page */
+.appel-final { position: relative; overflow: hidden; padding: 110px 0 120px; text-align: center; background: #1E1A3A; }
+.appel-final .decor-voile::after { background: linear-gradient(180deg, rgba(13, 11, 34, .55), rgba(13, 11, 34, .25) 60%, rgba(13, 11, 34, .5)); }
+.appel-contenu { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.appel-contenu h2 { font-size: clamp(30px, 4vw, 52px); text-shadow: .07em .07em 0 rgba(0, 0, 0, .4); }
+.appel-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px; }
+.appel-final::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; pointer-events: none; }
