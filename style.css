@@ -1,8 +1,8 @@
 /* Figtree (The Figtree Project Authors, licence SIL OFL 1.1 : polices-libres/OFL-Figtree.txt), hébergée sur le site : aucun appel à Google */
-@font-face { font-family: "Figtree"; src: url(polices-libres/Figtree-Variable.ttf) format("truetype"); font-weight: 300 900; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url(polices-libres/Figtree-Variable.woff2) format("woff2"), url(polices-libres/Figtree-Variable.ttf) format("truetype"); font-weight: 300 900; font-display: swap; }
 /* Monocraft (Idrees Hassan, licence SIL OFL 1.1 : polices-libres/OFL-Monocraft.txt), recréation libre de la police de Minecraft */
-@font-face { font-family: "Monocraft"; src: url(polices-libres/Monocraft-Regular.ttf) format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Monocraft"; src: url(polices-libres/Monocraft-Bold.ttf) format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Monocraft"; src: url(polices-libres/Monocraft-Regular.woff2) format("woff2"), url(polices-libres/Monocraft-Regular.ttf) format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Monocraft"; src: url(polices-libres/Monocraft-Bold.woff2) format("woff2"), url(polices-libres/Monocraft-Bold.ttf) format("truetype"); font-weight: 700; font-display: swap; }
 /* Historia : présentation interactive. Ambiance cinéma, titres dorés, verre dépoli, chapitres pilotés par le défilement. */
 :root {
   --nuit: #0D0B22;
