@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boutique · Historia</title>
+<meta name="description" content="La boutique d'Historia ouvrira avec le serveur : uniquement des cosmétiques, des titres et la piste premium du passe. Aucun avantage de jeu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Historia">
+<meta property="og:title" content="Historia · Boutique">
+<meta property="og:description" content="La boutique d'Historia ouvrira avec le serveur : uniquement des cosmétiques, des titres et la piste premium du passe. Aucun avantage de jeu.">
+<meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.jpg">
+<meta property="og:url" content="https://antaooo.github.io/historia-site/boutique.html">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10241A">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body class="page-interne">
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<div class="progression" aria-hidden="true"><i id="progression"></i></div>
+
+<header class="entete" id="entete">
+  <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
+  <nav class="nav" id="nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="nouveautes.html">Nouveautés</a><a href="galerie.html">Galerie</a><a href="boutique.html" aria-current="page">Boutique</a>
+  </nav>
+  <div class="entete-droite">
+    <span class="en-ligne" hidden><span class="point" aria-hidden="true"></span><b></b></span>
+    <a href="index.html#finale" class="bouton bouton-or bouton-petit">Jouer</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="bandeau bandeau-haut">
+    <div class="decor" data-theme="royaume" aria-hidden="true"></div>
+    <div class="conteneur bandeau-contenu">
+      <p class="numero">Boutique · bientôt</p>
+      <h1 class="h1-page">Brille sans tricher</h1>
+      <p class="sous-texte">La boutique ouvrira avec le serveur. On n'y vendra que de l'apparence : cosmétiques, titres et piste premium du passe. Jamais de puissance.</p>
+      <span class="etiquette">Rien n'est encore en vente</span>
+    </div>
+  </section>
+
+  <section class="section-page" id="offres">
+    <div class="decor decor-voile" data-theme="plaines" aria-hidden="true"></div>
+    <div class="conteneur">
+      <div class="principes carte-verre" id="principes">
+        <h2 class="h2-petit">Notre promesse</h2>
+        <ul>
+          <li><b>Aucun achat ne donne de puissance.</b> Pas d'armes, pas de ressources, pas de bonus d'expérience à vendre.</li>
+          <li><b>Tout ce qui compte s'obtient en jouant</b> : équipement, rangs, compagnons de combat, monnaie.</li>
+          <li><b>Pas de caisses payantes</b> ni de tirage au hasard contre de l'argent.</li>
+          <li>Conforme aux règles d'usage commerciales de Minecraft.</li>
+        </ul>
+      </div>
+      <div class="offres">
+        <article class="carte-verre offre" id="passe">
+          <div class="offre-image" data-offre-theme="sakuras"><span class="offre-bientot">Bientôt</span></div>
+          <h2 class="h2-petit">La piste premium du passe</h2>
+          <p>Le passe d'aventure a deux pistes. La gratuite reste utile à tous ; la premium ajoute des récompenses d'apparence à chaque palier.</p>
+          <img class="offre-capture" src="img/captures/passe.png" alt="Maquette des menus du passe d'aventure" loading="lazy">
+        </article>
+        <article class="carte-verre offre" id="titres">
+          <div class="offre-image" data-offre-theme="cimes"><span class="offre-bientot">Bientôt</span></div>
+          <h2 class="h2-petit">Des titres</h2>
+          <p>Un titre s'affiche à côté de ton nom, dans le chat et dans le tableau des joueurs. Pour la frime, rien de plus.</p>
+          <p class="offre-titres" aria-label="Exemples de titres"><span>« l'Intrépide »</span><span>« Ami des elfes »</span><span>« Chasseur d'aurores »</span></p><p class="note">Exemples, la liste n'est pas arrêtée.</p>
+        </article>
+        <article class="carte-verre offre" id="effets">
+          <div class="offre-image" data-offre-theme="crepuscule"><span class="offre-bientot">Bientôt</span></div>
+          <h2 class="h2-petit">Des effets visuels</h2>
+          <p>Particules autour de toi, traînées derrière tes pas, éclats à la victoire : de quoi briller sans rien changer aux combats.</p>
+          <p class="offre-etincelles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></p>
+        </article>
+        <article class="carte-verre offre" id="apparences">
+          <div class="offre-image" data-offre-theme="lunaire"><span class="offre-bientot">Bientôt</span></div>
+          <h2 class="h2-petit">Des apparences</h2>
+          <p>Chapeaux, capes de cérémonie et apparences alternatives pour tes compagnons : ton style, ta légende.</p>
+          
+        </article>
+      </div>
+      <div class="carte-verre boutique-fin">
+        <h2 class="h2-petit">Pourquoi une boutique ?</h2>
+        <p>Elle sert à faire vivre le serveur : l'hébergement, les créations sur mesure et les mises à jour. Elle ouvrira avec le serveur, sur une plateforme de paiement sécurisée qui sera annoncée à ce moment-là.</p>
+        <a class="bouton bouton-discord" href="https://discord.gg/">Être prévenu sur le Discord</a>
+      </div>
+      <script>addEventListener("DOMContentLoaded", () => document.querySelectorAll("[data-offre-theme]").forEach(el => Historia.imageDiffere(el, el.dataset.offreTheme, 360, 150)));</script>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur pied-in">
+    <span class="marque marque-petite"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</span>
+    <nav aria-label="Liens du pied de page"><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="galerie.html">Galerie</a><a href="nouveautes.html">Nouveautés</a><a href="feuille-de-route.html">Feuille de route</a><a href="boutique.html">Boutique</a><a href="bientot.html?page=Voter">Voter</a><a href="bientot.html?page=R%C3%A8glement">Règlement</a><a href="bientot.html?page=Mentions%20l%C3%A9gales">Mentions légales</a></nav>
+    <p>Serveur non officiel : ni approuvé par Mojang ou Microsoft, ni associé à eux.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="pixel.js"></script>
+<script src="commun.js"></script>
+<script src="extras.js"></script>
+<script>Historia.demarrer();</script>
+</body>
+</html>

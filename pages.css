@@ -191,3 +191,28 @@
   .route-jalon { width: 46px; height: 46px; font-size: 18px; }
   .regles li { grid-template-columns: 1fr; }
 }
+
+/* ---------- boutique (vitrine) ---------- */
+.principes { max-width: 900px; margin: 0 auto 34px; border-color: rgba(242, 193, 78, .5); }
+.principes .h2-petit, .boutique-fin .h2-petit { margin-bottom: 12px; }
+.principes ul { display: grid; gap: 8px; padding-left: 20px; color: var(--texte-doux); }
+.principes li::marker { color: var(--or); }
+.principes b { color: #fff; }
+.offres { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; max-width: 1100px; margin: 0 auto; }
+.offre { display: flex; flex-direction: column; gap: 10px; }
+.offre-image { position: relative; height: 150px; margin: -6px -8px 6px; border-radius: 16px; overflow: hidden; background: rgba(0, 0, 0, .25); }
+.offre-image canvas { width: 100%; height: 100%; object-fit: cover; }
+.offre-bientot { position: absolute; top: 10px; right: 10px; z-index: 1; font-family: var(--titre); font-size: 12px; letter-spacing: .1em; padding: 5px 10px; border-radius: 8px; background: rgba(13, 11, 34, .78); border: 1px solid rgba(242, 193, 78, .6); color: var(--or-clair); }
+.offre-capture { width: 100%; border-radius: 12px; border: 1px solid var(--verre-bord); }
+.offre-titres { display: flex; flex-wrap: wrap; gap: 8px; }
+.offre-titres span { font-family: var(--titre); font-size: 14px; padding: 6px 12px; border-radius: 10px; background: rgba(0, 0, 0, .3); border: 1px solid rgba(242, 193, 78, .45); color: var(--or-clair); }
+.offre-etincelles { position: relative; height: 54px; }
+.offre-etincelles i { position: absolute; bottom: 0; width: 6px; height: 6px; background: var(--or-clair); box-shadow: 0 0 10px var(--or); animation: etincelle 2.4s linear infinite; }
+.offre-etincelles i:nth-child(1) { left: 8%; animation-delay: 0s; } .offre-etincelles i:nth-child(2) { left: 24%; animation-delay: .5s; background: #C8A0FF; box-shadow: 0 0 10px #8A5AD8; }
+.offre-etincelles i:nth-child(3) { left: 40%; animation-delay: 1.1s; } .offre-etincelles i:nth-child(4) { left: 56%; animation-delay: .3s; background: #9FE6FF; box-shadow: 0 0 10px #4AB8E8; }
+.offre-etincelles i:nth-child(5) { left: 72%; animation-delay: 1.6s; } .offre-etincelles i:nth-child(6) { left: 88%; animation-delay: .9s; background: #FFB0C8; box-shadow: 0 0 10px #F07AA0; }
+@keyframes etincelle { 0% { transform: translateY(0) scale(1); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-48px) scale(.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .offre-etincelles i { animation: none; opacity: .8; } }
+.boutique-fin { max-width: 900px; margin: 34px auto 0; text-align: center; }
+.boutique-fin p { margin-bottom: 16px; }
+@media (max-width: 760px) { .offres { grid-template-columns: 1fr; } }
