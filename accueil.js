@@ -23,12 +23,20 @@
   // construction (et reconstruction au redimensionnement) : une toile par couche, le sol et ses calques dans un même groupe
   function construire() {
     const garde = R ? off / ech : 0;
-    dims = [vue(), monde.clientHeight]; ech = monde.clientHeight / M.H; R = M.rendre(Math.ceil(vue() / ech));
+    // sur téléphone, le monde est dézoomé pour voir plus d'un biome ; le haut de l'écran se remplit avec le ciel de chaque biome
+    const hauteur = monde.clientHeight; dims = [vue(), hauteur]; ech = hauteur / M.H; if (vue() < 700) ech = Math.min(ech, vue() / 130);
+    const reste = Math.max(0, hauteur - M.H * ech), bas = Math.round(Math.min(220, reste * 0.45)), decal = Math.round(reste - bas); // le sol remonte au-dessus des commandes
+    R = M.rendre(Math.ceil(vue() / ech));
     piste.innerHTML = ""; couches = [];
-    for (const c of R.couches) { c.canvas.className = "monde-couche"; taille(c.canvas); piste.appendChild(c.canvas); couches.push({ el: c.canvas, s: c.s }); }
+    if (decal) { const haut = toile(M.W, 1, "monde-couche"); haut.getContext("2d").drawImage(R.couches[0].canvas, 0, 0, M.W, 1, 0, 0, M.W, 1);
+      haut.style.width = `${M.W * ech}px`; haut.style.height = `${decal + 2}px`; piste.appendChild(haut); couches.push({ el: haut, s: 1 }); }
+    for (const c of R.couches) { c.canvas.className = "monde-couche"; taille(c.canvas); c.canvas.style.top = `${decal}px`; piste.appendChild(c.canvas); couches.push({ el: c.canvas, s: c.s }); }
+    if (bas) { const hl = Math.ceil(bas / ech) + 1, roche = toile(M.W, hl, "monde-couche"), solC = R.couches[R.couches.length - 1].canvas, c = roche.getContext("2d");
+      for (let y = 0; y < hl; y += 16) c.drawImage(solC, 0, M.H - 16, M.W, 16, 0, y, M.W, 16); // la roche des profondeurs, répétée
+      taille(roche); roche.style.top = `${decal + M.H * ech - 1}px`; piste.appendChild(roche); couches.push({ el: roche, s: 1 }); }
     sol = document.createElement("div"); sol.className = "monde-sol"; sol.style.width = `${M.W * ech}px`;
     const anim = toile(M.W, M.H, "monde-couche"), part = toile(M.W, M.H, "monde-couche"), reflet = toile(M.W, M.H, "monde-couche monde-reflet");
-    [anim, part, reflet].forEach(cv => { taille(cv); sol.appendChild(cv); });
+    [anim, part, reflet].forEach(cv => { taille(cv); cv.style.top = `${decal}px`; sol.appendChild(cv); });
     ctxAnim = anim.getContext("2d"); ctxPart = part.getContext("2d"); ctxReflet = reflet.getContext("2d");
     sol.insertAdjacentHTML("beforeend", BIOMES.map((b, i) => `<button type="button" class="repere" data-i="${i}" aria-describedby="infobulle" aria-expanded="false" style="left:${(M.debuts[i] + b.l / 2) * ech}px"><span>${b.nom}</span></button>`).join(""));
     piste.appendChild(sol); couches.push({ el: sol, s: 1 });
