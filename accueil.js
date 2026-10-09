@@ -346,8 +346,5 @@
   new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { construire(); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
 
   Historia.demarrer();
-  // le monde et la Tour se préparent pendant les temps morts, après le chargement : le défilement reste fluide en arrivant dessus
-  const auRepos = f => ("requestIdleCallback" in window ? requestIdleCallback(f, { timeout: 3000 }) : setTimeout(f, 1200));
-  addEventListener("load", () => auRepos(() => { if (!R) construire(); auRepos(() => { if (!tourMontee) monterTour(); }); }));
   aller(0); legende(0);
 })();

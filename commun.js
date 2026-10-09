@@ -31,7 +31,7 @@
     const r = e.target.getBoundingClientRect();
     if (r.bottom > 0 && r.top < innerHeight) monter(e.target);
     else if (!file.includes(e.target)) { file.push(e.target); if (!enCours) { enCours = true; auRepos(suivant); } }
-  }), { rootMargin: "900px 0px" });
+  }), { rootMargin: "500px 0px" });
   // un fond qui arrive à l'écran avant son tour est dessiné aussitôt
   const urgent = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting || scenes.has(e.target)) return; const i = file.indexOf(e.target); if (i >= 0) file.splice(i, 1); monter(e.target); }));
   function monterTout() {
