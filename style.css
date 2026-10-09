@@ -610,3 +610,4 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
   .tour-paliers { justify-content: center; }
   .etage { margin-top: 8px; } .etage b { font-size: 40px; }
 }
+.credit a { text-decoration: underline; text-underline-offset: 2px; }
