@@ -655,3 +655,5 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .fiche-lien { display: inline-block; margin-top: 14px; font-family: var(--titre); font-size: 14px; color: var(--or-clair); }
 .fiche-boss:target { outline: 3px solid var(--or); outline-offset: 4px; scroll-margin-top: 110px; }
 .fiche-boss { scroll-margin-top: 110px; }
+.legendes .fiche { background: rgba(13, 11, 34, .72); border-color: rgba(242, 193, 78, .35); }
+.fiche-lieu { color: var(--or-clair) !important; }
