@@ -1,4 +1,4 @@
-// Page d'accueil : présentation interactive (biomes et légendes en carrousels manuels, créatures, progression, Tour).
+// Page d'accueil : présentation interactive (monde en frise, créatures, peuples, légendes, progression, Tour).
 "use strict";
 (() => {
   const { $, $$, calme, couchesDe, surDefilement, surBoucle } = Historia;
@@ -172,6 +172,9 @@
     b.setAttribute("aria-pressed", dos); b.setAttribute("aria-label", b.querySelector(".banniere-nom").textContent + (dos ? " : revenir à la bannière" : " : lire la légende"));
     b.querySelector(".banniere-face").setAttribute("aria-hidden", dos); b.querySelector(".banniere-dos").setAttribute("aria-hidden", !dos);
   }));
+  // les flèches ne servent que si la rangée déborde de l'écran
+  const peuplesTient = () => $("#peuples").classList.toggle("tient", bannieres.scrollWidth <= bannieres.clientWidth + 2);
+  addEventListener("resize", peuplesTient); addEventListener("load", peuplesTient); peuplesTient();
   $$("[data-peuple]").forEach(b => b.addEventListener("click", () => {
     const pas = bannieres.firstElementChild.offsetWidth + 20;
     bannieres.scrollBy({ left: Number(b.dataset.peuple) * pas * Math.max(1, Math.floor(bannieres.clientWidth / pas) - 1), behavior: calme ? "auto" : "smooth" });
@@ -268,11 +271,12 @@
   curseur.addEventListener("input", majNiveau); majNiveau();
   $$(".metier").forEach(b => b.addEventListener("click", () => { $$(".metier").forEach(x => { x.classList.toggle("actif", x === b); x.setAttribute("aria-pressed", x === b); }); }));
 
-  /* ---------- VI · la Tour ---------- */
-  const tour = $("#tour-svg"); let t = "";
-  for (let i = 0; i < 40; i++) { const y = 720 - i * 17, l = 170 - i * 1.4, x = 150 - l / 2; t += `<rect class="etage-r" data-i="${i + 1}" x="${x.toFixed(1)}" y="${y}" width="${l.toFixed(1)}" height="14"/>`; if (i % 5 === 4) t += `<rect class="fenetre-t" data-i="${i + 1}" x="144" y="${y + 3}" width="12" height="8"/>`; }
-  t += `<path class="tour-toit" d="M88,44 H212 V36 H200 V24 H188 V12 H176 V0 H164 V-12 H136 V0 H124 V12 H112 V24 H100 V36 H88 Z"/><rect x="146" y="-34" width="8" height="22" fill="#3A2A1E"/><rect x="154" y="-34" width="22" height="12" fill="#E0533B"/><rect x="40" y="736" width="220" height="24" class="tour-socle"/>`;
-  tour.innerHTML = t; const etages = [...tour.querySelectorAll("[data-i]")];
+  /* ---------- VI · la Tour : on la gravit en faisant défiler (tour.js) ---------- */
+  const sceneTour = $("#tour"); let tourVisible = false, tourMontee = false;
+  const monterTour = () => { Tour.monter(sceneTour); tourMontee = true; Tour.animer(0); };
+  new IntersectionObserver(es => { tourVisible = es.some(x => x.isIntersecting); if (tourVisible && !tourMontee) monterTour(); }, { rootMargin: "600px 0px" }).observe(sceneTour);
+  surBoucle.push(t => { if (tourVisible && tourMontee) Tour.animer(t); });
+  let attenteTour; addEventListener("resize", () => { clearTimeout(attenteTour); attenteTour = setTimeout(() => { if (tourMontee) monterTour(); }, 250); });
 
   /* ---------- scènes épinglées (créatures, Tour) ---------- */
   const epinglees = $$(".scene");
@@ -287,9 +291,8 @@
         mosaique.style.transform = `scale(${2.6 - 1.6 * q}) rotate(${-6 + 6 * q}deg)`;
         mosaique.style.setProperty("--p", q);
       } else if (s.dataset.scene === "tour") {
-        const e = Math.max(1, Math.ceil(lisse(borne(p / 0.85)) * 40));
-        $("#etage").textContent = e;
-        etages.forEach(el => { const k = Number(el.dataset.i); el.classList.toggle("allume", k <= e); el.classList.toggle("sommet", k === e && el.classList.contains("etage-r")); });
+        if (!tourMontee) monterTour();
+        Tour.maj(borne(p / 0.92));
       }
     }
   });

@@ -181,14 +181,6 @@ h2 em { font-style: normal; background: linear-gradient(180deg, var(--or-clair),
 .etage { margin-top: 28px; font-size: 20px; color: var(--texte-doux); }
 .etage b { font-family: var(--titre); font-size: 64px; color: var(--or-clair); font-variant-numeric: tabular-nums; }
 .etiquette { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; border: 1px dashed rgba(255, 255, 255, .4); color: rgba(255, 255, 255, .8); }
-.tour-svg { height: min(76svh, 720px); justify-self: center; overflow: visible; shape-rendering: crispEdges; }
-.etage-r { fill: #3A3046; stroke: #241C2E; stroke-width: 2; transition: fill .25s; }
-.etage-r.allume { fill: #8A7A8E; }
-.etage-r.sommet { fill: var(--or); filter: drop-shadow(0 0 12px var(--or)); }
-.fenetre-t { fill: #1A1536; transition: fill .25s; }
-.fenetre-t.allume { fill: var(--or-clair); filter: drop-shadow(0 0 6px var(--or)); }
-.tour-toit { fill: #5A3A4E; }
-.tour-socle { fill: #2A2230; }
 
 /* finale */
 .finale { position: relative; min-height: 100svh; overflow: hidden; display: grid; place-items: center; text-align: center; }
@@ -222,7 +214,6 @@ h2 em { font-style: normal; background: linear-gradient(180deg, var(--or-clair),
   .legendes-grille, .prog-grille, .tour-grille { grid-template-columns: 1fr; }
   .scene-boss { min-height: 360px; order: -1; }
   .legendes-halo { right: -40%; top: 30%; }
-  .tour-svg { height: 48svh; }
   .tour-texte { text-align: center; display: flex; flex-direction: column; align-items: center; }
 }
 @media (max-width: 640px) {
@@ -250,7 +241,6 @@ h2 em { font-style: normal; background: linear-gradient(180deg, var(--or-clair),
 .progression-chap { position: relative; overflow: hidden; }
 .progression-chap .decor-voile::after { background: linear-gradient(90deg, rgba(13, 11, 34, .8), rgba(13, 11, 34, .4)); }
 .creatures-pin .decor-voile::after { background: rgba(13, 11, 34, .45); }
-.tour-pin .decor-voile::after { background: linear-gradient(90deg, rgba(13, 11, 34, .75), rgba(13, 11, 34, .2)); }
 .legendes > .conteneur, .progression-chap > .conteneur, .tour-grille { position: relative; z-index: 2; }
 .legendes-halo { z-index: 1; }
 .mosaique { z-index: 1; }
@@ -330,7 +320,6 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .legendes .decor-voile::after { background: linear-gradient(90deg, rgba(16, 36, 26, .78), rgba(16, 36, 26, .25) 55%, rgba(16, 36, 26, 0)); }
 .progression-chap .decor-voile::after { background: linear-gradient(90deg, rgba(16, 36, 26, .78), rgba(16, 36, 26, .3) 60%, rgba(16, 36, 26, .15)); }
 .creatures-pin .decor-voile::after { background: rgba(16, 36, 26, .3); }
-.tour-pin .decor-voile::after { background: linear-gradient(90deg, rgba(20, 10, 8, .7), rgba(20, 10, 8, .15)); }
 .legendes, .progression-chap, .creatures-pin { background: var(--nuit); }
 .tuile { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .22); backdrop-filter: blur(4px); }
 .tuile.cachee img { filter: brightness(0) drop-shadow(0 0 1px rgba(255, 255, 255, .4)); opacity: .6; }
@@ -592,3 +581,32 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 }
 .monde-wiki { top: 112px; bottom: auto; }
 .monde::after { content: none; }
+
+/* peuples : en-tête centré, rangée de bannières centrée ; elle défile seulement si elle ne tient pas dans l'écran */
+.peuples-chap .galerie-entete { flex-direction: column; align-items: center; text-align: center; }
+.peuples-chap .sous-texte { margin-inline: auto; }
+.bannieres { justify-content: safe center; padding-inline: 24px; scroll-padding-inline: 24px; }
+.banniere { flex-basis: clamp(184px, calc((100vw - 48px - 8 * 20px - 24px) / 9), 250px); }
+.peuples-chap.tient .peuples-fleches { visibility: hidden; }
+
+/* ---------- VI · la Tour en pixel art ---------- */
+.tour-pin { background: #1E2A6E; }
+.tour-scene { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(180deg, var(--ciel-haut, #7DB4F0), var(--ciel-bas, #D4EAFA)); }
+.tour-scene canvas, .tour-monde { position: absolute; top: 0; left: 0; image-rendering: pixelated; image-rendering: crisp-edges; will-change: transform; }
+.tour-monde { right: 0; }
+.tour-etoiles { transition: opacity .4s; }
+.tour-nuages-proches { opacity: .85; }
+.tour-grille { grid-template-columns: minmax(0, 540px); justify-content: start; }
+.tour-texte { padding: 30px 32px; border-radius: 24px; background: rgba(13, 11, 34, .58); border: 1px solid var(--verre-bord); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .6); }
+.tour-paliers { display: flex; gap: 8px; margin-top: 10px; }
+.tour-paliers i { font-style: normal; font-family: var(--titre); font-size: 13px; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(242, 193, 78, .4); color: rgba(255, 255, 255, .55); transition: background .3s, color .3s; }
+.tour-paliers i.atteint { background: var(--or); color: #2A1A00; border-color: var(--or-clair); }
+@media (max-width: 900px) {
+  .tour-pin { align-items: start; }
+  .tour-grille { justify-content: center; padding-top: 84px; }
+  .tour-texte { padding: 18px 20px; text-align: center; }
+  .tour-texte h2 { font-size: 26px; }
+  .tour-texte .sous-texte { display: none; }
+  .tour-paliers { justify-content: center; }
+  .etage { margin-top: 8px; } .etage b { font-size: 40px; }
+}
