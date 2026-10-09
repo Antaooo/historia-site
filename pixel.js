@@ -424,5 +424,7 @@
     { id: "boreale", nom: "Forêt boréale", texte: "Épicéas enneigés, bouleaux tordus, clairières de congères. Des hurlements de loups, au loin.", boss: "Yéti", portrait: "lr_yeti", creatures: "Vikings, loups, wendigos" },
   ];
 
-  window.Pixel = { monter, image, THEMES, BIOMES };
+  window.Pixel = { monter, image, THEMES, BIOMES,
+    // outils partagés avec le monde en frise (monde.js)
+    outils: { Toile, SPRITES, sprite, lueur, rgb, mix, ton, alea, bruit, palette, BAYER, ANIM, dessinerAnim, PARTICULES } };
 })();

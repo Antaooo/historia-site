@@ -6,75 +6,106 @@
   const lisse = t => 1 - Math.pow(1 - t, 3);
   const fmt = n => n.toLocaleString("fr-FR").replace(/ | /g, " ");
 
-  /* ---------- I · le monde : une frise continue de biomes, une infobulle par biome ---------- */
+  /* ---------- I · le monde : une seule frise continue, vue en coupe (monde.js), une infobulle par biome ---------- */
   const piste = $("#piste"), points = $("#points-biomes"), monde = $("#monde"), bulle = $("#infobulle"), courant = $("#monde-courant");
-  // ordre de la frise : du cœur du royaume vers le nord, puis le sud chaud, jusqu'à l'océan
-  const ORDRE = ["plaines", "falaises", "boreale", "lunaire", "sakuras", "jungle", "desert", "caldeira", "abysses"];
-  const BIOMES = ORDRE.map(id => Pixel.BIOMES.find(b => b.id === id)).filter(Boolean), NB = BIOMES.length;
-  // teinte de la fenêtre de la légende, par biome
-  const TEINTES = { plaines: "#7FC25A", falaises: "#BFD8EE", jungle: "#3FA66A", lunaire: "#9A7AE0", sakuras: "#F4A6C6", caldeira: "#FF7A2A", abysses: "#2F8FC5", desert: "#E8B25A", boreale: "#8FD0E8" };
-  piste.style.setProperty("--n", NB);
-  piste.innerHTML = BIOMES.map((b, i) => `<div class="troncon" style="--i:${i}"><div class="decor" data-theme="${b.id}" aria-hidden="true"></div>
-    <button type="button" class="repere" data-i="${i}" aria-describedby="infobulle" aria-expanded="false"><span>${b.nom}</span></button></div>`).join("");
+  const M = Pixel.monde, BIOMES = M.BIOMES, NB = BIOMES.length;
+  // teinte de la fenêtre de la légende : l'herbe du biome, ou sa brume
+  const teinte = b => b.herbe || b.brume;
   points.innerHTML = BIOMES.map((b, i) => `<button type="button" class="point-biome" data-i="${i}" aria-label="Aller à : ${b.nom}" aria-current="${i === 0}"><span>${b.nom}</span></button>`).join("");
-  const troncons = $$(".troncon"), reperes = $$(".repere"), pts = [...points.children], fleches = $$("[data-biome]");
-  let off = 0, ouverte = -1, glisse = false;
-  const largeur = () => piste.offsetWidth / NB, vue = () => monde.clientWidth;
-  const borneOff = o => borne(o, 0, Math.max(0, piste.offsetWidth - vue()));
+  const pts = [...points.children], fleches = $$("[data-biome]");
+  let off = 0, ech = 1, R = null, couches = [], sol = null, ctxAnim = null, ctxPart = null, ctxReflet = null, particules = null, reperes = [];
+  let ouverte = -1, glisse = false, mondeVisible = false, dernierAnim = -1e9, dims = [0, 0];
+  const vue = () => monde.clientWidth, total = () => M.W * ech;
+  const borneOff = o => borne(o, 0, Math.max(0, total() - vue()));
+  const toile = (l, h, classe) => { const cv = document.createElement("canvas"); cv.width = l; cv.height = h; cv.className = classe; return cv; };
+  const taille = cv => { cv.style.width = `${cv.width * ech}px`; cv.style.height = `${cv.height * ech}px`; };
+
+  // construction (et reconstruction au redimensionnement) : une toile par couche, le sol et ses calques dans un même groupe
+  function construire() {
+    const garde = R ? off / ech : 0;
+    dims = [vue(), monde.clientHeight]; ech = monde.clientHeight / M.H; R = M.rendre(Math.ceil(vue() / ech));
+    piste.innerHTML = ""; couches = [];
+    for (const c of R.couches) { c.canvas.className = "monde-couche"; taille(c.canvas); piste.appendChild(c.canvas); couches.push({ el: c.canvas, s: c.s }); }
+    sol = document.createElement("div"); sol.className = "monde-sol"; sol.style.width = `${M.W * ech}px`;
+    const anim = toile(M.W, M.H, "monde-couche"), part = toile(M.W, M.H, "monde-couche"), reflet = toile(M.W, M.H, "monde-couche monde-reflet");
+    [anim, part, reflet].forEach(cv => { taille(cv); sol.appendChild(cv); });
+    ctxAnim = anim.getContext("2d"); ctxPart = part.getContext("2d"); ctxReflet = reflet.getContext("2d");
+    sol.insertAdjacentHTML("beforeend", BIOMES.map((b, i) => `<button type="button" class="repere" data-i="${i}" aria-describedby="infobulle" aria-expanded="false" style="left:${(M.debuts[i] + b.l / 2) * ech}px"><span>${b.nom}</span></button>`).join(""));
+    piste.appendChild(sol); couches.push({ el: sol, s: 1 });
+    reperes = [...sol.querySelectorAll(".repere")];
+    reperes.forEach((r, i) => { r.addEventListener("focus", () => montrer(i)); r.addEventListener("blur", () => { if (!monde.matches(":hover")) cacher(); }); });
+    particules = M.creerParticules();
+    Pixel.outils.dessinerAnim(ctxAnim, R.anims, 0); particules(ctxPart, 0, 0, M.W);
+    const o = ouverte; ouverte = -1; if (o >= 0) montrer(o);
+    monde.classList.add("glisse"); aller(garde * ech); requestAnimationFrame(() => monde.classList.remove("glisse"));
+  }
 
   function aller(o) {
-    off = borneOff(o); const seg = largeur(), V = vue();
-    piste.style.transform = `translate3d(${-off}px,0,0)`;
-    troncons.forEach((t, k) => {
-      const debut = k * seg, el = t.querySelector(".decor");
-      // rendu à la demande : les biomes à l'écran et leurs voisins proches seulement
-      if (monde.dataset.vu && debut + seg * 1.3 > off - V * 0.6 && debut - seg * 0.3 < off + V * 1.6) Historia.monter(el);
-      // parallaxe : chaque biome glisse légèrement selon sa place dans la vue
-      const d = borne((debut + seg / 2 - off - V / 2) / V, -1, 1);
-      couchesDe(el).forEach(c => { c.style.transform = `translate3d(${-d * c.dataset.profondeur * 5}%,0,0)`; });
-    });
-    const centre = Math.min(NB - 1, Math.floor((off + V / 2) / seg));
+    off = borneOff(o);
+    for (const c of couches) c.el.style.transform = `translate3d(${-off * c.s}px,0,0)`;
+    const centre = R ? M.indexA((off + vue() / 2) / ech) : 0;
     pts.forEach((p, k) => p.setAttribute("aria-current", k === centre));
     if (courant.textContent !== BIOMES[centre].nom) courant.textContent = BIOMES[centre].nom;
-    fleches[0].disabled = off <= 1; fleches[1].disabled = off >= borneOff(1e9) - 1;
+    fleches[0].disabled = off <= 1; fleches[1].disabled = !R || off >= borneOff(1e9) - 1;
     if (ouverte >= 0) placer(ouverte);
   }
-  const pas = s => aller(off + s * vue() * 0.88);
+  const pas = s => aller(off + s * vue() * 0.85);
+
+  // la vie du monde : eau, lave, cascades et fumées environ 10 fois par seconde, particules à chaque image, seulement à l'écran
+  surBoucle.push(t => {
+    if (!R || !mondeVisible) return;
+    const xa = Math.floor(off / ech) - 2, xb = Math.ceil((off + vue()) / ech) + 2;
+    ctxPart.clearRect(xa, 0, xb - xa, M.H); particules(ctxPart, t, xa, xb);
+    if (t - dernierAnim > 100) { dernierAnim = t; ctxAnim.clearRect(0, 0, M.W, M.H); Pixel.outils.dessinerAnim(ctxAnim, R.anims, t); }
+  });
+  new IntersectionObserver(es => { mondeVisible = es.some(e => e.isIntersecting); }).observe(monde);
+
+  // surbrillance du biome : les autres s'assombrissent, un liseré doré suit son relief et ses frontières dentelées
+  function surligner(k) {
+    const c = ctxReflet; c.clearRect(0, 0, M.W, M.H); if (k < 0) return;
+    const a0 = M.debuts[k], b0 = a0 + BIOMES[k].l;
+    c.fillStyle = "rgba(10,8,24,.45)";
+    for (let y = 0; y < M.H; y++) { const d = M.decalage(y), a = a0 - d, b = b0 - d; if (a > 0) c.fillRect(0, y, a, 1); if (b < M.W) c.fillRect(b, y, M.W - b, 1); }
+    c.fillStyle = "rgba(255,214,110,.95)";
+    for (let x = Math.max(0, a0 - 8); x < Math.min(M.W, b0 + 8); x++) if (M.biomeA(x, M.surf[x]) === k) c.fillRect(x, M.surf[x] - 1, 1, 1);
+    c.fillStyle = "rgba(255,214,110,.55)";
+    for (let y = 0; y < M.H; y++) { const d = M.decalage(y); if (y < M.surf[Math.max(0, Math.min(M.W - 1, a0 - d))] && y < M.surf[Math.max(0, Math.min(M.W - 1, b0 - d - 1))]) continue; c.fillRect(a0 - d, y, 1, 1); c.fillRect(b0 - d - 1, y, 1, 1); }
+  }
 
   // infobulle : nom, description, légende du biome dans sa fenêtre, créatures
   function remplir(i) {
     const b = BIOMES[i];
-    bulle.style.setProperty("--c", TEINTES[b.id] || "#F2C14E");
+    bulle.style.setProperty("--c", teinte(b));
     bulle.innerHTML = `<figure class="fenetre-boss bulle-boss"><img src="img/boss/p_${b.portrait}.png" alt="" width="320" height="320"></figure>
       <div class="bulle-texte"><p class="bulle-num">${String(i + 1).padStart(2, "0")} / ${String(NB).padStart(2, "0")}</p><h3>${b.nom}</h3>
       <p>${b.texte}</p><p class="bulle-legende">Légende · <b>${b.boss}</b></p><p class="bulle-creatures">${b.creatures}</p></div>`;
   }
-  // l'infobulle se pose sous le repère du biome, sans sortir de l'écran
+  // l'infobulle se pose sous le repère du biome, sans sortir de l'écran ni couvrir le fil des chapitres
   function placer(i) {
-    const mr = monde.getBoundingClientRect(), seg = largeur(), l = bulle.offsetWidth;
-    const cx = i * seg + seg / 2 - off, haut = reperes[i].offsetTop + reperes[i].offsetHeight;
-    const gauche = borne(cx - l / 2, 16, mr.width - l - (mr.width > 1000 ? 96 : 16));
+    if (!reperes[i]) return;
+    const V = vue(), l = bulle.offsetWidth, cx = (M.debuts[i] + BIOMES[i].l / 2) * ech - off, haut = reperes[i].offsetTop + reperes[i].offsetHeight;
+    const gauche = borne(cx - l / 2, 16, V - l - (V > 1000 ? 96 : 16));
     bulle.style.left = `${gauche}px`; bulle.style.top = `${haut + 14}px`;
     bulle.style.setProperty("--fleche", `${borne(cx - gauche, 24, l - 24)}px`);
   }
   function montrer(i) {
-    if (i === ouverte) return;
-    if (ouverte >= 0) reperes[ouverte].setAttribute("aria-expanded", "false");
-    ouverte = i; remplir(i); reperes[i].setAttribute("aria-expanded", "true");
+    if (i === ouverte || !R) return;
+    if (ouverte >= 0 && reperes[ouverte]) reperes[ouverte].setAttribute("aria-expanded", "false");
+    ouverte = i; remplir(i); reperes[i].setAttribute("aria-expanded", "true"); surligner(i); ctxReflet.canvas.classList.add("visible");
     bulle.hidden = false; placer(i); requestAnimationFrame(() => bulle.classList.add("visible"));
   }
   function cacher() {
     if (ouverte < 0) return;
-    reperes[ouverte].setAttribute("aria-expanded", "false"); ouverte = -1; bulle.classList.remove("visible");
+    if (reperes[ouverte]) reperes[ouverte].setAttribute("aria-expanded", "false");
+    ouverte = -1; bulle.classList.remove("visible"); if (ctxReflet) ctxReflet.canvas.classList.remove("visible");
   }
   bulle.addEventListener("transitionend", e => { if (e.propertyName === "opacity" && ouverte < 0) bulle.hidden = true; });
-  const biomeSous = x => Math.min(NB - 1, Math.max(0, Math.floor((x - monde.getBoundingClientRect().left + off) / largeur())));
+  const biomeSous = x => M.indexA((x - monde.getBoundingClientRect().left + off) / ech);
 
-  // survol à la souris : l'infobulle du biome sous le curseur
-  const horsFrise = ".points-biomes, .fleche, .monde-wiki, .monde-entete, .infobulle";
-  monde.addEventListener("pointermove", e => { if (e.pointerType === "mouse" && !glisse && !e.target.closest(horsFrise)) montrer(biomeSous(e.clientX)); });
+  // survol à la souris : le biome sous le curseur s'éclaire et montre son infobulle
+  const horsFrise = ".monde-commandes, .monde-wiki, .monde-entete, .infobulle";
+  monde.addEventListener("pointermove", e => { if (e.pointerType === "mouse" && !glisse && R && !e.target.closest(horsFrise)) montrer(biomeSous(e.clientX)); });
   monde.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") cacher(); });
-  reperes.forEach((r, i) => { r.addEventListener("focus", () => montrer(i)); r.addEventListener("blur", () => { if (!monde.matches(":hover")) cacher(); }); });
   addEventListener("keydown", e => { if (e.key === "Escape") cacher(); });
 
   // glisser (souris ou doigt) ; un toucher sans glisser ouvre ou ferme l'infobulle du biome touché
@@ -100,9 +131,10 @@
     clearTimeout(roue); roue = setTimeout(() => monde.classList.remove("glisse"), 120);
   }, { passive: false });
 
-  pts.forEach((p, k) => p.addEventListener("click", () => { aller(k * largeur() + largeur() / 2 - vue() / 2); montrer(k); }));
+  pts.forEach((p, k) => p.addEventListener("click", () => { aller((M.debuts[k] + BIOMES[k].l / 2) * ech - vue() / 2); montrer(k); }));
   fleches.forEach(b => b.addEventListener("click", () => { cacher(); pas(Number(b.dataset.biome)); }));
-  addEventListener("resize", () => aller(off));
+  let attenteMonde;
+  addEventListener("resize", () => { clearTimeout(attenteMonde); attenteMonde = setTimeout(() => { if (!R) return; if (Math.abs(monde.clientHeight - dims[1]) > 40 || Math.abs(vue() - dims[0]) > 40) construire(); else aller(off); }, 250); });
 
   /* ---------- III · les peuples : bannières à retourner ---------- */
   const PEUPLES = [
@@ -300,8 +332,7 @@
   mur.innerHTML = MUR.map(([t, id, nom, taille]) => `<a class="brique brique-${t}${taille ? " " + taille : ""}" href="galerie.html" data-t="${t}" data-id="${id}"><span class="brique-image">${t === "boss" ? `<img src="img/boss/p_${id}.png" alt="" loading="lazy">` : t === "jeu" ? `<img src="${id}" alt="" loading="lazy">` : ""}</span><span class="brique-nom">${nom}</span></a>`).join("");
   $$(".brique-biome").forEach(b => { const grand = b.classList.contains("grand"), large = b.classList.contains("large"); Historia.imageDiffere(b.querySelector(".brique-image"), b.dataset.id, grand || large ? 420 : 220, grand ? 300 : 180); });
   // la frise des biomes n'est dessinée que lorsqu'on s'en approche
-  piste.dataset.aLaDemande = "1";
-  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { monde.dataset.vu = "1"; aller(off); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
+  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { construire(); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
 
   Historia.demarrer();
   aller(0); legende(0);
