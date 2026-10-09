@@ -66,5 +66,5 @@
   recherche.addEventListener("input", filtrer);
   // bestiaire.html#famille=Démons : ouvre directement une famille
   const voulu = decodeURIComponent((location.hash.match(/famille=([^&]+)/) || [])[1] || "");
-  const bouton = $("#familles .filtre").find(x => x.dataset.famille === voulu); if (voulu && bouton) bouton.click();
+  const bouton = $$("#familles .filtre").find(x => x.dataset.famille === voulu); if (voulu && bouton) bouton.click();
 })();
