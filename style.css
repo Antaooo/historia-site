@@ -646,3 +646,9 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 @media (max-width: 700px) { .ouverture-nouveau { font-size: 13px; text-align: center; border-radius: 16px; } .ouverture-actions .bouton-visite { display: none; } }
 /* légende de la carte du chapitre progression : lisible sur le décor */
 .radar-legende { display: inline-block; padding: 8px 16px; border-radius: 14px; background: rgba(13, 11, 34, .72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: rgba(255, 255, 255, .9); }
+
+.monde-consigne { margin-top: 6px; font-size: 13px; color: rgba(255, 255, 255, .8); }
+.consigne-doigt { display: none; }
+@media (hover: none) { .consigne-souris { display: none; } .consigne-doigt { display: inline; } }
+.monde-wiki { padding: 8px 14px; border-radius: 999px; background: rgba(13, 11, 34, .6); border: 1px solid var(--verre-bord); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); text-shadow: none; }
+@media (max-width: 900px) { .monde-consigne { font-size: 12px; } }

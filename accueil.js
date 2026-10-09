@@ -11,7 +11,7 @@
   const M = Pixel.monde, BIOMES = M.BIOMES, NB = BIOMES.length;
   // teinte de la fenêtre de la légende : l'herbe du biome, ou sa brume
   const teinte = b => b.herbe || b.brume;
-  points.innerHTML = BIOMES.map((b, i) => `<button type="button" class="point-biome" data-i="${i}" aria-label="Aller à : ${b.nom}" aria-current="${i === 0}"><span>${b.nom}</span></button>`).join("");
+  points.innerHTML = BIOMES.map((b, i) => `<button type="button" class="point-biome" data-i="${i}" aria-label="Aller à : ${b.nom}" aria-current="${b.id === "plaines"}"><span>${b.nom}</span></button>`).join("");
   const pts = [...points.children], fleches = $$("[data-biome]");
   let off = 0, ech = 1, R = null, couches = [], sol = null, ctxAnim = null, ctxPart = null, ctxReflet = null, particules = null, reperes = [];
   let ouverte = -1, glisse = false, mondeVisible = false, dernierAnim = -1e9, dims = [0, 0];
@@ -22,7 +22,7 @@
 
   // construction (et reconstruction au redimensionnement) : une toile par couche, le sol et ses calques dans un même groupe
   function construire() {
-    const garde = R ? off / ech : 0;
+    const garde = R ? off / ech : null; // première fois : on s'ouvre sur les plaines, le cœur du royaume
     // sur téléphone, le monde est dézoomé pour voir plus d'un biome ; le haut de l'écran se remplit avec le ciel de chaque biome
     const hauteur = monde.clientHeight; dims = [vue(), hauteur]; ech = hauteur / M.H; if (vue() < 700) ech = Math.min(ech, vue() / 130);
     const reste = Math.max(0, hauteur - M.H * ech), bas = Math.round(Math.min(220, reste * 0.45)), decal = Math.round(reste - bas); // le sol remonte au-dessus des commandes
@@ -45,7 +45,7 @@
     particules = M.creerParticules();
     Pixel.outils.dessinerAnim(ctxAnim, R.anims, 0); particules(ctxPart, 0, 0, M.W);
     const o = ouverte; ouverte = -1; if (o >= 0) montrer(o);
-    monde.classList.add("glisse"); aller(garde * ech); requestAnimationFrame(() => monde.classList.remove("glisse"));
+    monde.classList.add("glisse"); { const k = BIOMES.findIndex(b => b.id === "plaines"); aller(garde === null ? (M.debuts[k] + BIOMES[k].l / 2) * ech - vue() / 2 : garde * ech); } requestAnimationFrame(() => monde.classList.remove("glisse"));
   }
 
   function aller(o) {
