@@ -8,6 +8,8 @@
 
   /* ---------- I · carrousel des biomes ---------- */
   const piste = $("#piste"), BIOMES = Pixel.BIOMES, points = $("#points-biomes");
+  // teinte du cadre de la légende, par biome
+  const TEINTES = { plaines: "#7FC25A", falaises: "#BFD8EE", jungle: "#3FA66A", lunaire: "#9A7AE0", sakuras: "#F4A6C6", caldeira: "#FF7A2A", abysses: "#2F8FC5", desert: "#E8B25A", boreale: "#8FD0E8" };
   piste.innerHTML = BIOMES.map((b, i) => `
     <article class="biome" aria-roledescription="diapositive" aria-label="${i + 1} sur ${BIOMES.length} : ${b.nom}">
       <div class="decor" data-theme="${b.id}" aria-hidden="true"></div>
@@ -15,9 +17,12 @@
         <p class="biome-num">${String(i + 1).padStart(2, "0")} / ${String(BIOMES.length).padStart(2, "0")}</p>
         <h3>${b.nom}</h3>
         <p>${b.texte}</p>
-        <p class="biome-pastilles"><span>Légende · <b>${b.boss}</b></span><span>${b.creatures}</span></p>
+        <p class="biome-pastilles"><span>${b.creatures}</span></p>
       </div>
-      <img class="biome-boss" src="img/boss/p_${b.portrait}.png" alt="" loading="lazy" width="460" height="460">
+      <figure class="fenetre-boss biome-cadre" style="--c:${TEINTES[b.id] || "#F2C14E"}">
+        <img src="img/boss/p_${b.portrait}.png" alt="" loading="lazy" width="320" height="320">
+        <figcaption><small>Légende du biome</small><b>${b.boss}</b></figcaption>
+      </figure>
     </article>`).join("");
   points.innerHTML = BIOMES.map((b, i) => `<button type="button" class="point-biome" aria-label="${b.nom}" aria-current="${i === 0}"><span>${b.nom}</span></button>`).join("");
   const biomes = $$(".biome"), pts = [...points.children];
@@ -37,13 +42,54 @@
   monde.addEventListener("pointerdown", e => { if (!e.target.closest("button, a")) bx = e.clientX; });
   monde.addEventListener("pointerup", e => { if (bx !== null && Math.abs(e.clientX - bx) > 60) biome(ib + (e.clientX < bx ? 1 : -1)); bx = null; });
 
+  /* ---------- III · les peuples : bannières à retourner ---------- */
+  const PEUPLES = [
+    ["Elfes", "elven_druid", "#8F6FC9", "Gardiens des clairières lunaires", "Forêt lunaire · Jardin des fées", "Leur village s'enroule autour d'un arbre-cœur, gardé par des portails de calcite et de quartz. Épéistes, rôdeurs, mages et druides veillent sur la forêt, et ne tolèrent pas qu'on y coupe un arbre sans raison."],
+    ["Nains", "dwarf_knight", "#8A8A96", "Maîtres des profondeurs", "Pics de granit · Grottes", "Sous les montagnes, des mines creusées pendant des siècles, des ponts jetés au-dessus des gouffres et une porte scellée que personne n'a jamais rouverte. Chevaliers, chasseurs, forgerons et prêtres gardent ce qui reste du royaume nain."],
+    ["Gobelins", "goblin_king", "#6F9A2A", "Pillards des plaines", "Plaines · Savane · Steppe", "Petits, verts et toujours en bande. Armés de poêles, de cuillères et de gourdins, ils sortent de leurs camps et de leurs champignonnières pour piller tout ce qui brille. Un chaman les galvanise, et leur roi les mène."],
+    ["Vikings", "viking", "#4C78A8", "Guerriers du grand nord", "Taïga · Forêt boréale", "Retranchés derrière leurs palissades et leurs longues maisons, ils ne craignent ni le froid ni la mort. Ils obéissent à Bjorn l'Exalté, et chaque raid qu'ils mènent devient un chant."],
+    ["Pirates et créatures marines", "pirate_captain", "#2F7FA5", "Écumeurs des côtes", "Côtes · Abysses", "Épaves échouées, coffres enterrés, sanctuaire englouti. Le capitaine et son équipage pillent les rivages, des crabes géants gardent les plages, et au fond de l'eau, quelque chose de bien plus grand attend."],
+    ["Morts-vivants", "mortos", "#5F8F7A", "Ceux qui ne reposent pas", "Désert · Landes · Forêts", "Le tombeau d'Anubis et ses momies, l'ossuaire, le cimetière où dort le dragon Mortos, l'église du gardien Kriger. Dans ce royaume, les morts ne restent pas toujours sous terre."],
+    ["Démons", "lillith", "#A23A3A", "Enfants des rituels", "Caldeira · Terres brûlées", "Invoqués par des rituels oubliés, ils obéissent à Lillith. Là où son cercle d'invocation s'allume, les diablotins ne sont jamais loin, et les faucheurs non plus."],
+    ["Esprits de la forêt", "skog", "#3F9D8F", "Âmes de la nature", "Forêts · Vallée des sakuras", "Skog, l'esprit des chênes et des bouleaux. Glume, gardien des champignons géants. Hana, dans la vallée des sakuras. Ils protègent la nature, et se souviennent de chaque arbre abattu."],
+    ["Golems", "amethystgolem", "#6AA7C7", "Colosses nés des géodes", "Grottes · Géodes", "Améthyste, diamant, émeraude, quartz, redstone : chaque gemme a son colosse. Ils dorment dans la pierre, jusqu'au jour où un mineur creuse un peu trop près."],
+  ];
+  const bannieres = $("#bannieres");
+  bannieres.innerHTML = PEUPLES.map(([nom, portrait, c, devise, terres, legende]) => `
+    <div class="banniere" role="listitem" style="--c:${c}">
+      <button type="button" class="banniere-carte" aria-pressed="false" aria-label="${nom} : lire la légende">
+        <span class="banniere-face">
+          <span class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${portrait}.png" alt="" loading="lazy" width="320" height="320"></span>
+          <span class="banniere-nom">${nom}</span>
+          <span class="banniere-devise">${devise}</span>
+          <span class="banniere-terres">${terres}</span>
+          <span class="banniere-indice" aria-hidden="true">Lire la légende ↻</span>
+        </span>
+        <span class="banniere-dos" aria-hidden="true">
+          <span class="banniere-nom">${nom}</span>
+          <span class="banniere-legende">${legende}</span>
+          <span class="banniere-indice">Retourner ↻</span>
+        </span>
+      </button>
+    </div>`).join("");
+  // une bannière se retourne pour montrer la légende du peuple ; la face cachée sort de l'arbre d'accessibilité
+  $$(".banniere-carte").forEach(b => b.addEventListener("click", () => {
+    const dos = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", dos); b.setAttribute("aria-label", b.querySelector(".banniere-nom").textContent + (dos ? " : revenir à la bannière" : " : lire la légende"));
+    b.querySelector(".banniere-face").setAttribute("aria-hidden", dos); b.querySelector(".banniere-dos").setAttribute("aria-hidden", !dos);
+  }));
+  $$("[data-peuple]").forEach(b => b.addEventListener("click", () => {
+    const pas = bannieres.firstElementChild.offsetWidth + 20;
+    bannieres.scrollBy({ left: Number(b.dataset.peuple) * pas * Math.max(1, Math.floor(bannieres.clientWidth / pas) - 1), behavior: calme ? "auto" : "smooth" });
+  }));
+
   /* ---------- II · mosaïque des créatures ---------- */
   const PORTRAITS = ["lr_minotaur", "medusa", "phoenix", "lr_yeti", "lr_anubis", "kraken", "cerberus", "tiamat", "azriel", "nightharrow_wendigo", "lr_gryffin", "wu", "flamental", "capra", "elven_druid", "mega_warden", "hana", "demon_of_chaos_gama05", "megalodon", "glume", "skog", "oblivion", "voras", "zahar", "mortos", "lillith", "wolfebersahd", "koboldassassin", "magnus", "kriger", "ent_king"];
   const mosaique = $("#mosaique");
   mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % PORTRAITS.length, p = PORTRAITS[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="img/boss/p_${p}.png" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
   const compteur = $("#compteur");
 
-  /* ---------- III · légendes (carrousel manuel) ---------- */
+  /* ---------- IV · légendes (carrousel manuel) ---------- */
   const LEGENDES = [
     ["lr_minotaur", "Le Minotaure", "Gardien du labyrinthe", "Falaises blanches", 1250, "#D8C9A6"],
     ["medusa", "Méduse", "Reine au regard de pierre", "Falaises côtières", 1000, "#7FD3C4"],
@@ -79,7 +125,7 @@
   zone.addEventListener("pointerdown", e => { lx = e.clientX; });
   zone.addEventListener("pointerup", e => { if (lx !== null && Math.abs(e.clientX - lx) > 50) legende(il + (e.clientX < lx ? 1 : -1)); lx = null; });
 
-  /* ---------- IV · progression : carte carrée façon carte de Minecraft ---------- */
+  /* ---------- V · progression : carte carrée façon carte de Minecraft ---------- */
   const carte = $("#carte"), cctx = carte.getContext("2d"), curseur = $("#niveau"), N = 161, C = 80, BPX = 125; // 125 blocs par pixel, ±10 000 blocs
   const fond = (() => { // terrain vu du dessus, couleurs et ombrage des cartes de Minecraft
     const al = (x, y, g) => { let h = (x * 374761393 + y * 668265263 + g * 2246822519) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967295; };
@@ -128,7 +174,7 @@
   curseur.addEventListener("input", majNiveau); majNiveau();
   $$(".metier").forEach(b => b.addEventListener("click", () => { $$(".metier").forEach(x => { x.classList.toggle("actif", x === b); x.setAttribute("aria-pressed", x === b); }); }));
 
-  /* ---------- V · la Tour ---------- */
+  /* ---------- VI · la Tour ---------- */
   const tour = $("#tour-svg"); let t = "";
   for (let i = 0; i < 40; i++) { const y = 720 - i * 17, l = 170 - i * 1.4, x = 150 - l / 2; t += `<rect class="etage-r" data-i="${i + 1}" x="${x.toFixed(1)}" y="${y}" width="${l.toFixed(1)}" height="14"/>`; if (i % 5 === 4) t += `<rect class="fenetre-t" data-i="${i + 1}" x="144" y="${y + 3}" width="12" height="8"/>`; }
   t += `<path class="tour-toit" d="M88,44 H212 V36 H200 V24 H188 V12 H176 V0 H164 V-12 H136 V0 H124 V12 H112 V24 H100 V36 H88 Z"/><rect x="146" y="-34" width="8" height="22" fill="#3A2A1E"/><rect x="154" y="-34" width="22" height="12" fill="#E0533B"/><rect x="40" y="736" width="220" height="24" class="tour-socle"/>`;
@@ -186,7 +232,7 @@
     e.preventDefault(); scrollTo({ top: cible, behavior: calme ? "auto" : "smooth" });
   });
 
-  /* ---------- VI · mur de la galerie ---------- */
+  /* ---------- VII · mur de la galerie ---------- */
   const MUR = [["biome", "royaume", "Le royaume", "grand"], ["boss", "lr_minotaur", "Le Minotaure"], ["biome", "jungle", "Jungle ancestrale"], ["biome", "sakuras", "Vallée des sakuras"], ["boss", "phoenix", "Le Phénix"], ["biome", "falaises", "Falaises blanches", "large"], ["biome", "lunaire", "Forêt lunaire"], ["biome", "desert", "Désert"], ["boss", "kraken", "Le Kraken"], ["jeu", "img/captures/menus.png", "Les menus en jeu", "large"]];
   const mur = $("#mur");
   mur.innerHTML = MUR.map(([t, id, nom, taille]) => `<a class="brique brique-${t}${taille ? " " + taille : ""}" href="galerie.html" data-t="${t}" data-id="${id}"><span class="brique-image">${t === "boss" ? `<img src="img/boss/p_${id}.png" alt="" loading="lazy">` : t === "jeu" ? `<img src="${id}" alt="" loading="lazy">` : ""}</span><span class="brique-nom">${nom}</span></a>`).join("");

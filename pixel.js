@@ -47,7 +47,7 @@
     torii: ["rrrrrrrrrrr", ".rrrrrrrrr.", "..r.....r..", ".kkkkkkkkk.", "..r.....r..", "..r.....r..", "..r.....r..", "..r.....r..", "..k.....k.."],
     mort: ["k...k...k", ".k..k..k.", "..k.k.k..", "...kkk...", "....k..k.", "..k.k.k..", "...kk....", "....k....", "....k....", "...kkk..."],
     maison: ["...rrr...", "..rrrrr..", ".rrrrrrr.", "rrrrrrrrr", ".wwwwwww.", ".wyww.ww.", ".wwwwdww.", ".wwwwdww."],
-    moulin: ["k...k...", ".k.k....", "..k.....", ".k.k....", "k..rrr..", "..rrrrr.", "..wwwww.", "..wywww.", "..wwwww.", "..wwdww.", "..wwdww."],
+    moulin: ["........", "........", "........", "........", "...rrr..", "..rrrrr.", "..wwwww.", "..wywww.", "..wwwww.", "..wwdww.", "..wwdww."],
     bruyere: [".p.l.", "plpp.", "ppgpp"],
     champignon: [".cccc.", "cclccc", "cccccc", "..tt..", "..tt.."],
   };
@@ -57,13 +57,31 @@
   }
   function lueur(t, x, y, r, c, force = 0.35) { for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) { const d = Math.hypot(i, j) / r; if (d < 1 && BAYER[(y + j) & 3][(x + i) & 3] < (1 - d) * 0.9) t.px(x + i, y + j, c, force * (1 - d)); } }
 
-  function chateau(t, x, y, e, c, fen) {
+  // ---------- éléments animés : dessinés sur un calque posé juste au-dessus de leur couche ----------
+  const hashA = (a, b) => { let h = (a * 374761393 + b * 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967295; };
+  const ANIM = {
+    eau(ctx, a, t) { const f = Math.floor(t / 350); ctx.fillStyle = "rgba(255,255,255,.85)"; for (const [x, y] of a.points) if (hashA(x * 3 + y, f) > 0.955) ctx.fillRect(x, y, 2, 1); },
+    lave(ctx, a, t) { for (const [x, y] of a.points) { const v = 0.5 + 0.5 * Math.sin(t * 0.004 + x * 0.35 + y); if (v > 0.55) { ctx.fillStyle = `rgba(255,232,130,${((v - 0.55) * 1.4).toFixed(2)})`; ctx.fillRect(x, y, 1, 1); } } },
+    cascade(ctx, a, t) { const dec = Math.floor(t * 0.03);
+      for (let i = 0; i < a.l; i++) for (let y = a.hauts[i]; y < a.bas; y++) { ctx.fillStyle = (((y - dec + i * 3) % 7) + 7) % 7 < 2 ? "#F0FAFF" : a.couleur; ctx.fillRect(a.x0 + i, y, 1, 1); }
+      ctx.fillStyle = "#F5FCFF"; for (let i = -3; i < a.l + 3; i++) for (let j = 0; j < 3; j++) if (hashA(i * 5 + j, Math.floor(t / 120)) < 0.7) ctx.fillRect(a.x0 + i, a.bas - j, 1, 1); },
+    drapeau(ctx, a, t) { ctx.fillStyle = "#E0533B"; const l = 5 * a.e, h = 3 * a.e; for (let c = 0; c < l; c++) { const dy = Math.round(Math.sin(t * 0.006 - c * 0.7) * (c / l) * a.e); ctx.fillRect(a.x + c, a.y + dy, 1, h); } ctx.fillStyle = "#FF8A6A"; ctx.fillRect(a.x, a.y, 1, h); },
+    fenetres(ctx, a, t) { for (const [x, y, w, h] of a.rects) if (hashA(x * 7 + y, Math.floor(t / 900)) > 0.72) { ctx.fillStyle = "rgba(255,244,190,.6)"; ctx.fillRect(x, y, w, h); } },
+    fumee(ctx, a, t) { for (let k = 0; k < 6; k++) { const age = (t * 0.012 + k * 7 + a.x) % 42, s = age > 22 ? 2 : 1; ctx.fillStyle = `rgba(228,228,234,${((1 - age / 42) * 0.7).toFixed(2)})`; ctx.fillRect(Math.round(a.x + Math.sin(age / 5 + k) * 1.5 + age * 0.15), Math.round(a.y - age), s, s); } },
+    moulin(ctx, a, t) { ctx.fillStyle = "#4A3020"; const e = a.e, croix = Math.floor(t / 420) % 2; for (let k = -3; k <= 3; k++) { if (croix) { ctx.fillRect(a.x + k * e, a.y, e, e); ctx.fillRect(a.x, a.y + k * e, e, e); } else { ctx.fillRect(a.x + k * e, a.y + k * e, e, e); ctx.fillRect(a.x + k * e, a.y - k * e, e, e); } } },
+  };
+  const dessinerAnim = (ctx, anims, t) => { for (const a of anims) ANIM[a.type](ctx, a, t); };
+
+  function chateau(t, x, y, e, c, fen, anims) {
     const pierre = (i, j) => ton(c, ((i * 7 + j * 3) % 5 === 0) ? 0.1 : (i % 4 === 0 ? -0.06 : 0));
     const bloc = (a, b, l, h) => { for (let j = 0; j < h * e; j++) for (let i = 0; i < l * e; i++) t.px(x + a * e + i, y - b * e + j, ton(pierre(i, j), i < e ? 0.08 : 0)); };
     const cren = (a, b, l) => { for (let k = 0; k < l; k += 2) bloc(a + k, b + 1, 1, 1); };
     bloc(-10, 8, 20, 8); cren(-10, 8, 20); bloc(-14, 14, 5, 14); cren(-14, 14, 5); bloc(9, 14, 5, 14); cren(9, 14, 5); bloc(-3, 22, 6, 22); cren(-3, 22, 6);
-    for (const [a, b] of [[-1, 17], [1, 17], [-1, 12], [1, 12], [-12, 10], [11, 10], [-6, 4], [5, 4]]) t.rect(x + a * e, y - b * e, e, e * 1.5, fen);
-    t.rect(x, y - 30 * e, Math.max(1, e / 2), 8 * e, ton(c, -0.3)); t.rect(x + e / 2, y - 30 * e, 5 * e, 3 * e, rgb("#E0533B"));
+    const fenetres = [[-1, 17], [1, 17], [-1, 12], [1, 12], [-12, 10], [11, 10], [-6, 4], [5, 4]].map(([a, b]) => [x + a * e, y - b * e, e, Math.round(e * 1.5)]);
+    for (const [fx, fy, fw, fh] of fenetres) t.rect(fx, fy, fw, fh, fen);
+    t.rect(x, y - 30 * e, Math.max(1, e / 2), 8 * e, ton(c, -0.3));
+    // le drapeau flotte : il est dessiné sur le calque animé
+    anims.push({ type: "drapeau", x: Math.round(x + e / 2), y: y - 30 * e, e }, { type: "fenetres", rects: fenetres });
     t.rect(x - e, y - 3 * e, 2 * e, 3 * e, ton(c, -0.45));
     lueur(t, x, y - 14 * e, 8 * e, fen, 0.18);
   }
@@ -92,12 +110,15 @@
       [[2.6, 0.12], [1.9, 0.22], [1.4, 0.38]].forEach(([k, f]) => { for (let j = -rr * k; j <= rr * k; j++) for (let i = -rr * k; i <= rr * k; i++) if (Math.hypot(i, j) <= rr * k) ciel.px(ax + i, ay + j, c, f); });
       for (let j = -rr; j <= rr; j++) for (let i = -rr; i <= rr; i++) if (Math.hypot(i, j) <= rr) ciel.px(ax + i, ay + j, a.lune && ((i * 3 + j * 5) % 11 === 0 || Math.hypot(i + rr / 3, j - rr / 4) < rr / 4) ? ton(c, -0.1) : c); }
     if (th.rayons) for (let k = 0; k < 6; k++) { const x0 = r() * W, l = 6 + r() * 10; for (let y = 0; y < H; y++) for (let i = 0; i < l; i++) { const x = Math.round(x0 + i - y * 0.35); if (BAYER[y & 3][x & 3] < 0.5) ciel.px(x, y, [200, 236, 255], 0.12); } }
-    if (th.nuages) for (let k = 0; k < th.nuages; k++) { const x = r() * W | 0, y = (0.06 + r() * 0.3) * H | 0, l = 14 + r() * 26 | 0, c = rgb(th.couleurNuage || "#FFFFFF");
-      ciel.rect(x, y + 3, l, 5, c, 0.94); ciel.rect(x + 3, y, l * 0.45 | 0, 4, c, 0.94); ciel.rect(x + (l * 0.5 | 0), y + 1, l * 0.35 | 0, 3, c, 0.94); ciel.rect(x + 1, y + 1, 3, 2, ton(c, 0.5), 0.9); ciel.rect(x, y + 8, l, 1, ton(c, -0.14), 0.9); }
+    let nuagesT = null;
+    if (th.nuages) { nuagesT = new Toile(W * 2, H);
+      for (let k = 0; k < th.nuages; k++) { const x0 = r() * W | 0, y = (0.06 + r() * 0.3) * H | 0, l = 14 + r() * 26 | 0, c = rgb(th.couleurNuage || "#FFFFFF");
+        for (const x of [x0, x0 + W, x0 - W]) { nuagesT.rect(x, y + 3, l, 5, c, 0.94); nuagesT.rect(x + 3, y, l * 0.45 | 0, 4, c, 0.94); nuagesT.rect(x + (l * 0.5 | 0), y + 1, l * 0.35 | 0, 3, c, 0.94); nuagesT.rect(x + 1, y + 1, 3, 2, ton(c, 0.5), 0.9); nuagesT.rect(x, y + 8, l, 1, ton(c, -0.14), 0.9); } } }
     if (th.minerais) { for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (r() < 0.12) ciel.px(x, y, ton(stops[0], (r() - 0.5) * 0.5), 0.7);
       const MIN = [["#5FE0E8", 0.18], ["#F2C94C", 0.22], ["#D8A88A", 0.3], ["#E04848", 0.3]];
       for (let k = 0; k < W * H * th.minerais; k++) { const x = r() * W | 0, y = r() * H * 0.8 | 0, [c, p] = MIN[r() * MIN.length | 0]; if (r() > p * 3) continue; const cc = rgb(c); for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [2, 1], [1, 2]]) if (r() < 0.8) ciel.px(x + dx, y + dy, (dx + dy) % 2 ? ton(cc, -0.25) : cc); } }
     couches.push({ canvas: ciel.toile(), profondeur: 0, fond: true });
+    if (nuagesT) couches.push({ canvas: nuagesT.toile(), profondeur: 0, nuages: true });
 
     // 2. plafond de grotte
     if (th.plafond) { const p = th.plafond, t = new Toile(W, H), n = bruit(th.graine + 50), c = rgb(p.couleur);
@@ -108,13 +129,14 @@
 
     // 3. couches
     th.couches.forEach((cc, idx) => {
-      const t = new Toile(W, H), prof = cc.profondeur ?? (idx + 1) / (th.couches.length + 1);
+      const t = new Toile(W, H), prof = cc.profondeur ?? (idx + 1) / (th.couches.length + 1), anims = [];
       if (cc.eau) { // plan d'eau : du niveau à la base, reflets
         const c = rgb(cc.eau), y0 = Math.round(cc.niveau * H), cl = ton(c, 0.35);
         for (let y = y0; y < H; y++) for (let x = 0; x < W; x++) { const k = (y - y0) / (H - y0); t.px(x, y, ton(c, -0.25 * k + (BAYER[y & 3][x & 3] < 0.12 ? 0.08 : 0))); }
         for (let k = 0; k < W * 0.25; k++) { const x = r() * W | 0, y = y0 + 1 + (r() * (H - y0) * 0.7 | 0), l = 2 + r() * 8 | 0; t.rect(x, y, l, 1, cl, 0.8); }
         t.rect(0, y0, W, 1, ton(c, 0.5));
-        couches.push({ canvas: t.toile(), profondeur: prof }); return;
+        const points = []; for (let k = 0; k < W * 0.7; k++) points.push([r() * W | 0, y0 + 1 + (r() * (H - y0) * 0.55 | 0)]);
+        couches.push({ canvas: t.toile(), profondeur: prof, anims: [{ type: "eau", points }] }); return;
       }
       const c = rgb(cc.couleur), g = (th.graine || 7) * 31 + idx * 17, n1 = bruit(g), n2 = bruit(g + 5), n3 = bruit(g + 9), haut = [];
       for (let x = 0; x < W; x++) {
@@ -128,9 +150,9 @@
       // constructions de la couche : emprise (demi-largeur en pixels) et terrassement du sol sous chacune
       const toits = { r: rgb("#9A3F2E"), w: rgb("#E2CFA8"), y: rgb("#FFD27A"), d: rgb("#5A3A24"), k: rgb("#4A3020") }, ouvrages = [];
       const em = cc.echelleMaison || 1;
-      if (cc.chateau) { const e = cc.echelleChateau || 1; ouvrages.push({ x: Math.round(cc.chateau * W), demi: 15 * e, couvrable: true, dessin: (x, y) => chateau(t, x, y, e, cc.couleurChateau ? rgb(cc.couleurChateau) : ton(c, 0.08), rgb("#FFD27A")) }); }
-      for (const mx of cc.maisons || []) ouvrages.push({ x: Math.round(mx * W), demi: 5 * em, dessin: (x, y) => sprite(t, "maison", x, y, em, toits) });
-      if (cc.moulin) ouvrages.push({ x: Math.round(cc.moulin * W), demi: 5 * em, dessin: (x, y) => sprite(t, "moulin", x, y, em, toits) });
+      if (cc.chateau) { const e = cc.echelleChateau || 1; ouvrages.push({ x: Math.round(cc.chateau * W), demi: 15 * e, couvrable: true, dessin: (x, y) => chateau(t, x, y, e, cc.couleurChateau ? rgb(cc.couleurChateau) : ton(c, 0.08), rgb("#FFD27A"), anims) }); }
+      for (const mx of cc.maisons || []) ouvrages.push({ x: Math.round(mx * W), demi: 5 * em, dessin: (x, y) => { sprite(t, "maison", x, y, em, toits); anims.push({ type: "fumee", x: x - 2 * em, y: y - 8 * em - 1 }); } });
+      if (cc.moulin) ouvrages.push({ x: Math.round(cc.moulin * W), demi: 5 * em, dessin: (x, y) => { sprite(t, "moulin", x, y, em, toits); anims.push({ type: "moulin", x: Math.round(x - 4 * em) + 2 * em, y: y - 11 * em + 2 * em, e: em }); } });
       if (cc.torii) { const e = cc.echelleTorii || 2; ouvrages.push({ x: Math.round(cc.torii * W), demi: 6 * e, dessin: (x, y) => sprite(t, "torii", x, y, e, { r: rgb("#C8372D"), k: rgb("#3A1E1A") }) }); }
       if (cc.pyramide) { const hp = Math.round(cc.pyramide.h * H); ouvrages.push({ x: Math.round(cc.pyramide.x * W), demi: hp + 1, couvrable: true, dessin: (x, y) => pyramide(t, x, y, hp, rgb(cc.pyramide.couleur), cc.pyramide.mousse) }); }
       for (const o of ouvrages) { // plateau sous l'ouvrage, rampes douces de chaque côté
@@ -162,8 +184,9 @@
           if (fleurs.length && r() < (cc.herbe.densiteFleurs || 0.04)) { t.px(x, y0 - 1, hb.a); t.px(x, y0 - 2, fleurs[r() * fleurs.length | 0]); } } }
       if (cc.neige) { const seuil = (cc.base - cc.amplitude * 0.55) * H; for (let x = 0; x < W; x++) if (haut[x] < seuil) { const ep = Math.min(seuil - haut[x], 2 + ((x * 7) % 5)); for (let j = 0; j < ep; j++) t.px(x, haut[x] + j, j === 0 ? [255, 255, 255] : (x % 5 === 0 ? [206, 218, 238] : [228, 236, 250])); } }
       if (cc.veines) for (let k = 0; k < W * 0.08; k++) { const x = r() * W | 0, l = 6 + r() * 22 | 0; for (let j = 2; j < l; j++) t.px(x + (j > l / 2 ? 1 : 0), haut[x] + j, ton(c, -0.22)); }
-      if (cc.lave) { const n = bruit(g + 77), lv = rgb("#FF7A2A"), jn = rgb("#FFD24A");
-        for (let x = 0; x < W; x++) if (n(x / 7) > 0.6) { const y = haut[x] + 3 + ((x / 3 | 0) % 2); t.px(x, y, jn); t.px(x, y + 1, lv); lueur(t, x, y - 2, 3, lv, 0.12); } }
+      if (cc.lave) { const n = bruit(g + 77), lv = rgb("#FF7A2A"), jn = rgb("#FFD24A"), points = [];
+        for (let x = 0; x < W; x++) if (n(x / 7) > 0.6) { const y = haut[x] + 3 + ((x / 3 | 0) % 2); t.px(x, y, jn); t.px(x, y + 1, lv); lueur(t, x, y - 2, 3, lv, 0.12); points.push([x, y], [x, y + 1]); }
+        if (points.length) anims.push({ type: "lave", points }); }
       if (cc.lac) { const lv = rgb(cc.lac.couleur), x0 = Math.max(0, Math.round((cc.lac.x - cc.lac.l / 2) * W)), x1 = Math.min(W - 1, Math.round((cc.lac.x + cc.lac.l / 2) * W));
         const zone = haut.slice(x0, x1 + 1), fond = x0 + zone.indexOf(Math.max(...zone));
         let niveau = Math.round(cc.lac.niveau ? cc.lac.niveau * H : cc.lac.prof ? Math.max(...zone) - cc.lac.prof * H : zone.reduce((a, b) => a + b, 0) / zone.length);
@@ -171,16 +194,19 @@
         const bordG = Math.min(...haut.slice(x0, fond + 1)), bordD = Math.min(...haut.slice(fond, x1 + 1));
         niveau = Math.max(niveau, Math.max(bordG, bordD) + 1);
         let g = fond, dr = fond; while (g > x0 && haut[g - 1] > niveau) g--; while (dr < x1 && haut[dr + 1] > niveau) dr++;
+        const surface = []; for (let x = g; x <= dr; x++) if (haut[x] > niveau) for (let y = niveau; y <= Math.min(haut[x], niveau + 3); y++) surface.push([x, y]);
+        if (surface.length) anims.push(cc.lac.lueur ? { type: "lave", points: surface } : { type: "eau", points: surface.filter((_, i) => i % 2 === 0) });
         for (let x = g; x <= dr; x++) if (haut[x] > niveau) { for (let y = niveau; y <= haut[x] + 1; y++) t.px(x, y, y === niveau ? ton(lv, 0.45) : ton(lv, -0.25 * Math.min(1, (y - niveau) / 8))); if (cc.lac.lueur) lueur(t, x, niveau - 2, 4, lv, 0.12); else if (x % 5 === 0) t.px(x, niveau + 2, ton(lv, 0.3)); } }
       if (cc.cascade) { const x0 = Math.round(cc.cascade.x * W), l = cc.cascade.l || 4, bas = Math.round(cc.cascade.bas * H), eau = rgb(cc.cascade.couleur || "#9FD4F2");
         for (let i = 0; i < l; i++) { const x = x0 + i, y1 = haut[Math.min(W - 1, x)]; for (let y = y1; y < bas; y++) t.px(x, y, (y + i * 3) % 7 < 2 ? [240, 250, 255] : ton(eau, i === 0 ? 0.15 : 0)); }
-        for (let i = -3; i < l + 3; i++) for (let j = 0; j < 3; j++) if (r() < 0.7) t.px(x0 + i, bas - j, [245, 252, 255]); }
+        for (let i = -3; i < l + 3; i++) for (let j = 0; j < 3; j++) if (r() < 0.7) t.px(x0 + i, bas - j, [245, 252, 255]);
+        anims.push({ type: "cascade", x0, l, bas, couleur: `rgb(${eau.join(",")})`, hauts: Array.from({ length: l }, (_, i) => haut[Math.min(W - 1, x0 + i)]) }); }
       if (cc.decor) { const ds = [].concat(cc.decor), pal = palette(cc.palette);
         for (let x = 0; x < W; x++) if (r() < cc.densite && libre(x)) { const nom = ds[r() * ds.length | 0], e = cc.taille || 1; sprite(t, nom, x, haut[x] + 2, e, pal);
           if (nom === "cristal") lueur(t, x, haut[x] - 4 * e, 6 * e, pal.l || [200, 160, 255], 0.2); if (nom === "champignon") lueur(t, x, haut[x] - 3 * e, 5 * e, pal.c, 0.25); } }
       if (cc.stalagmites) for (let k = 0; k < W * cc.stalagmites; k++) { const x0 = r() * W | 0, l = 6 + r() * 22 | 0, larg = 2 + (r() * 3 | 0); for (let j = 0; j < l; j++) { const w = Math.max(0, Math.round(larg * (1 - j / l))); for (let i = -w; i <= w; i++) t.px(x0 + i, haut[x0] + 2 - j, ton(c, i < 0 ? 0.16 : -0.08)); } }
       if (cc.algues) for (let x = 0; x < W; x += 2) if (r() < cc.algues) { const l = 8 + r() * 24 | 0, c2 = rgb(cc.couleurAlgue); for (let j = 0; j < l; j++) t.px(x + Math.round(Math.sin(j / 3 + x) * 1.2), haut[x] - j, j % 4 === 0 ? ton(c2, 0.2) : c2); }
-      couches.push({ canvas: t.toile(), profondeur: prof });
+      couches.push({ canvas: t.toile(), profondeur: prof, anims });
     });
     return couches;
   }
@@ -211,18 +237,29 @@
     return { cv, animer };
   }
 
+  // les couches animées (eau, lave, cascades, drapeaux, fumées, ailes de moulin) sont redessinées environ 10 fois par seconde
+  // sur un calque posé juste au-dessus de leur couche, avec la même profondeur pour suivre la parallaxe
   function monter(el, th) {
     el.innerHTML = "";
     const H = th.resolution || 240, W = Math.max(140, Math.round(H * (el.clientWidth || innerWidth) / (el.clientHeight || innerHeight) * 1.12));
-    const couches = rendre(th, W, H).map(c => { c.canvas.className = "pixel-couche" + (c.fond ? " pixel-fond" : ""); c.canvas.dataset.profondeur = c.profondeur; el.appendChild(c.canvas); return c.canvas; });
-    let animer = () => {};
-    if (th.particules) { const p = particules(PARTICULES[th.particules], W, H); el.appendChild(p.cv); animer = p.animer; }
-    return { couches, animer: t => animer(t) };
+    const couches = [], calques = [];
+    for (const c of rendre(th, W, H)) {
+      c.canvas.className = "pixel-couche" + (c.fond ? " pixel-fond" : "") + (c.nuages ? " pixel-nuages" : "");
+      c.canvas.dataset.profondeur = c.profondeur; el.appendChild(c.canvas); couches.push(c.canvas);
+      if (c.anims && c.anims.length) {
+        const cv = document.createElement("canvas"); cv.width = W; cv.height = H; cv.className = "pixel-couche pixel-anim"; cv.dataset.profondeur = c.profondeur;
+        el.appendChild(cv); couches.push(cv); const ctx = cv.getContext("2d"); calques.push({ ctx, anims: c.anims }); dessinerAnim(ctx, c.anims, 0);
+      }
+    }
+    let part = () => {};
+    if (th.particules) { const p = particules(PARTICULES[th.particules], W, H); el.appendChild(p.cv); part = p.animer; }
+    let dernier = -1e9;
+    return { couches, animer: t => { part(t); if (t - dernier < 100) return; dernier = t; for (const k of calques) { k.ctx.clearRect(0, 0, W, H); dessinerAnim(k.ctx, k.anims, t); } } };
   }
-  // une image fixe (galerie) : toutes les couches fusionnées
+  // une image fixe (galerie) : toutes les couches fusionnées, animations figées à leur premier instant
   function image(th, l, h) {
     const H = h, W = l, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-    const ctx = cv.getContext("2d"); for (const c of rendre(th, W, H)) ctx.drawImage(c.canvas, 0, 0);
+    const ctx = cv.getContext("2d"); for (const c of rendre(th, W, H)) { ctx.drawImage(c.canvas, 0, 0); if (c.anims) dessinerAnim(ctx, c.anims, 0); }
     return cv;
   }
 
@@ -248,6 +285,16 @@
         { eau: "#4E94DA", niveau: 0.9, profondeur: 0.5 },
         { base: 0.96, amplitude: 0.07, rugosite: 1.4, couleur: "#4A9238", herbe: { a: "#2E6A28", b: "#4C8E38", c: "#7AB850", fleurs: ["#FF6A5A", "#FFE070", "#FFFFFF", "#B88AE8"], densiteFleurs: 0.08 }, decor: ["chene", "buisson", "bouleau"], densite: 0.03, taille: 2, palette: { a: "#285A26", b: "#3E7E34", c: "#64A848", t: "#5A3A22", u: "#3E2816", w: "#ECE8DC", k: "#2A2A2A" }, profondeur: 0.65 },
         { base: 1.04, amplitude: 0.05, rugosite: 1.6, couleur: "#3A7A2C", herbe: { a: "#245A20", b: "#3A7A2C", c: "#5E9E40", fleurs: ["#FFE070", "#FF6A5A"] }, decor: ["chene", "sapin"], densite: 0.02, taille: 3, palette: { a: "#1E4A1C", b: "#2E6A28", c: "#4E8E38", t: "#4A2E1A", u: "#2E1C10" }, profondeur: 0.9 },
+      ] },
+    // les contrées des peuples : fin d'après-midi dorée, château lointain, village et moulin, lac, lande fleurie
+    contrees: { graine: 57, particules: "oiseaux", nuages: 7, couleurNuage: "#FFF2DA", ciel: ["#3E7CD0", "#78AEE6", "#BFDCF0", "#F4E2B4", "#F8C888"], finCiel: 0.8,
+      astre: { x: 0.18, y: 0.3, r: 0.05, couleur: "#FFF0C8" },
+      couches: [
+        { base: 0.7, amplitude: 0.3, rugosite: 1, aspect: "pics", couleur: "#9C9EC2", neige: true, profondeur: 0.08 },
+        { base: 0.76, amplitude: 0.14, rugosite: 1.2, couleur: "#5E8E62", foret: { a: "#46765A", b: "#568A62", c: "#70A272" }, profondeur: 0.18 },
+        { base: 0.84, amplitude: 0.1, rugosite: 1.2, couleur: "#62A04A", herbe: { ...VERT, fleurs: ["#FFE070", "#FFFFFF"] }, decor: ["chene", "sapin"], densite: 0.02, chateau: 0.26, echelleChateau: 2, couleurChateau: "#DCD4C4", maisons: [0.6, 0.635, 0.67], moulin: 0.72, echelleMaison: 1, palette: { a: "#2F6A2C", b: "#4E8E3C", c: "#7AB850", t: "#5A3A22", u: "#3E2816" }, profondeur: 0.32 },
+        { eau: "#4E94DA", niveau: 0.9, profondeur: 0.45 },
+        { base: 0.97, amplitude: 0.06, rugosite: 1.4, couleur: "#4E8E3A", herbe: { a: "#2E6A28", b: "#4C8E38", c: "#7AB850", fleurs: ["#B88AE8", "#D6A2F0", "#FFE070", "#FFFFFF"], densiteFleurs: 0.1 }, decor: ["chene", "buisson", "bouleau"], densite: 0.025, taille: 2, palette: { a: "#285A26", b: "#3E7E34", c: "#64A848", t: "#5A3A22", u: "#3E2816", w: "#ECE8DC", k: "#2A2A2A" }, profondeur: 0.7 },
       ] },
     cimes: { graine: 131, particules: "oiseaux", nuages: 6, couleurNuage: "#FFE0B8", ciel: ["#4A6AB8", "#C88A9A", "#F6A86A", "#FCD48A"], finCiel: 0.8,
       astre: { x: 0.72, y: 0.66, r: 0.08, couleur: "#FFE8A8" },

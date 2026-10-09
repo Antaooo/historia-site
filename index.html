@@ -38,11 +38,12 @@
   <a href="#ouverture" data-chap="0"><span>Ouverture</span></a>
   <a href="#monde" data-chap="1"><span>I · Le monde</span></a>
   <a href="#creatures" data-chap="2"><span>II · Les créatures</span></a>
-  <a href="#legendes" data-chap="3"><span>III · Les légendes</span></a>
-  <a href="#progression-chap" data-chap="4"><span>IV · Ta légende</span></a>
-  <a href="#tour" data-chap="5"><span>V · La Tour</span></a>
-  <a href="#galerie" data-chap="6"><span>VI · Galerie</span></a>
-  <a href="#finale" data-chap="7"><span>Rejoindre</span></a>
+  <a href="#peuples" data-chap="3"><span>III · Les peuples</span></a>
+  <a href="#legendes" data-chap="4"><span>IV · Les légendes</span></a>
+  <a href="#progression-chap" data-chap="5"><span>V · Ta légende</span></a>
+  <a href="#tour" data-chap="6"><span>VI · La Tour</span></a>
+  <a href="#galerie" data-chap="7"><span>VII · Galerie</span></a>
+  <a href="#finale" data-chap="8"><span>Rejoindre</span></a>
 </nav>
 
 <main id="contenu">
@@ -92,13 +93,29 @@
   </div>
 </section>
 
-<!-- ================= III · LES LÉGENDES ================= -->
-<section class="legendes chap" id="legendes" data-chap="3" aria-labelledby="legendes-h">
+<!-- ================= III · LES PEUPLES ================= -->
+<section class="peuples-chap chap" id="peuples" data-chap="3" aria-roledescription="carrousel" aria-labelledby="peuples-h">
+  <div class="decor decor-voile" data-theme="contrees" aria-hidden="true"></div>
+  <div class="conteneur">
+    <div class="galerie-entete">
+      <div><p class="numero">Chapitre III</p><h2 id="peuples-h">Les peuples <em>du royaume</em></h2>
+        <p class="sous-texte">Neuf peuples se partagent les forêts, les mines et les mers. Retourne une bannière pour lire sa légende.</p></div>
+      <div class="peuples-fleches">
+        <button type="button" class="fleche" data-peuple="-1" aria-label="Peuples précédents"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="fleche" data-peuple="1" aria-label="Peuples suivants"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="bannieres" id="bannieres" role="list"></div>
+</section>
+
+<!-- ================= IV · LES LÉGENDES ================= -->
+<section class="legendes chap" id="legendes" data-chap="4" aria-labelledby="legendes-h">
   <div class="decor decor-voile" data-theme="cimes" aria-hidden="true"></div>
   <div class="legendes-halo" id="halo" aria-hidden="true"></div>
   <div class="conteneur legendes-grille">
     <div class="legendes-texte">
-      <p class="numero">Chapitre III</p>
+      <p class="numero">Chapitre IV</p>
       <h2 id="legendes-h">Une légende par biome</h2>
       <p class="sous-texte">Plus de 100 boss règnent sur le royaume, chacun dans son antre. Leur repaire n'est écrit nulle part.</p>
       <div class="fiche" aria-live="polite">
@@ -112,8 +129,9 @@
       </div>
     </div>
     <div class="scene-boss">
-      <div class="socle" aria-hidden="true"></div>
-      <img id="boss-image" class="boss-image" src="img/boss/p_lr_minotaur.png" alt="Le Minotaure">
+      <figure class="fenetre-boss fenetre-legende">
+        <img id="boss-image" class="boss-image" src="img/boss/p_lr_minotaur.png" alt="Le Minotaure">
+      </figure>
     </div>
   </div>
   <div class="conteneur">
@@ -125,12 +143,12 @@
   </div>
 </section>
 
-<!-- ================= IV · TA LÉGENDE ================= -->
-<section class="progression-chap chap" id="progression-chap" data-chap="4" aria-labelledby="prog-h">
+<!-- ================= V · TA LÉGENDE ================= -->
+<section class="progression-chap chap" id="progression-chap" data-chap="5" aria-labelledby="prog-h">
   <div class="decor decor-voile" data-theme="grottes" aria-hidden="true"></div>
   <div class="conteneur prog-grille">
     <div class="prog-texte">
-      <p class="numero">Chapitre IV</p>
+      <p class="numero">Chapitre V</p>
       <h2 id="prog-h">Écris ta propre légende</h2>
       <p class="sous-texte">Quatre métiers font ton niveau, de 0 à 100. Plus il monte, plus tu peux t'aventurer loin du centre, là où vivent les créatures les plus dangereuses.</p>
       <div class="metiers" role="group" aria-label="Métiers">
@@ -158,13 +176,13 @@
   </div>
 </section>
 
-<!-- ================= V · LA TOUR ================= -->
-<section class="scene chap" id="tour" data-chap="5" data-scene="tour" style="--ecrans: 2.4" aria-labelledby="tour-h">
+<!-- ================= VI · LA TOUR ================= -->
+<section class="scene chap" id="tour" data-chap="6" data-scene="tour" style="--ecrans: 2.4" aria-labelledby="tour-h">
   <div class="scene-pin tour-pin">
     <div class="decor decor-voile" data-theme="steppe" aria-hidden="true"></div>
     <div class="conteneur tour-grille">
       <div class="tour-texte">
-        <p class="numero">Chapitre V · bientôt</p>
+        <p class="numero">Chapitre VI · bientôt</p>
         <h2 id="tour-h">Quarante étages.<br>Un boss à chacun.</h2>
         <p class="sous-texte">Et avant la Tour : quatre donjons en trois difficultés, quatre raids à affronter en groupe.</p>
         <p class="etage">Étage <b id="etage">1</b> / 40</p>
@@ -175,19 +193,19 @@
   </div>
 </section>
 
-<!-- ================= FINALE ================= -->
-<section class="galerie-chap chap" id="galerie" data-chap="6" aria-labelledby="galerie-h">
+<!-- ================= VII · GALERIE ================= -->
+<section class="galerie-chap chap" id="galerie" data-chap="7" aria-labelledby="galerie-h">
   <div class="decor decor-voile" data-theme="sakuras" aria-hidden="true"></div>
   <div class="conteneur">
     <div class="galerie-entete">
-      <div><p class="numero">Chapitre VI</p><h2 id="galerie-h">Le royaume en images</h2></div>
+      <div><p class="numero">Chapitre VII</p><h2 id="galerie-h">Le royaume en images</h2></div>
       <a class="bouton bouton-or" href="galerie.html">Toute la galerie →</a>
     </div>
     <div class="mur" id="mur"></div>
   </div>
 </section>
 
-<section class="faq-chap chap" id="faq" data-chap="7" aria-labelledby="faq-h">
+<section class="faq-chap chap" id="faq" data-chap="8" aria-labelledby="faq-h">
   <div class="decor decor-voile" data-theme="prairie" aria-hidden="true"></div>
   <div class="conteneur faq-grille">
     <div><p class="numero">Questions fréquentes</p><h2 id="faq-h">Avant de partir à l'aventure</h2><p class="sous-texte">Une autre question ? On répond sur le Discord.</p></div>
@@ -203,7 +221,7 @@
 </section>
 
 <!-- ================= FINALE ================= -->
-<section class="finale chap" id="finale" data-chap="7" aria-labelledby="finale-h">
+<section class="finale chap" id="finale" data-chap="8" aria-labelledby="finale-h">
   <div class="decor" data-theme="aube" aria-hidden="true"></div>
   <div class="conteneur finale-contenu">
     <h2 id="finale-h" class="titre-or titre-or-moyen">Le royaume t'attend</h2>
