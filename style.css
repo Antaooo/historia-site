@@ -611,3 +611,16 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
   .etage { margin-top: 8px; } .etage b { font-size: 40px; }
 }
 .credit a { text-decoration: underline; text-underline-offset: 2px; }
+
+/* dernières nouvelles (accueil) */
+.nouvelles { position: relative; padding: 110px 0 100px; background: linear-gradient(180deg, #10241A, #0F1E2A); }
+.nouvelles-entete { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+.nouvelles-cartes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.nouvelle { display: flex; flex-direction: column; gap: 8px; padding: 22px 24px; border-radius: 20px; text-decoration: none; color: #fff; background: rgba(255, 255, 255, .05); border: 1px solid var(--verre-bord); transition: transform .25s, border-color .25s, background .25s; }
+.nouvelle:hover { transform: translateY(-4px); border-color: var(--or); background: rgba(255, 255, 255, .08); }
+.nouvelle time { font-family: var(--titre); font-size: 13px; color: var(--or-clair); letter-spacing: .06em; }
+.nouvelle h3 { font-family: var(--titre); font-weight: 400; font-size: 20px; line-height: 1.25; }
+.nouvelle p { color: var(--texte-doux); font-size: 15px; }
+.nouvelles-route { margin-top: 26px; text-align: center; color: var(--texte-doux); }
+.nouvelles-route a { color: var(--or-clair); }
+@media (max-width: 900px) { .nouvelles-cartes { grid-template-columns: 1fr; } .nouvelles { padding: 80px 0; } }
