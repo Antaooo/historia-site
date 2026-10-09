@@ -1,0 +1,65 @@
+[
+  {
+    "titre": "Le monde et ses créatures",
+    "statut": "presque",
+    "puces": [
+      "Un monde fait main : des dizaines de biomes sur mesure, rivières et ponts, volcans, villages, camps et cavernes.",
+      "Plus de 500 créatures aux noms français, et un boss dans l'antre de chaque famille de biomes.",
+      "Une interface pour l'aventure : barres de vie, bestiaire illustré, tableau Tab médiéval, compagnons, musiques.",
+      "Une fois validée, la carte est figée : le monde que tu explores ne bougera plus."
+    ]
+  },
+  {
+    "titre": "Ta progression",
+    "statut": "en-cours",
+    "puces": [
+      "Quatre métiers pour tous : Mineur, Artisan, Cuisinier, Chasseur. Ton niveau, de 0 à 100, est leur somme.",
+      "Cinq statistiques, des talents par métier, deux spécialités aux niveaux 30 et 60, treize rangs.",
+      "Plus tu t'éloignes du centre, plus les monstres sont forts, et meilleur est leur butin."
+    ]
+  },
+  {
+    "titre": "La capitale",
+    "statut": "a-venir",
+    "puces": [
+      "Une capitale médiévale avec un bâtiment par service : banque, forge, hôtel de ville, guilde des héros, porte des donjons, accès à la Tour.",
+      "Un parcours d'accueil pour rencontrer ses habitants, et des secrets à dénicher.",
+      "Des pierres de voyage pour te déplacer dans le monde."
+    ]
+  },
+  {
+    "titre": "L'équipement légendaire",
+    "statut": "a-venir",
+    "puces": [
+      "Neuf objets légendaires à raffiner sur cinq niveaux ; au dernier, tu choisis une branche.",
+      "Des matériaux à récolter et à combiner, des enchantements sur mesure.",
+      "Tout s'obtient en jouant : boss, donjons, quêtes. Rien n'est vendu."
+    ]
+  },
+  {
+    "titre": "Donjons, raids et Tour",
+    "statut": "a-venir",
+    "puces": [
+      "Quatre donjons à objectifs, chacun en trois difficultés.",
+      "Quatre raids à vivre en groupe.",
+      "Une Tour de quarante étages, un boss à chaque étage : l'héritière de la Tour du Chaos de 2023."
+    ]
+  },
+  {
+    "titre": "Saisons et monde vivant",
+    "statut": "a-venir",
+    "puces": [
+      "Un passe de saison : la piste gratuite reste utile, la piste premium est uniquement cosmétique.",
+      "Des quêtes de saison et des quêtes courtes à refaire.",
+      "Des événements à l'étude, et une boutique limitée aux cosmétiques, aux titres et au passe premium : aucun achat ne donne de puissance."
+    ]
+  },
+  {
+    "titre": "L'ouverture",
+    "statut": "a-venir",
+    "puces": [
+      "L'économie repart de zéro : tout le monde commence à égalité.",
+      "D'abord une bêta fermée avec les joueurs de 2023, puis les corrections, puis l'ouverture à tous."
+    ]
+  }
+]

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back-office · Historia</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="page-interne admin">
+<header class="admin-entete">
+  <a href="index.html" class="marque" aria-label="Historia, voir le site"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
+  <span class="admin-titre">Back-office</span>
+  <span class="admin-etat" id="etat" role="status" aria-live="polite"></span>
+  <button type="button" class="bouton bouton-verre bouton-petit" id="deconnexion" hidden>Se déconnecter</button>
+</header>
+
+<main class="admin-corps">
+  <!-- connexion -->
+  <section class="carte-verre admin-connexion" id="connexion" aria-labelledby="connexion-h">
+    <h1 class="h2-petit" id="connexion-h">Connexion</h1>
+    <p>Le site est publié depuis GitHub : le back-office enregistre tes modifications directement dans le dépôt, avec ton <b>jeton d'accès GitHub</b>. Le jeton reste dans ton navigateur et ne sert qu'à parler à GitHub.</p>
+    <form id="form-connexion">
+      <label class="admin-champ"><span>Jeton d'accès GitHub</span><input type="password" id="jeton" autocomplete="off" required placeholder="github_pat_…"></label>
+      <label class="admin-case"><input type="checkbox" id="souvenir"> Se souvenir de moi sur cet appareil</label>
+      <button type="submit" class="bouton bouton-or">Se connecter</button>
+    </form>
+    <details class="admin-aide">
+      <summary>Comment créer le jeton ?</summary>
+      <ol>
+        <li>Sur GitHub : ta photo › <b>Settings</b> › <b>Developer settings</b> › <b>Personal access tokens</b> › <b>Fine-grained tokens</b> › <b>Generate new token</b>.</li>
+        <li><b>Repository access</b> : « Only select repositories », puis choisis <b>historia-site</b>.</li>
+        <li><b>Permissions</b> › Repository permissions › <b>Contents</b> : « Read and write ». Rien d'autre.</li>
+        <li>Choisis une date d'expiration, génère le jeton, copie-le ici. Ne le partage avec personne.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- éditeur -->
+  <section id="editeur" hidden>
+    <div class="admin-onglets" role="tablist" aria-label="Contenus">
+      <button type="button" role="tab" aria-selected="true" data-onglet="nouveautes">Nouveautés</button>
+      <button type="button" role="tab" aria-selected="false" data-onglet="route">Feuille de route</button>
+      <button type="button" role="tab" aria-selected="false" data-onglet="reglages">Réglages</button>
+    </div>
+
+    <div class="admin-panneau" id="p-nouveautes" role="tabpanel">
+      <div class="admin-barre"><button type="button" class="bouton bouton-verre bouton-petit" id="ajout-nouveaute">+ Ajouter une nouveauté</button><button type="button" class="bouton bouton-or bouton-petit" data-publier="nouveautes">Publier</button></div>
+      <div id="liste-nouveautes" class="admin-liste"></div>
+      <h2 class="admin-apercu-titre">Aperçu</h2>
+      <ol class="journal" id="apercu-nouveautes"></ol>
+    </div>
+
+    <div class="admin-panneau" id="p-route" role="tabpanel" hidden>
+      <div class="admin-barre"><button type="button" class="bouton bouton-verre bouton-petit" id="ajout-etape">+ Ajouter une étape</button><button type="button" class="bouton bouton-or bouton-petit" data-publier="route">Publier</button></div>
+      <div id="liste-etapes" class="admin-liste"></div>
+      <h2 class="admin-apercu-titre">Aperçu</h2>
+      <ol class="route" id="apercu-route"></ol>
+    </div>
+
+    <div class="admin-panneau" id="p-reglages" role="tabpanel" hidden>
+      <div class="admin-barre"><span></span><button type="button" class="bouton bouton-or bouton-petit" data-publier="reglages">Publier</button></div>
+      <div class="carte-verre admin-fiche">
+        <label class="admin-champ"><span>Lien d'invitation Discord</span><input type="url" id="r-discord" placeholder="https://discord.gg/…"></label>
+        <label class="admin-champ"><span>Adresse du serveur</span><input type="text" id="r-adresse"></label>
+        <label class="admin-champ"><span>Version du jeu</span><input type="text" id="r-version"></label>
+      </div>
+      <div class="carte-verre admin-fiche">
+        <h2 class="h2-petit">Bandeau d'annonce</h2>
+        <label class="admin-case"><input type="checkbox" id="r-active"> Afficher le bandeau en haut de toutes les pages</label>
+        <label class="admin-champ"><span>Pastille</span><input type="text" id="r-pastille" maxlength="30"></label>
+        <label class="admin-champ"><span>Texte</span><textarea id="r-texte" rows="2" maxlength="200"></textarea></label>
+        <label class="admin-champ"><span>Texte du lien (vers le Discord)</span><input type="text" id="r-lien" maxlength="30"></label>
+        <p class="note">Quand tu changes le texte, le bandeau réapparaît chez les visiteurs qui avaient fermé l'ancien.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="pixel.js"></script>
+<script src="commun.js"></script>
+<script src="donnees.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

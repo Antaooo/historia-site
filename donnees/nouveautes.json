@@ -1,0 +1,52 @@
+[
+  {
+    "date": "2026-10-09",
+    "titre": "Des paysages encore plus vivants",
+    "texte": "De nouveaux paysages apparaissent entre les grands biomes : collines boisées, forêts clairsemées, taïga claire, landes et toundra arbustives, broussailles sèches, plaines rocheuses. Tu croiseras aussi des coulées de lave, un gouffre de glace, une érablière d'automne, des cerisiers sous la neige et des arches de pierre. Les côtes sont plus découpées, et de petites ruines usées par le temps parsèment le monde."
+  },
+  {
+    "date": "2026-10-03",
+    "titre": "Des barres de vie et des fiches lisibles",
+    "texte": "Le nom de chaque créature se lit de loin. La barre de vie n'apparaît que quand le monstre est blessé, sauf pour les boss. Des centaines de créatures portent leur nom en français, et la fiche du bestiaire s'affiche sur parchemin, avec une illustration plus grande."
+  },
+  {
+    "date": "2026-10-03",
+    "titre": "Un tableau Tab médiéval",
+    "texte": "La touche Tab ouvre un tableau de bord en deux pages : ton biome, ta bourse et les espèces rencontrées, puis le hall des légendes. Chaque joueur a son blason, sa couleur de rang et le nombre de boss vaincus."
+  },
+  {
+    "date": "2026-10-03",
+    "titre": "Nouveaux antres et camps gobelins",
+    "texte": "Trois nouveaux antres se cachent dans le monde : l'arène de Lueur de lune, la fourmilière de la reine fourmi et la caverne de l'ogre. Les camps gobelins ont leur troupe et leur chaman, et chaque boss a maintenant son propre butin."
+  },
+  {
+    "date": "2026-10-02",
+    "titre": "Le monde a sa musique",
+    "texte": "Quinze ambiances de biomes, sept thèmes de combat, des disques à trouver et des ambiances propres aux grandes structures. Le monde ne sonne plus pareil le jour et la nuit. Approche-toi de la clairière du Wendigo… et tends l'oreille."
+  },
+  {
+    "date": "2026-10-02",
+    "titre": "Les seigneurs prennent possession de leurs antres",
+    "texte": "Les boss ont rejoint leurs repaires : le Démon du chaos dans sa forteresse, Azriel dans la cathédrale noire, Wu dans le pavillon de l'encre, un capitaine pirate dans sa crique, Tiamat sous terre, et bien d'autres. La nuit, le Wendigo erre loin de sa clairière."
+  },
+  {
+    "date": "2026-10-02",
+    "titre": "Compagnons, bestiaire et menus",
+    "texte": "Familiers et montures sont arrivés : le menu des compagnons les range par familles, sur fond de parchemin et de bois. Le bestiaire garde la trace de chaque créature découverte, et les trophées celle de tes victoires."
+  },
+  {
+    "date": "2026-10-01",
+    "titre": "Feu, abîmes et forêts sculptées",
+    "texte": "La steppe embrasée et des volcans à lacs de lave surgissent. Le gouffre enchanté plonge à près de 90 blocs, avec un sentier en corniche et une clairière fleurie au fond. Les plages changent avec le climat, des oasis naissent au cœur des déserts, et des dizaines d'arbres sculptés habillent les forêts. Côté créatures : mimiques, Hydre du Vide, Kraken, Mégalodon, et les antres du Phénix et de Cerbère."
+  },
+  {
+    "date": "2026-09-30",
+    "titre": "Sous la surface",
+    "texte": "Le monde souterrain s'ouvre : cavernes, avens, failles, rivières souterraines. La mine naine, le sanctuaire englouti, l'ossuaire, la porte scellée et l'autel de cristal t'attendent sous terre. En surface, des rivières, des cascades, des sentiers et des ponts mènent aux villages, et des îles célestes flottent au-dessus des terres."
+  },
+  {
+    "date": "2026-09-29",
+    "titre": "Le nouveau monde est né",
+    "texte": "Les fondations d'Historia sont posées : des dizaines de biomes, des côtes et des océans, des épaves, des tours de guet, des tours de mage, des camps gobelins et des sculptures de pierre géantes. Le début d'une nouvelle aventure."
+  }
+]

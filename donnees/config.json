@@ -1,0 +1,11 @@
+{
+  "discord": "https://discord.gg/",
+  "adresse": "historia.mine.fun",
+  "version": "Java 26.2",
+  "annonce": {
+    "active": true,
+    "pastille": "Bêta fermée",
+    "texte": "Elle se prépare : inscris-toi sur le Discord pour faire partie des premiers à entrer dans le royaume.",
+    "lien": "S'inscrire"
+  }
+}
