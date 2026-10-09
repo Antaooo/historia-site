@@ -67,6 +67,11 @@
     if (!c) return;
     if (c.discord && /^https:\/\//.test(c.discord)) document.querySelectorAll('a[href^="https://discord.gg/"]').forEach(a => { a.href = c.discord; });
     if (c.annonce) annoncer({ ...ANNONCE, ...c.annonce }, c.discord || DISCORD);
+    // adresse et version du serveur : remplacées partout où elles s'affichent (textes, boutons de copie)
+    const remplacer = (avant, apres) => { if (!apres || apres === avant) return;
+      const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n; while ((n = tw.nextNode())) if (n.nodeValue.includes(avant)) n.nodeValue = n.nodeValue.split(avant).join(apres);
+      document.querySelectorAll("[data-copier], [aria-label]").forEach(el => { for (const at of ["data-copier", "aria-label"]) { const v = el.getAttribute(at); if (v && v.includes(avant)) el.setAttribute(at, v.split(avant).join(apres)); } }); };
+    remplacer(ADRESSE, c.adresse); remplacer("Java 26.2", c.version);
   }).catch(() => {});
 
   // crédit de la musique (licence CC BY 4.0)

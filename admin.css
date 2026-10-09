@@ -32,3 +32,4 @@
 .toast.erreur { background: #6A1E1E; border-color: #E06A5A; }
 @media (max-width: 640px) { .admin-date, .admin-statut { flex: 1 1 100%; } .admin-barre { top: 60px; } }
 .admin [hidden] { display: none !important; }
+@media (max-width: 640px) { .admin-entete { flex-wrap: wrap; gap: 10px; } .admin-etat { display: none; } #deconnexion { margin-left: auto; } }

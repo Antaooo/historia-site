@@ -249,3 +249,17 @@
 .bestiaire-aucun { text-align: center; margin-top: 24px; color: var(--texte-doux); font-size: 18px; }
 @media (max-width: 760px) { .familles { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding: 0 16px 6px; scrollbar-width: none; } .familles::-webkit-scrollbar { display: none; } .familles .filtre { flex: 0 0 auto; } }
 .route-fait .route-jalon { background: #4ADE80; border-color: #A7F3C0; color: #0B2A14; } .route-fait .route-statut { color: #86EFAC; }
+.bestiaire-onglets { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+.bestiaire-onglets button { font-family: var(--titre); font-size: 17px; padding: 12px 24px; border-radius: 999px; border: 2px solid rgba(242, 193, 78, .5); background: rgba(13, 11, 34, .6); color: #fff; cursor: pointer; }
+.bestiaire-onglets button[aria-selected="true"] { background: var(--or); color: #2A1A00; border-color: var(--or-clair); }
+#types-c { margin-bottom: 12px; }
+.bestiaire-famille-texte { min-height: 24px; margin: -10px 0 18px; color: var(--or-clair); font-style: italic; }
+.compagnons { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.compagnon { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 10px 14px; border-radius: 16px; text-align: center; background: rgba(16, 36, 26, .55); border: 1px solid var(--verre-bord); transition: transform .2s, border-color .2s; }
+.compagnon:hover { transform: translateY(-3px); border-color: var(--or); }
+.compagnon-image { width: 100%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 12px; background: radial-gradient(circle at 50% 45%, #3A3270, #17133A 72%); }
+.compagnon-image img { width: 88%; height: auto; image-rendering: auto; }
+.compagnon figcaption { display: grid; gap: 2px; }
+.compagnon b { font-family: var(--titre); font-weight: 400; font-size: 15px; line-height: 1.2; }
+.compagnon small { font-size: 12px; color: var(--texte-doux); }
+.bestiaire-note { text-align: center; margin-top: 24px; }

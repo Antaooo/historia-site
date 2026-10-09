@@ -64,6 +64,47 @@
   }
   $$("#familles .filtre").forEach(b => b.addEventListener("click", () => { famille = b.dataset.famille; $$("#familles .filtre").forEach(x => x.setAttribute("aria-pressed", x === b)); filtrer(); }));
   recherche.addEventListener("input", filtrer);
+  // ---------- onglets : légendes / familiers et montures ----------
+  const onglets = { legendes: $("#onglet-legendes"), compagnons: $("#onglet-compagnons") };
+  function ouvrir(nom) {
+    for (const [k, b] of Object.entries(onglets)) { b.setAttribute("aria-selected", k === nom); $("#panneau-" + k).hidden = k !== nom; }
+    if (nom === "compagnons") chargerCompagnons();
+  }
+  onglets.legendes.addEventListener("click", () => { ouvrir("legendes"); history.replaceState(null, "", location.pathname); });
+  onglets.compagnons.addEventListener("click", () => { ouvrir("compagnons"); history.replaceState(null, "", "#compagnons"); });
+
+  // ---------- familiers et montures (données chargées à la première ouverture) ----------
+  let compagnons = null;
+  function chargerCompagnons() {
+    if (compagnons) return;
+    compagnons = fetch("donnees/compagnons.json").then(r => r.json()).then(({ familles, compagnons: liste }) => {
+      $("#nb-compagnons").textContent = liste.length;
+      const fc = $("#familles-c"), grille = $("#compagnons"), rech = $("#recherche-c"), aucunC = $("#aucun-c"), texteF = $("#famille-texte");
+      let type = "", fam = -1;
+      const boutonsFamilles = () => {
+        fc.innerHTML = `<button type="button" class="filtre" aria-pressed="${fam < 0}" data-f="-1">Toutes</button>` +
+          familles.map(([n, t], i) => (!type || t === type) ? `<button type="button" class="filtre" aria-pressed="${fam === i}" data-f="${i}">${n}</button>` : "").join("");
+      };
+      grille.innerHTML = liste.map(([img, nom, t, f]) => `<figure class="compagnon" data-t="${t}" data-f="${f}" data-texte="${(nom + " " + familles[f][0]).toLowerCase()}">
+          <span class="compagnon-image"><img src="img/compagnons/${img}.png" alt="" loading="lazy" width="128" height="128"></span>
+          <figcaption><b>${nom}</b><small>${t === "m" ? "Monture" : "Familier"} · ${familles[f][0]}</small></figcaption></figure>`).join("");
+      const cartes = [...grille.children];
+      const filtrerC = () => {
+        const q = sansAccents(rech.value.trim().toLowerCase()); let n = 0;
+        cartes.forEach(c => { const ok = (!type || c.dataset.t === type) && (fam < 0 || Number(c.dataset.f) === fam) && (!q || sansAccents(c.dataset.texte).includes(q)); c.hidden = !ok; if (ok) n++; });
+        aucunC.hidden = n > 0; texteF.textContent = fam >= 0 ? familles[fam][2] : "";
+      };
+      $$("#types-c .filtre").forEach(b => b.addEventListener("click", () => {
+        type = b.dataset.type; $$("#types-c .filtre").forEach(x => x.setAttribute("aria-pressed", x === b));
+        if (fam >= 0 && type && familles[fam][1] !== type) fam = -1; boutonsFamilles(); filtrerC();
+      }));
+      fc.addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return; fam = Number(b.dataset.f); boutonsFamilles(); filtrerC(); });
+      rech.addEventListener("input", filtrerC);
+      boutonsFamilles(); filtrerC();
+    }).catch(() => { $("#compagnons").innerHTML = `<p class="bestiaire-aucun">Les compagnons n'ont pas pu être chargés.</p>`; compagnons = null; });
+  }
+  if (location.hash === "#compagnons") ouvrir("compagnons");
+
   // bestiaire.html#famille=Démons : ouvre directement une famille
   const voulu = decodeURIComponent((location.hash.match(/famille=([^&]+)/) || [])[1] || "");
   const bouton = $$("#familles .filtre").find(x => x.dataset.famille === voulu); if (voulu && bouton) bouton.click();

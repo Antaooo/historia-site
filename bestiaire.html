@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bestiaire des légendes · Historia</title>
-<meta name="description" content="Les boss d'Historia déjà présents dans le monde : leur biome, leur repaire et leur légende.">
+<title>Bestiaire · Historia</title>
+<meta name="description" content="Les boss d'Historia déjà présents dans le monde, et les familiers et montures à gagner.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Historia">
-<meta property="og:title" content="Historia · Bestiaire des légendes">
-<meta property="og:description" content="Les boss d'Historia déjà présents dans le monde : leur biome, leur repaire et leur légende.">
+<meta property="og:title" content="Historia · Bestiaire">
+<meta property="og:description" content="Les boss d'Historia déjà présents dans le monde, et les familiers et montures à gagner.">
 <meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.jpg">
 <meta property="og:url" content="https://antaooo.github.io/historia-site/bestiaire.html">
 <meta property="og:image:width" content="1200">
@@ -40,8 +40,8 @@
     <div class="decor" data-theme="cimes" aria-hidden="true"></div>
     <div class="conteneur bandeau-contenu">
       <p class="numero">Bestiaire</p>
-      <h1 class="h1-page">Le bestiaire des légendes</h1>
-      <p class="sous-texte">Les seigneurs du royaume qui t'attendent déjà dans le monde. Leur biome et le nom de leur repaire sont ici. Où il se cache exactement, c'est à toi de le trouver.</p>
+      <h1 class="h1-page">Le bestiaire du royaume</h1>
+      <p class="sous-texte">Les légendes qui t'attendent déjà dans le monde, et les compagnons qui t'accompagneront. Où chaque seigneur se cache exactement, c'est à toi de le trouver.</p>
       <span class="etiquette">Plus de 100 boss à terme</span>
     </div>
   </section>
@@ -49,6 +49,11 @@
   <section class="section-page" id="legendes">
     <div class="decor decor-voile" data-theme="contrees" aria-hidden="true"></div>
     <div class="conteneur">
+      <div class="bestiaire-onglets" role="tablist" aria-label="Bestiaire">
+        <button type="button" role="tab" id="onglet-legendes" aria-selected="true" aria-controls="panneau-legendes">Légendes</button>
+        <button type="button" role="tab" id="onglet-compagnons" aria-selected="false" aria-controls="panneau-compagnons">Familiers et montures</button>
+      </div>
+      <div id="panneau-legendes" role="tabpanel" aria-labelledby="onglet-legendes">
       <div class="bestiaire-outils">
         <p class="bestiaire-compte"><b id="nb-legendes">0</b> légendes déjà dans le monde</p>
         <label class="recherche"><span class="visuellement-cache">Chercher une légende</span><input id="recherche" type="search" placeholder="Chercher : dragon, marais, Anubis…" autocomplete="off"></label>
@@ -56,6 +61,21 @@
       <div class="filtres familles" id="familles" role="group" aria-label="Filtrer par famille"></div>
       <div class="bestiaire" id="bestiaire"></div>
       <p class="bestiaire-aucun" id="aucun" hidden>Aucune légende ne correspond. Elle se cache peut-être encore…</p>
+      </div>
+      <div id="panneau-compagnons" role="tabpanel" aria-labelledby="onglet-compagnons" hidden>
+        <div class="bestiaire-outils">
+          <p class="bestiaire-compte"><b id="nb-compagnons">0</b> compagnons à gagner en jeu</p>
+          <label class="recherche"><span class="visuellement-cache">Chercher un compagnon</span><input id="recherche-c" type="search" placeholder="Chercher : dragon, loup, phénix…" autocomplete="off"></label>
+        </div>
+        <div class="filtres" id="types-c" role="group" aria-label="Filtrer par type">
+          <button type="button" class="filtre" aria-pressed="true" data-type="">Tous</button><button type="button" class="filtre" aria-pressed="false" data-type="f">Familiers</button><button type="button" class="filtre" aria-pressed="false" data-type="m">Montures</button>
+        </div>
+        <div class="filtres familles" id="familles-c" role="group" aria-label="Filtrer par famille"></div>
+        <p class="bestiaire-famille-texte" id="famille-texte"></p>
+        <div class="compagnons" id="compagnons"></div>
+        <p class="bestiaire-aucun" id="aucun-c" hidden>Aucun compagnon ne correspond.</p>
+        <p class="note bestiaire-note">Ils s'obtiennent en jeu : butin des boss, quêtes, rangs, œufs trouvés en exploration… Le détail arrivera avec l'ouverture.</p>
+      </div>
     </div>
   </section>
 </main>
