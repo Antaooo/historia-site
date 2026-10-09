@@ -43,7 +43,7 @@
   const familles = [...new Set(LEGENDES.map(l => l[3]))].sort(tri);
   const liste = [...LEGENDES].sort((a, b) => tri(a[1].replace(/^(Le |La |L')/, ""), b[1].replace(/^(Le |La |L')/, "")));
   const FICHES = liste.map(([p, nom, titre, famille, lieu, repaire, texte]) => `
-    <article class="fiche-boss carte-verre" style="--c:${TEINTE[famille] || "#F2C14E"}" data-famille="${famille}" data-texte="${(nom + " " + titre + " " + lieu + " " + repaire + " " + famille).toLowerCase()}">
+    <article class="fiche-boss carte-verre" id="boss-${p}" style="--c:${TEINTE[famille] || "#F2C14E"}" data-famille="${famille}" data-texte="${(nom + " " + titre + " " + lieu + " " + repaire + " " + famille).toLowerCase()}">
       <figure class="fenetre-boss fiche-boss-portrait"><img src="img/boss/p_${p}.webp" alt="${nom}" loading="lazy" width="320" height="320"></figure>
       <p class="fiche-boss-famille">${famille}</p>
       <h2 class="fiche-boss-nom">${nom}</h2>

@@ -219,7 +219,7 @@
     if (focus) vignettes[il].focus({ preventScroll: true });
     img.classList.add("change");
     setTimeout(() => { img.src = `img/boss/p_${p}.webp`; img.alt = nom; img.classList.remove("change"); }, calme ? 0 : 220);
-    $("#fiche-nom").textContent = nom; $("#fiche-titre").textContent = titre; $("#fiche-lieu").textContent = lieu; $("#fiche-pv").textContent = fmt(pv);
+    $("#fiche-lien").href = `bestiaire.html#boss-${p}`; $("#fiche-nom").textContent = nom; $("#fiche-titre").textContent = titre; $("#fiche-lieu").textContent = lieu; $("#fiche-pv").textContent = fmt(pv);
     $("#fiche-danger").style.width = `${Math.round(borne(pv / 1500) * 100)}%`;
     document.documentElement.style.setProperty("--legende", c);
   }
