@@ -325,3 +325,10 @@
 .appel-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px; }
 .appel-final::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; pointer-events: none; }
 .appel-final { scroll-margin-top: 60px; }
+/* pages intérieures : bandeau plus court, le contenu arrive plus vite */
+.bandeau-haut { min-height: 64svh; }
+.bandeau-haut + .section-page { padding-top: 80px; }
+@media (max-width: 700px) { .bandeau-haut { min-height: 56svh; } .bandeau-haut + .section-page { padding-top: 56px; } .section-page { padding: 72px 0; } }
+.bandeau-haut::before { content: ""; position: absolute; top: auto; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); pointer-events: none; }
+.bandeau-contenu { padding-bottom: 72px !important; }
+.bandeau .numero, .bandeau .sous-texte { text-shadow: 0 2px 0 rgba(13, 11, 34, .6), 0 0 18px rgba(13, 11, 34, .55); }
