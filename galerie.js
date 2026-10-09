@@ -7,7 +7,7 @@
   const M = Pixel.monde;
   const ELEMENTS = [
     ...M.BIOMES.map((b, k) => ({ type: "biome", k, titre: b.nom, legende: `Biome · légende : ${b.boss}` })),
-    ...M.BIOMES.map(b => ({ type: "legende", src: `img/boss/p_${b.portrait}.png`, titre: b.boss, legende: `Légende · ${b.nom}` })),
+    ...M.BIOMES.map(b => ({ type: "legende", src: `img/boss/p_${b.portrait}.webp`, titre: b.boss, legende: `Légende · ${b.nom}` })),
     ...PAYSAGES.map(id => ({ type: "paysage", id, titre: NOMS[id], legende: "Paysage · pixel art Historia" })),
     { type: "jeu", src: "img/captures/menus.png", titre: "Carnet du voyageur", legende: "En jeu · menus du bestiaire" },
     { type: "jeu", src: "img/captures/passe.png", titre: "Passe d'aventure", legende: "En jeu · maquette des menus du passe" },

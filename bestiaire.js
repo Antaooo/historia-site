@@ -44,7 +44,7 @@
   const liste = [...LEGENDES].sort((a, b) => tri(a[1].replace(/^(Le |La |L')/, ""), b[1].replace(/^(Le |La |L')/, "")));
   const FICHES = liste.map(([p, nom, titre, famille, lieu, repaire, texte]) => `
     <article class="fiche-boss carte-verre" style="--c:${TEINTE[famille] || "#F2C14E"}" data-famille="${famille}" data-texte="${(nom + " " + titre + " " + lieu + " " + repaire + " " + famille).toLowerCase()}">
-      <figure class="fenetre-boss fiche-boss-portrait"><img src="img/boss/p_${p}.png" alt="${nom}" loading="lazy" width="320" height="320"></figure>
+      <figure class="fenetre-boss fiche-boss-portrait"><img src="img/boss/p_${p}.webp" alt="${nom}" loading="lazy" width="320" height="320"></figure>
       <p class="fiche-boss-famille">${famille}</p>
       <h2 class="fiche-boss-nom">${nom}</h2>
       <p class="fiche-boss-titre">${titre}</p>
@@ -89,7 +89,7 @@
           familles.map(([n, t], i) => (!type || t === type) ? `<button type="button" class="filtre" aria-pressed="${fam === i}" data-f="${i}">${n}</button>` : "").join("");
       };
       grille.innerHTML = liste.map(([img, nom, t, f]) => `<figure class="compagnon" data-t="${t}" data-f="${f}" data-texte="${(nom + " " + familles[f][0]).toLowerCase()}">
-          <span class="compagnon-image"><img src="img/compagnons/${img}.png" alt="" loading="lazy" width="128" height="128"></span>
+          <span class="compagnon-image"><img src="img/compagnons/${img}.webp" alt="" loading="lazy" width="128" height="128"></span>
           <figcaption><b>${nom}</b><small>${t === "m" ? "Monture" : "Familier"} · ${familles[f][0]}</small></figcaption></figure>`).join("");
       const cartes = [...grille.children];
       const filtrerC = () => {

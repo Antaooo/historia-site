@@ -84,7 +84,7 @@
   function remplir(i) {
     const b = BIOMES[i];
     bulle.style.setProperty("--c", teinte(b));
-    bulle.innerHTML = `<figure class="fenetre-boss bulle-boss"><img src="img/boss/p_${b.portrait}.png" alt="" width="320" height="320"></figure>
+    bulle.innerHTML = `<figure class="fenetre-boss bulle-boss"><img src="img/boss/p_${b.portrait}.webp" alt="" width="320" height="320"></figure>
       <div class="bulle-texte"><p class="bulle-num">${String(i + 1).padStart(2, "0")} / ${String(NB).padStart(2, "0")}</p><h3>${b.nom}</h3>
       <p>${b.texte}</p><p class="bulle-legende">Légende · <b>${b.boss}</b></p><p class="bulle-creatures">${b.creatures}</p></div>`;
   }
@@ -161,7 +161,7 @@
     <div class="banniere" role="listitem" style="--c:${c}">
       <button type="button" class="banniere-carte" aria-pressed="false" aria-label="${nom} : lire la légende">
         <span class="banniere-face">
-          <span class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${portrait}.png" alt="" loading="lazy" width="320" height="320"></span>
+          <span class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${portrait}.webp" alt="" loading="lazy" width="320" height="320"></span>
           <span class="banniere-nom">${nom}</span>
           <span class="banniere-devise">${devise}</span>
           <span class="banniere-terres">${terres}</span>
@@ -191,7 +191,7 @@
   /* ---------- II · mosaïque des créatures ---------- */
   const PORTRAITS = ["lr_minotaur", "medusa", "phoenix", "lr_yeti", "lr_anubis", "kraken", "cerberus", "tiamat", "azriel", "nightharrow_wendigo", "lr_gryffin", "wu", "flamental", "capra", "elven_druid", "mega_warden", "hana", "demon_of_chaos_gama05", "megalodon", "glume", "skog", "oblivion", "voras", "zahar", "mortos", "lillith", "wolfebersahd", "koboldassassin", "magnus", "kriger", "ent_king"];
   const mosaique = $("#mosaique");
-  mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % PORTRAITS.length, p = PORTRAITS[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="img/boss/p_${p}.png" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
+  mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % PORTRAITS.length, p = PORTRAITS[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
   const compteur = $("#compteur");
 
   /* ---------- IV · légendes (carrousel manuel) ---------- */
@@ -210,7 +210,7 @@
     ["flamental", "Flamental", "Cœur de la caldeira", "Caldeira", 1444, "#FFB03A"],
   ];
   const sel = $("#selecteur"), img = $("#boss-image"); let il = 0;
-  sel.innerHTML = LEGENDES.map((l, i) => `<button type="button" role="tab" class="vignette" aria-selected="${i === 0}" aria-label="${l[1]}" style="--c:${l[5]}"><img src="img/boss/p_${l[0]}.png" alt="" width="68" height="68"></button>`).join("");
+  sel.innerHTML = LEGENDES.map((l, i) => `<button type="button" role="tab" class="vignette" aria-selected="${i === 0}" aria-label="${l[1]}" style="--c:${l[5]}"><img src="img/boss/p_${l[0]}.webp" alt="" width="68" height="68"></button>`).join("");
   const vignettes = [...sel.children];
   function legende(i, focus) {
     il = (i + LEGENDES.length) % LEGENDES.length; const [p, nom, titre, lieu, pv, c] = LEGENDES[il];
@@ -218,7 +218,7 @@
     sel.scrollTo({ left: vignettes[il].offsetLeft - sel.clientWidth / 2 + 42, behavior: calme ? "auto" : "smooth" });
     if (focus) vignettes[il].focus({ preventScroll: true });
     img.classList.add("change");
-    setTimeout(() => { img.src = `img/boss/p_${p}.png`; img.alt = nom; img.classList.remove("change"); }, calme ? 0 : 220);
+    setTimeout(() => { img.src = `img/boss/p_${p}.webp`; img.alt = nom; img.classList.remove("change"); }, calme ? 0 : 220);
     $("#fiche-nom").textContent = nom; $("#fiche-titre").textContent = titre; $("#fiche-lieu").textContent = lieu; $("#fiche-pv").textContent = fmt(pv);
     $("#fiche-danger").style.width = `${Math.round(borne(pv / 1500) * 100)}%`;
     document.documentElement.style.setProperty("--legende", c);
@@ -340,7 +340,7 @@
   /* ---------- VII · mur de la galerie ---------- */
   const MUR = [["biome", "royaume", "Le royaume", "grand"], ["boss", "lr_minotaur", "Le Minotaure"], ["biome", "jungle", "Jungle ancestrale"], ["biome", "sakuras", "Vallée des sakuras"], ["boss", "phoenix", "Le Phénix"], ["biome", "falaises", "Falaises blanches", "large"], ["biome", "lunaire", "Forêt lunaire"], ["biome", "desert", "Désert"], ["boss", "kraken", "Le Kraken"], ["jeu", "img/captures/menus.png", "Les menus en jeu", "large"]];
   const mur = $("#mur");
-  mur.innerHTML = MUR.map(([t, id, nom, taille]) => `<a class="brique brique-${t}${taille ? " " + taille : ""}" href="galerie.html" data-t="${t}" data-id="${id}"><span class="brique-image">${t === "boss" ? `<img src="img/boss/p_${id}.png" alt="" loading="lazy">` : t === "jeu" ? `<img src="${id}" alt="" loading="lazy">` : ""}</span><span class="brique-nom">${nom}</span></a>`).join("");
+  mur.innerHTML = MUR.map(([t, id, nom, taille]) => `<a class="brique brique-${t}${taille ? " " + taille : ""}" href="galerie.html" data-t="${t}" data-id="${id}"><span class="brique-image">${t === "boss" ? `<img src="img/boss/p_${id}.webp" alt="" loading="lazy">` : t === "jeu" ? `<img src="${id}" alt="" loading="lazy">` : ""}</span><span class="brique-nom">${nom}</span></a>`).join("");
   $$(".brique-biome").forEach(b => { const grand = b.classList.contains("grand"), large = b.classList.contains("large"); Historia.imageDiffere(b.querySelector(".brique-image"), b.dataset.id, grand || large ? 420 : 220, grand ? 300 : 180); });
   // la frise des biomes n'est dessinée que lorsqu'on s'en approche
   new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { construire(); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
