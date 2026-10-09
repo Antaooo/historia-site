@@ -291,3 +291,14 @@
   .carte-texte b { font-size: 13px; }
   .carte-texte small { font-size: 11px; }
 }
+/* aucun débordement horizontal sur téléphone : les grilles acceptent de rétrécir, les boutons passent à la ligne */
+.texte-legal, .regles, .journal, .route { grid-template-columns: minmax(0, 1fr); }
+.carte-verre, .guide-carte, .spe, .offre { min-width: 0; }
+@media (max-width: 600px) {
+  .guide-grille { grid-template-columns: minmax(0, 1fr); }
+  .bouton { white-space: normal; text-align: center; max-width: 100%; }
+  .ip-guide { flex-wrap: wrap; max-width: 100%; }
+  .ip-guide b { overflow-wrap: anywhere; }
+  .specialites, .trois-col { grid-template-columns: minmax(0, 1fr) !important; }
+}
+@media (max-width: 600px) { .echelle { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px; align-items: stretch; } .echelle li { padding: 10px 4px; min-width: 0; margin: 0 !important; } .echelle span { font-size: 12px; } }
