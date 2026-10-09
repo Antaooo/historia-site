@@ -324,3 +324,4 @@
 .appel-contenu h2 { font-size: clamp(30px, 4vw, 52px); text-shadow: .07em .07em 0 rgba(0, 0, 0, .4); }
 .appel-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px; }
 .appel-final::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; pointer-events: none; }
+.appel-final { scroll-margin-top: 60px; }

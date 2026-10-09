@@ -71,7 +71,9 @@
       <p class="sous-texte">Minecraft Java 26.2, aucun mod à installer. La bêta fermée se prépare sur le Discord.</p>
       <div class="appel-actions"><button type="button" class="ip" data-copier="${ADRESSE}" aria-label="${ADRESSE} : copier l'adresse"><span class="ip-adresse">${ADRESSE}</span><span class="ip-copier">Copier</span></button>
       <a class="bouton bouton-discord" href="${DISCORD}">Rejoindre le Discord</a></div></div>`;
-    piedPage.before(cta);
+    cta.id = "jouer"; piedPage.before(cta);
+    // le bouton « Jouer » de l'en-tête mène à cet appel, sans quitter la page
+    document.querySelectorAll('.entete a[href="index.html#finale"]').forEach(j => { j.href = "#jouer"; });
     cta.querySelector("[data-copier]").addEventListener("click", async () => { try { await navigator.clipboard.writeText(ADRESSE); Historia.annoncer("Adresse copiée · " + ADRESSE); } catch { Historia.annoncer("Adresse · " + ADRESSE); } });
   }
 
