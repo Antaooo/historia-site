@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://antaooo.github.io/historia-site/</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/guide.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/progression.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/nouveautes.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/feuille-de-route.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/galerie.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/boutique.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/voter.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/reglement.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/mentions-legales.html</loc></url>
-  <url><loc>https://antaooo.github.io/historia-site/bestiaire.html</loc></url>
+  <url><loc>https://antaooo.github.io/historia-site/</loc><lastmod>2026-10-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/guide.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/progression.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/bestiaire.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/nouveautes.html</loc><lastmod>2026-10-10</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/feuille-de-route.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/galerie.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/boutique.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/voter.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/reglement.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://antaooo.github.io/historia-site/mentions-legales.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

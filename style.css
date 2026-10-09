@@ -635,3 +635,4 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
   .entete { justify-content: space-between; }
 }
 .creatures-lien { display: inline-block; margin-top: 16px; font-family: var(--titre); color: var(--or-clair); text-shadow: 2px 2px 0 rgba(0, 0, 0, .45); pointer-events: auto; }
+.visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -39,13 +39,10 @@
     ["zahar", "Zahar", "L'alchimiste fou du marais", "Sorciers et alchimistes", "Marais maudit", "Laboratoire interdit", "Dans une cabane sur pilotis noyée de vapeurs, un alchimiste poursuit des expériences que nul n'aurait dû tenter. Ce qu'il a créé rôde encore autour du laboratoire."],
   ];
   const TEINTE = { "Bêtes et monstres": "#C08A4B", "Morts-vivants": "#5F8F7A", "Démons": "#C0453A", "Esprits et féerique": "#3F9D8F", "Golems et êtres minéraux": "#6AA7C7", "Créatures marines": "#2F7FA5", "Elfes": "#8F6FC9", "Gobelins": "#6F9A2A", "Vikings": "#4C78A8", "Pirates": "#2F7FA5", "Humains": "#C08A4B", "Sorciers et alchimistes": "#9A6FB0" };
-  const { $, $$ } = Historia;
   const tri = (a, b) => a.localeCompare(b, "fr");
   const familles = [...new Set(LEGENDES.map(l => l[3]))].sort(tri);
   const liste = [...LEGENDES].sort((a, b) => tri(a[1].replace(/^(Le |La |L')/, ""), b[1].replace(/^(Le |La |L')/, "")));
-  $("#nb-legendes").textContent = LEGENDES.length;
-  $("#familles").innerHTML = `<button type="button" class="filtre" aria-pressed="true" data-famille="">Toutes</button>` + familles.map(f => `<button type="button" class="filtre" aria-pressed="false" data-famille="${f}">${f}</button>`).join("");
-  $("#bestiaire").innerHTML = liste.map(([p, nom, titre, famille, lieu, repaire, texte]) => `
+  const FICHES = liste.map(([p, nom, titre, famille, lieu, repaire, texte]) => `
     <article class="fiche-boss carte-verre" style="--c:${TEINTE[famille] || "#F2C14E"}" data-famille="${famille}" data-texte="${(nom + " " + titre + " " + lieu + " " + repaire + " " + famille).toLowerCase()}">
       <figure class="fenetre-boss fiche-boss-portrait"><img src="img/boss/p_${p}.png" alt="${nom}" loading="lazy" width="320" height="320"></figure>
       <p class="fiche-boss-famille">${famille}</p>
@@ -54,6 +51,12 @@
       <dl class="fiche-boss-lieu"><div><dt>Biome</dt><dd>${lieu}</dd></div><div><dt>Repaire</dt><dd>${repaire}</dd></div></dl>
       <p class="fiche-boss-texte">${texte}</p>
     </article>`).join("");
+  // le générateur de pages (Node) récupère les fiches pour les écrire dans le HTML : contenu lisible sans JavaScript et par les moteurs
+  if (typeof document === "undefined") { module.exports = { FICHES, nombre: LEGENDES.length }; return; }
+  const { $, $$ } = Historia;
+  $("#nb-legendes").textContent = LEGENDES.length;
+  $("#familles").innerHTML = `<button type="button" class="filtre" aria-pressed="true" data-famille="">Toutes</button>` + familles.map(f => `<button type="button" class="filtre" aria-pressed="false" data-famille="${f}">${f}</button>`).join("");
+  if (!$("#bestiaire").children.length) $("#bestiaire").innerHTML = FICHES;
   const fiches = $$(".fiche-boss"), recherche = $("#recherche"), aucun = $("#aucun");
   let famille = "";
   const sansAccents = t => t.normalize("NFD").replace(/[̀-ͯ]/g, "");
