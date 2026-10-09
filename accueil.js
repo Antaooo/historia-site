@@ -191,7 +191,7 @@
   /* ---------- II · mosaïque des créatures ---------- */
   const PORTRAITS = ["lr_minotaur", "medusa", "phoenix", "lr_yeti", "lr_anubis", "kraken", "cerberus", "tiamat", "azriel", "nightharrow_wendigo", "lr_gryffin", "wu", "flamental", "capra", "elven_druid", "mega_warden", "hana", "demon_of_chaos_gama05", "megalodon", "glume", "skog", "oblivion", "voras", "zahar", "mortos", "lillith", "wolfebersahd", "koboldassassin", "magnus", "kriger", "ent_king"];
   const mosaique = $("#mosaique");
-  mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % PORTRAITS.length, p = PORTRAITS[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
+  mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % PORTRAITS.length, p = PORTRAITS[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="img/boss/mini/p_${p}.webp" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
   const compteur = $("#compteur");
 
   /* ---------- IV · légendes (carrousel manuel) ---------- */
@@ -210,7 +210,7 @@
     ["flamental", "Flamental", "Cœur de la caldeira", "Caldeira", 1444, "#FFB03A"],
   ];
   const sel = $("#selecteur"), img = $("#boss-image"); let il = 0;
-  sel.innerHTML = LEGENDES.map((l, i) => `<button type="button" role="tab" class="vignette" aria-selected="${i === 0}" aria-label="${l[1]}" style="--c:${l[5]}"><img src="img/boss/p_${l[0]}.webp" alt="" width="68" height="68"></button>`).join("");
+  sel.innerHTML = LEGENDES.map((l, i) => `<button type="button" role="tab" class="vignette" aria-selected="${i === 0}" aria-label="${l[1]}" style="--c:${l[5]}"><img src="img/boss/mini/p_${l[0]}.webp" alt="" width="68" height="68" loading="lazy"></button>`).join("");
   const vignettes = [...sel.children];
   function legende(i, focus) {
     il = (i + LEGENDES.length) % LEGENDES.length; const [p, nom, titre, lieu, pv, c] = LEGENDES[il];
