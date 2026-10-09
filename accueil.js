@@ -25,6 +25,8 @@
   function biome(i) {
     ib = (i + BIOMES.length) % BIOMES.length;
     piste.style.transform = `translate3d(${-ib * 100}%,0,0)`;
+    // rendu à la demande : le biome affiché et ses deux voisins seulement
+    if (monde.dataset.vu) for (const d of [-1, 0, 1]) Historia.monter(biomes[(ib + d + BIOMES.length) % BIOMES.length].querySelector(".decor"));
     biomes.forEach((b, k) => { b.classList.toggle("actif", k === ib); b.setAttribute("aria-hidden", k !== ib);
       couchesDe(b.querySelector(".decor")).forEach(c => { c.style.transform = `translate3d(${(k - ib) * c.dataset.profondeur * -8}%,0,0)`; }); });
     pts.forEach((p, k) => p.setAttribute("aria-current", k === ib));
@@ -188,7 +190,10 @@
   const MUR = [["biome", "royaume", "Le royaume", "grand"], ["boss", "lr_minotaur", "Le Minotaure"], ["biome", "jungle", "Jungle ancestrale"], ["biome", "sakuras", "Vallée des sakuras"], ["boss", "phoenix", "Le Phénix"], ["biome", "falaises", "Falaises blanches", "large"], ["biome", "lunaire", "Forêt lunaire"], ["biome", "desert", "Désert"], ["boss", "kraken", "Le Kraken"], ["jeu", "img/captures/menus.png", "Les menus en jeu", "large"]];
   const mur = $("#mur");
   mur.innerHTML = MUR.map(([t, id, nom, taille]) => `<a class="brique brique-${t}${taille ? " " + taille : ""}" href="galerie.html" data-t="${t}" data-id="${id}"><span class="brique-image">${t === "boss" ? `<img src="img/boss/p_${id}.png" alt="" loading="lazy">` : t === "jeu" ? `<img src="${id}" alt="" loading="lazy">` : ""}</span><span class="brique-nom">${nom}</span></a>`).join("");
-  $$(".brique-biome").forEach(b => { const grand = b.classList.contains("grand"), large = b.classList.contains("large"), cv = Pixel.image(Pixel.THEMES[b.dataset.id], grand ? 420 : large ? 420 : 220, grand ? 300 : large ? 180 : 180); cv.className = "rendu-pixel"; b.querySelector(".brique-image").appendChild(cv); });
+  $$(".brique-biome").forEach(b => { const grand = b.classList.contains("grand"), large = b.classList.contains("large"); Historia.imageDiffere(b.querySelector(".brique-image"), b.dataset.id, grand || large ? 420 : 220, grand ? 300 : 180); });
+  // le carrousel des biomes n'est dessiné que lorsqu'on s'en approche
+  piste.dataset.aLaDemande = "1";
+  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { monde.dataset.vu = "1"; biome(ib); o.disconnect(); } }, { rootMargin: "900px 0px" }).observe(monde);
 
   Historia.demarrer();
   biome(0); legende(0);

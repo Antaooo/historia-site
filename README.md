@@ -28,7 +28,7 @@ Puis ouvrir http://localhost:4321.
 
 ## Licences des ressources
 
-- **Police** : Monocraft, Idrees Hassan, SIL Open Font License 1.1 (`polices-libres/OFL-Monocraft.txt`).
+- **Polices** : Monocraft (Idrees Hassan) et Figtree (The Figtree Project Authors), SIL Open Font License 1.1 (`polices-libres/`). Hébergées sur le site, sans appel à Google.
 - **Musique** : « Majestic Hills », Kevin MacLeod (incompetech.com), CC BY 4.0, créditée dans le pied de page.
 - **Portraits des boss** (`img/boss/`) : rendus des modèles des packs de créatures utilisés sur le serveur, montrés pour présenter le serveur. Ils ne sont pas sous licence libre : merci de ne pas les réutiliser.
 - Paysages, textures, logo et icônes : dessinés pour Historia.

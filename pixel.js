@@ -125,6 +125,22 @@
         if (cc.cratere) { const d = Math.abs(x / W - cc.cratere.x) / cc.cratere.l; h = h * (d < 1 ? 0.35 + 0.65 * d * d : 1) + 0.3 * Math.exp(-Math.pow((d - 0.95) / 0.18, 2)); }
         haut.push(Math.round((cc.base - h * cc.amplitude) * H));
       }
+      // constructions de la couche : emprise (demi-largeur en pixels) et terrassement du sol sous chacune
+      const toits = { r: rgb("#9A3F2E"), w: rgb("#E2CFA8"), y: rgb("#FFD27A"), d: rgb("#5A3A24"), k: rgb("#4A3020") }, ouvrages = [];
+      const em = cc.echelleMaison || 1;
+      if (cc.chateau) { const e = cc.echelleChateau || 1; ouvrages.push({ x: Math.round(cc.chateau * W), demi: 15 * e, couvrable: true, dessin: (x, y) => chateau(t, x, y, e, cc.couleurChateau ? rgb(cc.couleurChateau) : ton(c, 0.08), rgb("#FFD27A")) }); }
+      for (const mx of cc.maisons || []) ouvrages.push({ x: Math.round(mx * W), demi: 5 * em, dessin: (x, y) => sprite(t, "maison", x, y, em, toits) });
+      if (cc.moulin) ouvrages.push({ x: Math.round(cc.moulin * W), demi: 5 * em, dessin: (x, y) => sprite(t, "moulin", x, y, em, toits) });
+      if (cc.torii) { const e = cc.echelleTorii || 2; ouvrages.push({ x: Math.round(cc.torii * W), demi: 6 * e, dessin: (x, y) => sprite(t, "torii", x, y, e, { r: rgb("#C8372D"), k: rgb("#3A1E1A") }) }); }
+      if (cc.pyramide) { const hp = Math.round(cc.pyramide.h * H); ouvrages.push({ x: Math.round(cc.pyramide.x * W), demi: hp + 1, couvrable: true, dessin: (x, y) => pyramide(t, x, y, hp, rgb(cc.pyramide.couleur), cc.pyramide.mousse) }); }
+      for (const o of ouvrages) { // plateau sous l'ouvrage, rampes douces de chaque côté
+        const a = Math.max(0, o.x - o.demi), b = Math.min(W - 1, o.x + o.demi), rampe = Math.max(4, Math.round(o.demi * 0.6));
+        let somme = 0; for (let x = a; x <= b; x++) somme += haut[x];
+        o.niveau = Math.round(somme / (b - a + 1));
+        for (let x = a - rampe; x <= b + rampe; x++) { if (x < 0 || x >= W) continue; const d = x < a ? (a - x) / rampe : x > b ? (x - b) / rampe : 0, k = 1 - d * d * (3 - 2 * d); haut[x] = Math.round(haut[x] + (o.niveau - haut[x]) * k); }
+      }
+      const libre = x => ouvrages.every(o => Math.abs(x - o.x) > o.demi + 2);
+      const canopee = x => ouvrages.every(o => o.couvrable || Math.abs(x - o.x) > o.demi + 2); // la canopée peut passer devant le pied du château et du temple
       // remplissage : bandes tramées, éclairage par la gauche, grain
       for (let x = 0; x < W; x++) { const y0 = haut[x], pente = (haut[Math.min(W - 1, x + 2)] - haut[Math.max(0, x - 2)]) / 4, face = Math.round(8 + Math.abs(pente) * 6);
         for (let y = Math.max(0, y0); y < H; y++) {
@@ -132,8 +148,10 @@
           let k = 0.06 - bande * 0.32; if (y - y0 < face && !cc.herbe) k += pente < -0.3 ? 0.12 : pente > 0.3 ? -0.12 : 0;
           if (r() < 0.07) k += (r() - 0.5) * 0.16;
           t.px(x, y, y === y0 && !cc.herbe ? ton(c, 0.2) : ton(c, k)); } }
+      // les constructions avant la canopée et le décor : elles se nichent dedans
+      for (const o of ouvrages) o.dessin(o.x, o.niveau + 2);
       if (cc.foret) { const f = palette(cc.foret); // canopée : boules de feuillage le long de la crête
-        for (let x = -4; x < W + 4; x += 2 + (r() * 3 | 0)) { if (r() < 0.18) continue; const xx = Math.max(0, Math.min(W - 1, x)), rr = 2 + (r() * 6 | 0), cy = haut[xx] - rr * (0.3 + r() * 0.5);
+        for (let x = -4; x < W + 4; x += 2 + (r() * 3 | 0)) { if (r() < 0.18 || !canopee(x)) continue; const xx = Math.max(0, Math.min(W - 1, x)), rr = 2 + (r() * 6 | 0), cy = haut[xx] - rr * (0.3 + r() * 0.5);
           for (let j = -rr; j <= rr; j++) for (let i = -rr; i <= rr; i++) if (i * i + j * j <= rr * rr) t.px(x + i, cy + j, j < -rr / 2 && i < 0 ? f.c : (i + j > rr / 2 ? f.a : f.b));
           for (let y = Math.round(cy); y < haut[xx] + 3; y++) t.px(x, y, f.a); } }
       if (cc.herbe) { const hb = palette(cc.herbe), fleurs = (cc.herbe.fleurs || []).map(rgb);
@@ -147,22 +165,21 @@
       if (cc.lave) { const n = bruit(g + 77), lv = rgb("#FF7A2A"), jn = rgb("#FFD24A");
         for (let x = 0; x < W; x++) if (n(x / 7) > 0.6) { const y = haut[x] + 3 + ((x / 3 | 0) % 2); t.px(x, y, jn); t.px(x, y + 1, lv); lueur(t, x, y - 2, 3, lv, 0.12); } }
       if (cc.lac) { const lv = rgb(cc.lac.couleur), x0 = Math.max(0, Math.round((cc.lac.x - cc.lac.l / 2) * W)), x1 = Math.min(W - 1, Math.round((cc.lac.x + cc.lac.l / 2) * W));
-        const zone = haut.slice(x0, x1 + 1), niveau = Math.round(cc.lac.niveau ? cc.lac.niveau * H : cc.lac.prof ? Math.max(...zone) - cc.lac.prof * H : zone.reduce((a, b) => a + b, 0) / zone.length);
-        for (let x = x0; x <= x1; x++) if (haut[x] > niveau) { for (let y = niveau; y <= haut[x] + 1; y++) t.px(x, y, y === niveau ? ton(lv, 0.45) : ton(lv, -0.25 * Math.min(1, (y - niveau) / 8))); if (cc.lac.lueur) lueur(t, x, niveau - 2, 4, lv, 0.12); else if (x % 5 === 0) t.px(x, niveau + 2, ton(lv, 0.3)); } }
+        const zone = haut.slice(x0, x1 + 1), fond = x0 + zone.indexOf(Math.max(...zone));
+        let niveau = Math.round(cc.lac.niveau ? cc.lac.niveau * H : cc.lac.prof ? Math.max(...zone) - cc.lac.prof * H : zone.reduce((a, b) => a + b, 0) / zone.length);
+        // l'eau ne monte pas plus haut que le bord le plus bas de la cuvette, et ne remplit que le creux continu autour du fond
+        const bordG = Math.min(...haut.slice(x0, fond + 1)), bordD = Math.min(...haut.slice(fond, x1 + 1));
+        niveau = Math.max(niveau, Math.max(bordG, bordD) + 1);
+        let g = fond, dr = fond; while (g > x0 && haut[g - 1] > niveau) g--; while (dr < x1 && haut[dr + 1] > niveau) dr++;
+        for (let x = g; x <= dr; x++) if (haut[x] > niveau) { for (let y = niveau; y <= haut[x] + 1; y++) t.px(x, y, y === niveau ? ton(lv, 0.45) : ton(lv, -0.25 * Math.min(1, (y - niveau) / 8))); if (cc.lac.lueur) lueur(t, x, niveau - 2, 4, lv, 0.12); else if (x % 5 === 0) t.px(x, niveau + 2, ton(lv, 0.3)); } }
       if (cc.cascade) { const x0 = Math.round(cc.cascade.x * W), l = cc.cascade.l || 4, bas = Math.round(cc.cascade.bas * H), eau = rgb(cc.cascade.couleur || "#9FD4F2");
         for (let i = 0; i < l; i++) { const x = x0 + i, y1 = haut[Math.min(W - 1, x)]; for (let y = y1; y < bas; y++) t.px(x, y, (y + i * 3) % 7 < 2 ? [240, 250, 255] : ton(eau, i === 0 ? 0.15 : 0)); }
         for (let i = -3; i < l + 3; i++) for (let j = 0; j < 3; j++) if (r() < 0.7) t.px(x0 + i, bas - j, [245, 252, 255]); }
-      if (cc.pyramide) { const x = Math.round(cc.pyramide.x * W); pyramide(t, x, haut[x] + 2, Math.round(cc.pyramide.h * H), rgb(cc.pyramide.couleur), cc.pyramide.mousse); }
       if (cc.decor) { const ds = [].concat(cc.decor), pal = palette(cc.palette);
-        for (let x = 0; x < W; x++) if (r() < cc.densite) { const nom = ds[r() * ds.length | 0], e = cc.taille || 1; sprite(t, nom, x, haut[x] + 2, e, pal);
+        for (let x = 0; x < W; x++) if (r() < cc.densite && libre(x)) { const nom = ds[r() * ds.length | 0], e = cc.taille || 1; sprite(t, nom, x, haut[x] + 2, e, pal);
           if (nom === "cristal") lueur(t, x, haut[x] - 4 * e, 6 * e, pal.l || [200, 160, 255], 0.2); if (nom === "champignon") lueur(t, x, haut[x] - 3 * e, 5 * e, pal.c, 0.25); } }
       if (cc.stalagmites) for (let k = 0; k < W * cc.stalagmites; k++) { const x0 = r() * W | 0, l = 6 + r() * 22 | 0, larg = 2 + (r() * 3 | 0); for (let j = 0; j < l; j++) { const w = Math.max(0, Math.round(larg * (1 - j / l))); for (let i = -w; i <= w; i++) t.px(x0 + i, haut[x0] + 2 - j, ton(c, i < 0 ? 0.16 : -0.08)); } }
       if (cc.algues) for (let x = 0; x < W; x += 2) if (r() < cc.algues) { const l = 8 + r() * 24 | 0, c2 = rgb(cc.couleurAlgue); for (let j = 0; j < l; j++) t.px(x + Math.round(Math.sin(j / 3 + x) * 1.2), haut[x] - j, j % 4 === 0 ? ton(c2, 0.2) : c2); }
-      if (cc.chateau) chateau(t, Math.round(cc.chateau * W), haut[Math.round(cc.chateau * W)] + 2, cc.echelleChateau || 1, cc.couleurChateau ? rgb(cc.couleurChateau) : ton(c, 0.08), rgb("#FFD27A"));
-      const toits = { r: rgb("#9A3F2E"), w: rgb("#E2CFA8"), y: rgb("#FFD27A"), d: rgb("#5A3A24"), k: rgb("#4A3020") };
-      if (cc.maisons) for (const mx of cc.maisons) { const x = Math.round(mx * W); sprite(t, "maison", x, haut[x] + 2, cc.echelleMaison || 1, toits); }
-      if (cc.moulin) { const x = Math.round(cc.moulin * W); sprite(t, "moulin", x, haut[x] + 2, cc.echelleMaison || 1, toits); }
-      if (cc.torii) { const x = Math.round(cc.torii * W); sprite(t, "torii", x, haut[x] + 2, cc.echelleTorii || 2, { r: rgb("#C8372D"), k: rgb("#3A1E1A") }); }
       couches.push({ canvas: t.toile(), profondeur: prof });
     });
     return couches;
@@ -226,8 +243,8 @@
       couches: [
         { base: 0.8, amplitude: 0.36, rugosite: 1, aspect: "pics", couleur: "#8E9EC4", neige: true, profondeur: 0.08 },
         { base: 0.78, amplitude: 0.18, rugosite: 1.2, couleur: "#5E9A6A", foret: { a: "#447E52", b: "#548E5E", c: "#72AA72" }, profondeur: 0.2 },
-        { base: 0.84, amplitude: 0.2, aspect: "falaises", rugosite: 1.4, couleur: "#A8A49A", veines: true, herbe: { a: "#3E7A34", b: "#5A9A44", c: "#82BE5A", fleurs: ["#FFFFFF"] }, cascade: { x: 0.3, l: 4, bas: 0.88 }, profondeur: 0.3 },
-        { base: 0.86, amplitude: 0.14, rugosite: 1, couleur: "#5AA044", herbe: { a: "#3A7A30", b: "#5FA046", c: "#8CC85E", fleurs: ["#FFE070", "#FFFFFF"] }, chateau: 0.74, echelleChateau: 2, couleurChateau: "#D4CCC0", decor: ["chene", "sapin"], densite: 0.03, palette: { a: "#2F6A2C", b: "#4E8E3C", c: "#7AB850", t: "#5A3A22", u: "#3E2816" }, profondeur: 0.4 },
+        { base: 0.84, amplitude: 0.2, aspect: "falaises", rugosite: 1.4, couleur: "#A8A49A", veines: true, herbe: { a: "#3E7A34", b: "#5A9A44", c: "#82BE5A", fleurs: ["#FFFFFF"] }, cascade: { x: 0.3, l: 4, bas: 0.88 }, chateau: 0.74, echelleChateau: 2, couleurChateau: "#E4DED2", profondeur: 0.3 },
+        { base: 0.86, amplitude: 0.14, rugosite: 1, couleur: "#5AA044", herbe: { a: "#3A7A30", b: "#5FA046", c: "#8CC85E", fleurs: ["#FFE070", "#FFFFFF"] }, decor: ["chene", "sapin"], densite: 0.03, palette: { a: "#2F6A2C", b: "#4E8E3C", c: "#7AB850", t: "#5A3A22", u: "#3E2816" }, profondeur: 0.4 },
         { eau: "#4E94DA", niveau: 0.9, profondeur: 0.5 },
         { base: 0.96, amplitude: 0.07, rugosite: 1.4, couleur: "#4A9238", herbe: { a: "#2E6A28", b: "#4C8E38", c: "#7AB850", fleurs: ["#FF6A5A", "#FFE070", "#FFFFFF", "#B88AE8"], densiteFleurs: 0.08 }, decor: ["chene", "buisson", "bouleau"], densite: 0.03, taille: 2, palette: { a: "#285A26", b: "#3E7E34", c: "#64A848", t: "#5A3A22", u: "#3E2816", w: "#ECE8DC", k: "#2A2A2A" }, profondeur: 0.65 },
         { base: 1.04, amplitude: 0.05, rugosite: 1.6, couleur: "#3A7A2C", herbe: { a: "#245A20", b: "#3A7A2C", c: "#5E9E40", fleurs: ["#FFE070", "#FF6A5A"] }, decor: ["chene", "sapin"], densite: 0.02, taille: 3, palette: { a: "#1E4A1C", b: "#2E6A28", c: "#4E8E38", t: "#4A2E1A", u: "#2E1C10" }, profondeur: 0.9 },
@@ -244,16 +261,16 @@
       astre: { x: 0.5, y: 0.7, r: 0.09, couleur: "#FFF0C8" },
       couches: [
         { base: 0.8, amplitude: 0.22, rugosite: 1, aspect: "pics", couleur: "#8A7AA8", neige: true },
-        { base: 0.84, amplitude: 0.12, rugosite: 1.2, couleur: "#5E8A5A", foret: { a: "#3E6A40", b: "#4E7E4C", c: "#6A9A5E" }, chateau: 0.22, echelleChateau: 2, couleurChateau: "#B8A8A0" },
+        { base: 0.84, amplitude: 0.12, rugosite: 1.2, couleur: "#5E8A5A", foret: { a: "#3E6A40", b: "#4E7E4C", c: "#6A9A5E" }, chateau: 0.22, echelleChateau: 2, couleurChateau: "#B8A8A0", maisons: [0.31, 0.35, 0.39], moulin: 0.44, echelleMaison: 1 },
         { eau: "#6A8EC8", niveau: 0.86 },
-        { base: 0.92, amplitude: 0.06, rugosite: 1.3, couleur: "#4E8A3E", herbe: { ...VERT, fleurs: ["#FFE070", "#FFFFFF", "#F08AB0"] }, maisons: [0.62, 0.68, 0.76], moulin: 0.82, echelleMaison: 2, decor: ["chene", "buisson"], densite: 0.025, palette: { a: "#2F6A2C", b: "#4E8E3C", c: "#7AB850", t: "#5A3A22", u: "#3E2816" } },
+        { base: 0.92, amplitude: 0.06, rugosite: 1.3, couleur: "#4E8A3E", herbe: { ...VERT, fleurs: ["#FFE070", "#FFFFFF", "#F08AB0"] }, decor: ["chene", "buisson"], densite: 0.025, palette: { a: "#2F6A2C", b: "#4E8E3C", c: "#7AB850", t: "#5A3A22", u: "#3E2816" } },
         { base: 1.02, amplitude: 0.05, rugosite: 1.6, couleur: "#3A7230", herbe: { ...VERT, fleurs: ["#FFE070", "#FFFFFF"] }, decor: ["chene", "buisson", "bouleau"], densite: 0.02, taille: 2, palette: { a: "#285A26", b: "#3E7E34", c: "#64A848", t: "#5A3A22", u: "#3E2816", w: "#E8E4D8", k: "#2A2A2A" } },
       ] },
     plaines: { graine: 13, particules: "papillons", nuages: 8, ciel: ["#5C9EE8", "#94C4F2", "#D6ECFA"], astre: { x: 0.82, y: 0.2, r: 0.05, couleur: "#FFF8D8" },
       couches: [
         { base: 0.62, amplitude: 0.22, aspect: "pics", rugosite: 1, couleur: "#9AAACC", neige: true },
-        { base: 0.72, amplitude: 0.12, rugosite: 1, couleur: "#6E9E6A", foret: { a: "#4C7E4E", b: "#5E925A", c: "#78AA6A" } },
-        { base: 0.8, amplitude: 0.08, rugosite: 1.2, couleur: "#68A84C", herbe: { ...VERT, fleurs: ["#FFE070", "#FFFFFF"] }, maisons: [0.3, 0.36, 0.42], moulin: 0.48, echelleMaison: 2, decor: ["chene", "bouleau", "buisson"], densite: 0.02, palette: { a: "#3A7A30", b: "#5A9C42", c: "#86C25A", t: "#6A4428", u: "#4A2E1A", w: "#ECE8DC", k: "#2A2A2A" } },
+        { base: 0.72, amplitude: 0.12, rugosite: 1, couleur: "#6E9E6A", foret: { a: "#4C7E4E", b: "#5E925A", c: "#78AA6A" }, maisons: [0.3, 0.335, 0.37, 0.41], moulin: 0.46, echelleMaison: 1 },
+        { base: 0.8, amplitude: 0.08, rugosite: 1.2, couleur: "#68A84C", herbe: { ...VERT, fleurs: ["#FFE070", "#FFFFFF"] }, decor: ["chene", "bouleau", "buisson"], densite: 0.02, palette: { a: "#3A7A30", b: "#5A9C42", c: "#86C25A", t: "#6A4428", u: "#4A2E1A", w: "#ECE8DC", k: "#2A2A2A" } },
         { eau: "#4E92D8", niveau: 0.86 },
         { base: 0.94, amplitude: 0.05, rugosite: 1.4, couleur: "#5A9A40", herbe: { ...VERT, fleurs: ["#FF6A5A", "#FFE070", "#FFFFFF", "#7AA8FF"], densiteFleurs: 0.08 }, decor: ["chene", "buisson", "buisson"], densite: 0.02, taille: 2, palette: { a: "#2E6A28", b: "#4C8E38", c: "#7AB850", t: "#6A4428", u: "#4A2E1A" } },
       ] },
@@ -289,9 +306,9 @@
     sakuras: { graine: 41, particules: "petales", nuages: 4, ciel: ["#F4C6D6", "#FBE2EA", "#FFF4F0"], astre: { x: 0.82, y: 0.26, r: 0.05, couleur: "#FFFFFF" },
       couches: [
         { base: 0.66, amplitude: 0.26, aspect: "pics", rugosite: 1, couleur: "#C8B8D0", neige: true },
-        { base: 0.76, amplitude: 0.12, rugosite: 1.1, couleur: "#8EBA7E", foret: { a: "#5E9A5A", b: "#6EA866", c: "#86BC78" }, decor: "sakura", densite: 0.06, palette: { a: "#F0A2BC", b: "#FFCADA", c: "#D8849E", t: "#6B4A3A" } },
+        { base: 0.76, amplitude: 0.12, rugosite: 1.1, couleur: "#8EBA7E", foret: { a: "#5E9A5A", b: "#6EA866", c: "#86BC78" }, decor: "sakura", densite: 0.06, palette: { a: "#F0A2BC", b: "#FFCADA", c: "#D8849E", t: "#6B4A3A" }, torii: 0.62, echelleTorii: 2 },
         { eau: "#7EB8E0", niveau: 0.85 },
-        { base: 0.88, amplitude: 0.08, rugosite: 1.1, couleur: "#7AB06A", herbe: { a: "#4E8A44", b: "#6EA65A", c: "#94C878", fleurs: ["#F8A8C4", "#FFFFFF"], densiteFleurs: 0.07 }, decor: "sakura", densite: 0.035, palette: { a: "#F4A6BE", b: "#FFD0DE", c: "#D8849E", t: "#6B4A3A" }, torii: 0.62, echelleTorii: 2 },
+        { base: 0.88, amplitude: 0.08, rugosite: 1.1, couleur: "#7AB06A", herbe: { a: "#4E8A44", b: "#6EA65A", c: "#94C878", fleurs: ["#F8A8C4", "#FFFFFF"], densiteFleurs: 0.07 }, decor: "sakura", densite: 0.035, palette: { a: "#F4A6BE", b: "#FFD0DE", c: "#D8849E", t: "#6B4A3A" } },
         { base: 0.99, amplitude: 0.05, rugosite: 1.3, couleur: "#6AA45A", herbe: { a: "#3E7A36", b: "#5A9A48", c: "#86BE68", fleurs: ["#F8A8C4"] }, decor: ["sakura", "buisson"], densite: 0.02, taille: 2, palette: { a: "#F28AAE", b: "#FFC2D6", c: "#D06A8E", t: "#5B3C2E" } },
       ] },
     abysses: { graine: 51, particules: "bulles", rayons: true, ciel: ["#3DA4D8", "#1B6FA8", "#0D3D6E", "#061B36"], finCiel: 1,
@@ -304,7 +321,7 @@
       couches: [
         { base: 0.72, amplitude: 0.12, aspect: "dunes", rugosite: 1, couleur: "#E4B97C", pyramide: { x: 0.68, h: 0.22, couleur: "#D9A866" } },
         { base: 0.8, amplitude: 0.12, aspect: "dunes", rugosite: 1, couleur: "#D6A160" },
-        { base: 0.88, amplitude: 0.12, aspect: "dunes", rugosite: 1, couleur: "#C99256", lac: { x: 0.3, l: 0.3, couleur: "#4EA6C8", prof: 0.035 }, decor: "palmier", densite: 0.012, taille: 2, palette: { b: "#4E8A34", c: "#7EB84E", t: "#8A6038" } },
+        { base: 0.88, amplitude: 0.12, aspect: "dunes", rugosite: 1, couleur: "#C99256", lac: { x: 0.8, l: 0.3, couleur: "#4EA6C8", prof: 0.035 }, decor: "palmier", densite: 0.012, taille: 2, palette: { b: "#4E8A34", c: "#7EB84E", t: "#8A6038" } },
         { base: 0.96, amplitude: 0.08, aspect: "dunes", rugosite: 1, couleur: "#C38A4A", decor: "cactus", densite: 0.01, taille: 2, palette: { g: "#4E7A34", l: "#7DAA4E" } },
         { base: 1.02, amplitude: 0.05, aspect: "dunes", rugosite: 1, couleur: "#A9713A" },
       ] },

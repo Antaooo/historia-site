@@ -1,3 +1,5 @@
+/* Figtree (The Figtree Project Authors, licence SIL OFL 1.1 : polices-libres/OFL-Figtree.txt), hébergée sur le site : aucun appel à Google */
+@font-face { font-family: "Figtree"; src: url(polices-libres/Figtree-Variable.ttf) format("truetype"); font-weight: 300 900; font-display: swap; }
 /* Monocraft (Idrees Hassan, licence SIL OFL 1.1 : polices-libres/OFL-Monocraft.txt), recréation libre de la police de Minecraft */
 @font-face { font-family: "Monocraft"; src: url(polices-libres/Monocraft-Regular.ttf) format("truetype"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Monocraft"; src: url(polices-libres/Monocraft-Bold.ttf) format("truetype"); font-weight: 700; font-display: swap; }
@@ -453,3 +455,45 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .credit { flex-basis: 100%; font-size: 12px; color: rgba(255, 255, 255, .5); }
 .credit a { color: rgba(255, 255, 255, .7); }
 .legendes::after, .progression-chap::after, .galerie-chap::after, .faq-chap::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); pointer-events: none; }
+
+/* statut du serveur */
+.en-ligne[hidden] { display: none; }
+.en-ligne.hors-ligne .point { background: #9AA3A0; box-shadow: none; animation: none; }
+
+/* entrée plus rapide : l'adresse du serveur est visible presque tout de suite */
+.revele { animation-duration: .6s; }
+.revele:nth-child(1) { animation-delay: .05s; } .revele:nth-child(2) { animation-delay: .15s; } .revele:nth-child(3) { animation-delay: .3s; } .revele:nth-child(4) { animation-delay: .4s; }
+
+/* ---------- téléphone : bandeau court, contrôles du carrousel au-dessus de la barre, musique dans la barre ---------- */
+.barre-musique { display: none; }
+@media (max-width: 700px) {
+  .annonce-long { display: none; }
+  .annonce { min-height: 40px; }
+  .musique { display: none; }
+  .barre-musique { display: grid; place-items: center; flex: 0 0 48px; min-height: 48px; border: 1px solid var(--verre-bord); border-radius: 12px; background: rgba(255, 255, 255, .08); cursor: pointer; }
+  .barre-musique[aria-pressed="true"] { border-color: var(--or); }
+  .barre-musique[aria-pressed="true"] .musique-barres i { animation: barre 0.9s ease-in-out infinite alternate; }
+  .barre-musique[aria-pressed="true"] .musique-barres i:nth-child(2) { animation-delay: .3s; }
+  .barre-musique[aria-pressed="true"] .musique-barres i:nth-child(3) { animation-delay: .6s; }
+  .ouverture-contenu { padding-top: 110px; }
+  .fleche-monde { top: 42%; bottom: auto; width: 48px; height: 48px; margin-top: -24px; }
+  .fleche-g { left: 8px; } .fleche-d { right: 8px; }
+  .points-biomes { bottom: 96px; }
+  .monde .biome-texte { margin-bottom: 150px; }
+  .monde .biome-boss { top: 16vh; }
+}
+@media (max-width: 700px) {
+  .barre-mobile > * { min-width: 0; }
+  .barre-ip { overflow: hidden; }
+  .barre-ip b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .barre-mobile .bouton-discord { padding: 0 14px; flex: 0 0 auto; }
+}
+@media (max-width: 420px) {
+  .entete { gap: 10px; padding-left: 14px; padding-right: 14px; }
+  .marque { font-size: 17px; gap: 8px; }
+  .marque-blason { width: 22px; height: 26px; }
+  .entete .bouton-petit { padding: 0 14px; }
+  .barre-ip b { font-size: 12.5px; }
+  .barre-ip small { font-size: 10px; }
+  .barre-mobile .bouton-discord { padding: 0 12px; font-size: 14px; }
+}

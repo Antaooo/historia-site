@@ -18,7 +18,7 @@
     <span class="carte-texte"><b>${e.titre}</b><small>${e.legende}</small></span></button>`).join("");
   const cartes = $$(".carte-galerie");
   // rendus fixes des biomes, à la taille de leur carte
-  cartes.forEach(c => { const e = ELEMENTS[c.dataset.i]; if (e.type !== "biome") return; const cv = Pixel.image(Pixel.THEMES[e.id], c.classList.contains("large") ? 400 : 260, c.classList.contains("large") ? 225 : 180); cv.className = "rendu-pixel"; c.querySelector(".carte-image").appendChild(cv); });
+  cartes.forEach(c => { const e = ELEMENTS[c.dataset.i]; if (e.type !== "biome") return; const large = c.classList.contains("large"); Historia.imageDiffere(c.querySelector(".carte-image"), e.id, large ? 400 : 260, large ? 225 : 180); });
 
   // filtres
   $$(".filtre").forEach(f => f.addEventListener("click", () => {
