@@ -43,7 +43,7 @@
   // barre « Jouer » collée en bas sur téléphone
   const b = document.createElement("div");
   b.className = "barre-mobile";
-  b.innerHTML = `<button type="button" class="barre-musique" aria-label="Musique" aria-pressed="false"><span class="musique-barres" aria-hidden="true"><i></i><i></i><i></i></span></button><button type="button" class="barre-ip" data-copier="${ADRESSE}" aria-label="Copier l'adresse ${ADRESSE}"><small>Copier l'adresse</small><b>${ADRESSE}</b></button><a class="bouton bouton-discord bouton-petit" href="${DISCORD}">Discord</a>`;
+  b.innerHTML = `<button type="button" class="barre-musique" aria-label="Musique" aria-pressed="false"><span class="musique-barres" aria-hidden="true"><i></i><i></i><i></i></span></button><button type="button" class="barre-ip" data-copier="${ADRESSE}" aria-label="${ADRESSE} : copier l'adresse"><small>Copier l'adresse</small><b>${ADRESSE}</b></button><a class="bouton bouton-discord bouton-petit" href="${DISCORD}">Discord</a>`;
   document.body.appendChild(b);
   // sur téléphone, le bouton musique vit dans la barre du bas
   const bm = b.querySelector(".barre-musique");
@@ -69,7 +69,7 @@
     cta.innerHTML = `<div class="decor decor-voile" data-theme="aube" aria-hidden="true"></div>
       <div class="conteneur appel-contenu"><p class="numero">Prêt à partir ?</p><h2 id="appel-h">Le royaume t'attend</h2>
       <p class="sous-texte">Minecraft Java 26.2, aucun mod à installer. La bêta fermée se prépare sur le Discord.</p>
-      <div class="appel-actions"><button type="button" class="ip" data-copier="${ADRESSE}" aria-label="Copier l'adresse ${ADRESSE}"><span class="ip-adresse">${ADRESSE}</span><span class="ip-copier">Copier</span></button>
+      <div class="appel-actions"><button type="button" class="ip" data-copier="${ADRESSE}" aria-label="${ADRESSE} : copier l'adresse"><span class="ip-adresse">${ADRESSE}</span><span class="ip-copier">Copier</span></button>
       <a class="bouton bouton-discord" href="${DISCORD}">Rejoindre le Discord</a></div></div>`;
     piedPage.before(cta);
     cta.querySelector("[data-copier]").addEventListener("click", async () => { try { await navigator.clipboard.writeText(ADRESSE); Historia.annoncer("Adresse copiée · " + ADRESSE); } catch { Historia.annoncer("Adresse · " + ADRESSE); } });

@@ -21,10 +21,22 @@
     const s = Pixel.monter(el, th); s.visible = visibles.has(el); scenes.set(el, s); return s;
   }
   const vis = new IntersectionObserver(es => es.forEach(e => { e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target); const s = scenes.get(e.target); if (s) s.visible = e.isIntersecting; }));
-  const proche = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !scenes.has(e.target)) monter(e.target); }), { rootMargin: "900px 0px" });
+  // les fonds à l'écran sont dessinés tout de suite ; ceux qui approchent attendent un temps mort, un par un,
+  // pour ne jamais bloquer le navigateur au chargement
+  const file = [], auRepos = f => ("requestIdleCallback" in window ? requestIdleCallback(f, { timeout: 1500 }) : setTimeout(f, 60));
+  let enCours = false;
+  const suivant = () => { const el = file.shift(); if (!el) { enCours = false; return; } if (!scenes.has(el)) monter(el); auRepos(suivant); };
+  const proche = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting || scenes.has(e.target)) return;
+    const r = e.target.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < innerHeight) monter(e.target);
+    else if (!file.includes(e.target)) { file.push(e.target); if (!enCours) { enCours = true; auRepos(suivant); } }
+  }), { rootMargin: "900px 0px" });
+  // un fond qui arrive à l'écran avant son tour est dessiné aussitôt
+  const urgent = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting || scenes.has(e.target)) return; const i = file.indexOf(e.target); if (i >= 0) file.splice(i, 1); monter(e.target); }));
   function monterTout() {
     for (const el of $$(".decor[data-theme]")) {
-      if (!el.dataset.suivi) { el.dataset.suivi = "1"; vis.observe(el); if (!el.closest("[data-a-la-demande]")) proche.observe(el); }
+      if (!el.dataset.suivi) { el.dataset.suivi = "1"; vis.observe(el); if (!el.closest("[data-a-la-demande]")) { proche.observe(el); urgent.observe(el); } }
       if (scenes.has(el)) monter(el); // redimensionnement : on redessine ce qui l'était déjà
     }
   }

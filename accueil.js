@@ -159,7 +159,7 @@
   const bannieres = $("#bannieres");
   bannieres.innerHTML = PEUPLES.map(([nom, portrait, c, devise, terres, legende]) => `
     <div class="banniere" role="listitem" style="--c:${c}">
-      <button type="button" class="banniere-carte" aria-pressed="false" aria-label="${nom} : lire la légende">
+      <button type="button" class="banniere-carte" aria-pressed="false">
         <span class="banniere-face">
           <span class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${portrait}.webp" alt="" loading="lazy" width="320" height="320"></span>
           <span class="banniere-nom">${nom}</span>
@@ -177,7 +177,7 @@
   // une bannière se retourne pour montrer la légende du peuple ; la face cachée sort de l'arbre d'accessibilité
   $$(".banniere-carte").forEach(b => b.addEventListener("click", () => {
     const dos = b.getAttribute("aria-pressed") !== "true";
-    b.setAttribute("aria-pressed", dos); b.setAttribute("aria-label", b.querySelector(".banniere-nom").textContent + (dos ? " : revenir à la bannière" : " : lire la légende"));
+    b.setAttribute("aria-pressed", dos); 
     b.querySelector(".banniere-face").setAttribute("aria-hidden", dos); b.querySelector(".banniere-dos").setAttribute("aria-hidden", !dos);
   }));
   // les flèches ne servent que si la rangée déborde de l'écran
