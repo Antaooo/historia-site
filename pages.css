@@ -226,3 +226,25 @@
 .texte-legal b { color: #fff; }
 .texte-legal a:not(.bouton) { color: var(--or-clair); }
 .texte-legal .bouton { margin-top: 14px; }
+
+/* ---------- bestiaire des légendes ---------- */
+.visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.bestiaire-outils { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.bestiaire-compte { font-size: 18px; color: var(--texte-doux); }
+.bestiaire-compte b { font-family: var(--titre); font-size: 34px; color: var(--or-clair); margin-right: 6px; }
+.recherche input { width: min(360px, 80vw); padding: 12px 16px; border-radius: 999px; border: 1px solid var(--verre-bord); background: rgba(13, 11, 34, .6); color: #fff; font: inherit; }
+.recherche input:focus-visible { outline: 3px solid var(--or); outline-offset: 2px; }
+.familles { flex-wrap: wrap; margin-bottom: 28px; }
+.bestiaire { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+.fiche-boss { display: flex; flex-direction: column; gap: 6px; padding: 18px 18px 22px; border-top: 3px solid var(--c); }
+.fiche-boss-portrait { width: 100%; margin-bottom: 8px; border-width: 2px; border-radius: 16px; }
+.fiche-boss-famille { font-family: var(--titre); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--c); filter: brightness(1.35); }
+.fiche-boss-nom { font-family: var(--titre); font-weight: 400; font-size: 22px; line-height: 1.2; text-shadow: .07em .07em 0 rgba(0, 0, 0, .35); }
+.fiche-boss-titre { font-style: italic; color: var(--or-clair); }
+.fiche-boss-lieu { display: grid; gap: 4px; margin: 8px 0; padding: 10px 12px; border-radius: 12px; background: rgba(0, 0, 0, .25); font-size: 14px; }
+.fiche-boss-lieu div { display: flex; gap: 8px; }
+.fiche-boss-lieu dt { flex: 0 0 64px; color: rgba(255, 255, 255, .55); }
+.fiche-boss-lieu dd { margin: 0; color: #fff; }
+.fiche-boss-texte { color: var(--texte-doux); font-size: 15px; }
+.bestiaire-aucun { text-align: center; margin-top: 24px; color: var(--texte-doux); font-size: 18px; }
+@media (max-width: 760px) { .familles { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding: 0 16px 6px; scrollbar-width: none; } .familles::-webkit-scrollbar { display: none; } .familles .filtre { flex: 0 0 auto; } }

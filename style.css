@@ -624,3 +624,13 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .nouvelles-route { margin-top: 26px; text-align: center; color: var(--texte-doux); }
 .nouvelles-route a { color: var(--or-clair); }
 @media (max-width: 900px) { .nouvelles-cartes { grid-template-columns: 1fr; } .nouvelles { padding: 80px 0; } }
+.legendes-lien { position: relative; z-index: 2; text-align: center; margin-top: 18px; }
+.legendes-lien a { font-family: var(--titre); color: var(--or-clair); text-shadow: 2px 2px 0 rgba(0, 0, 0, .45); }
+/* en-tête : sept entrées de menu ; on resserre, puis on passe au menu burger avant que ça déborde */
+@media (max-width: 1380px) { .entete { gap: 18px; } .nav a { padding: 8px 10px; } .en-ligne { display: none; } }
+@media (max-width: 1180px) {
+  .nav { position: fixed; top: 76px; left: 16px; right: 16px; flex-direction: column; padding: 12px; border-radius: 20px; background: rgba(13, 11, 34, .92); backdrop-filter: blur(18px); border: 1px solid var(--verre-bord); display: none; }
+  .nav.ouvert { display: flex; }
+  .burger { display: flex; }
+  .entete { justify-content: space-between; }
+}

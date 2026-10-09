@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Voter · Historia</title>
-<meta name="description" content="Voter pour Historia sur les sites de classement : bientôt.">
+<title>Bestiaire des légendes · Historia</title>
+<meta name="description" content="Les boss d'Historia déjà présents dans le monde : leur biome, leur repaire et leur légende.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Historia">
-<meta property="og:title" content="Historia · Voter">
-<meta property="og:description" content="Voter pour Historia sur les sites de classement : bientôt.">
+<meta property="og:title" content="Historia · Bestiaire des légendes">
+<meta property="og:description" content="Les boss d'Historia déjà présents dans le monde : leur biome, leur repaire et leur légende.">
 <meta property="og:image" content="https://antaooo.github.io/historia-site/img/partage.jpg">
-<meta property="og:url" content="https://antaooo.github.io/historia-site/voter.html">
+<meta property="og:url" content="https://antaooo.github.io/historia-site/bestiaire.html">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -26,7 +26,7 @@
 <header class="entete" id="entete">
   <a href="index.html" class="marque" aria-label="Historia, accueil"><span class="marque-blason" aria-hidden="true"></span>HISTORIA</a>
   <nav class="nav" id="nav" aria-label="Navigation principale">
-    <a href="index.html">Accueil</a><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="bestiaire.html">Bestiaire</a><a href="nouveautes.html">Nouveautés</a><a href="galerie.html">Galerie</a><a href="boutique.html">Boutique</a>
+    <a href="index.html">Accueil</a><a href="guide.html">Guide</a><a href="progression.html">Progression</a><a href="bestiaire.html" aria-current="page">Bestiaire</a><a href="nouveautes.html">Nouveautés</a><a href="galerie.html">Galerie</a><a href="boutique.html">Boutique</a>
   </nav>
   <div class="entete-droite">
     <span class="en-ligne" hidden><span class="point" aria-hidden="true"></span><b></b></span>
@@ -37,25 +37,25 @@
 
 <main id="contenu">
   <section class="bandeau bandeau-haut">
-    <div class="decor" data-theme="plaines" aria-hidden="true"></div>
+    <div class="decor" data-theme="cimes" aria-hidden="true"></div>
     <div class="conteneur bandeau-contenu">
-      <p class="numero">Voter · bientôt</p>
-      <h1 class="h1-page">Fais grimper Historia</h1>
-      <p class="sous-texte">Un vote par jour, un coup de pouce pour le royaume. Les votes ouvriront avec le serveur.</p>
-      <span class="etiquette">Ouvre avec le serveur</span>
+      <p class="numero">Bestiaire</p>
+      <h1 class="h1-page">Le bestiaire des légendes</h1>
+      <p class="sous-texte">Les seigneurs du royaume qui t'attendent déjà dans le monde. Leur biome et le nom de leur repaire sont ici. Où il se cache exactement, c'est à toi de le trouver.</p>
+      <span class="etiquette">Plus de 100 boss à terme</span>
     </div>
   </section>
 
-  <section class="section-page" id="voter">
-    <div class="decor decor-voile" data-theme="plaines" aria-hidden="true"></div>
+  <section class="section-page" id="legendes">
+    <div class="decor decor-voile" data-theme="contrees" aria-hidden="true"></div>
     <div class="conteneur">
-      <div class="texte-legal">
-        <article class="carte-verre"><h2 class="h2-petit">À quoi sert un vote ?</h2>
-          <p>Les sites de classement de serveurs Minecraft mettent en avant ceux qui reçoivent le plus de votes. Chaque vote aide Historia à se faire connaître, et à faire grandir la communauté.</p></article>
-        <article class="carte-verre"><h2 class="h2-petit">Quand ?</h2>
-          <p>Les liens de vote ouvriront avec le serveur. Les récompenses de vote seront annoncées à ce moment-là, et resteront raisonnables : elles ne remplaceront jamais l'aventure.</p>
-          <a class="bouton bouton-discord" href="https://discord.gg/">Être prévenu sur le Discord</a></article>
+      <div class="bestiaire-outils">
+        <p class="bestiaire-compte"><b id="nb-legendes">0</b> légendes déjà dans le monde</p>
+        <label class="recherche"><span class="visuellement-cache">Chercher une légende</span><input id="recherche" type="search" placeholder="Chercher : dragon, marais, Anubis…" autocomplete="off"></label>
       </div>
+      <div class="filtres familles" id="familles" role="group" aria-label="Filtrer par famille"></div>
+      <div class="bestiaire" id="bestiaire"></div>
+      <p class="bestiaire-aucun" id="aucun" hidden>Aucune légende ne correspond. Elle se cache peut-être encore…</p>
     </div>
   </section>
 </main>
@@ -72,5 +72,6 @@
 <script src="commun.js"></script>
 <script src="extras.js"></script>
 <script>Historia.demarrer();</script>
+<script src="bestiaire.js"></script>
 </body>
 </html>
