@@ -283,3 +283,11 @@
   .compagnon b { font-size: 12px; }
   .compagnon small { display: none; }
 }
+/* galerie sur téléphone : deux colonnes, légendes resserrées */
+@media (max-width: 600px) {
+  .grille-galerie { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .carte-galerie.large { grid-column: 1 / -1; }
+  .carte-texte { padding: 8px 10px 10px; }
+  .carte-texte b { font-size: 13px; }
+  .carte-texte small { font-size: 11px; }
+}
