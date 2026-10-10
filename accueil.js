@@ -157,6 +157,7 @@
     for (const k of [ip - 1, ip, ip + 1]) { const el = diapos[(k + PEUPLES.length) % PEUPLES.length]; if (!el.style.backgroundImage) el.style.backgroundImage = `url(${el.dataset.fond})`; }
     diapos.forEach((el, k) => { el.classList.toggle("actif", k === ip); el.setAttribute("aria-hidden", k !== ip); el.inert = k !== ip; });
     pPts.forEach((p, k) => p.setAttribute("aria-current", k === ip));
+    $("#peuple-courant").textContent = `${PEUPLES[ip][0]} · ${ip + 1}/${PEUPLES.length}`;
   }
   pPts.forEach((p, k) => p.addEventListener("click", () => peuple(k)));
   $$("[data-peuple]").forEach(b => b.addEventListener("click", () => peuple(ip + Number(b.dataset.peuple))));
@@ -165,6 +166,7 @@
   pSection.addEventListener("pointerup", e => { if (px0 !== null && Math.abs(e.clientX - px0) > 50) peuple(ip + (e.clientX < px0 ? 1 : -1)); px0 = null; });
   new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { peuple(ip); o.disconnect(); } }, { rootMargin: "600px 0px" }).observe(pSection);
   diapos.forEach((el, k) => { el.classList.toggle("actif", k === 0); el.inert = k !== 0; });
+  $("#peuple-courant").textContent = `${PEUPLES[0][0]} · 1/${PEUPLES.length}`;
 
   /* ---------- II · mosaïque des créatures ---------- */
   const PORTRAITS = ["lr_minotaur", "medusa", "phoenix", "lr_yeti", "lr_anubis", "kraken", "cerberus", "tiamat", "azriel", "nightharrow_wendigo", "lr_gryffin", "wu", "flamental", "capra", "elven_druid", "mega_warden", "hana", "demon_of_chaos_gama05", "megalodon", "glume", "skog", "oblivion", "voras", "zahar", "mortos", "lillith", "wolfebersahd", "koboldassassin", "magnus", "kriger", "ent_king"];

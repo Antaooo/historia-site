@@ -88,3 +88,10 @@
   document.addEventListener("click", e => { if (!nav.contains(e.target) && !burger.contains(e.target)) fermer(false); });
   nav.addEventListener("click", e => { if (e.target.closest("a")) fermer(false); });
 })();
+
+// typographie française : espace insécable avant ? ! : ; » et après «, pour qu'aucun signe ne se retrouve seul à la ligne
+(() => {
+  const zone = document.body, tw = document.createTreeWalker(zone, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest("script, style, code, pre, textarea") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const corriger = t => t.replace(/ ([?!:;»])/g, " $1").replace(/« /g, "« ");
+  let n; while ((n = tw.nextNode())) { const v = corriger(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; }
+})();
