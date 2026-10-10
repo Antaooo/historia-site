@@ -688,3 +688,6 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 [data-affiche] .pixel-couche { animation: decor-arrive .5s ease-out both; }
 @keyframes decor-arrive { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { [data-affiche] .pixel-couche { animation: none; } }
+/* le titre et l'accroche sont visibles dès le premier affichage : ils glissent seulement en place */
+.ouverture .titre-or.revele, .ouverture .accroche.revele { opacity: 1; animation-name: glisse-en-place; }
+@keyframes glisse-en-place { from { transform: translateY(18px); } to { transform: none; } }
