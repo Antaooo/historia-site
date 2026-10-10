@@ -482,37 +482,57 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 }
 @media (max-width: 900px) { .fenetre-legende { width: min(300px, 80%); } }
 
-/* ---------- III · les peuples : bannières héraldiques à retourner ---------- */
-.peuples-chap { position: relative; padding: 130px 0 140px; overflow: hidden; background: var(--nuit); }
-.peuples-chap > .conteneur { position: relative; z-index: 2; }
-.peuples-chap .decor-voile::after { background: linear-gradient(180deg, rgba(16, 36, 26, .6), rgba(16, 36, 26, .3) 50%, rgba(16, 36, 26, .65)); }
-.peuples-chap .sous-texte { max-width: 560px; margin-top: 10px; }
-.peuples-fleches { display: flex; gap: 10px; }
-.bannieres { position: relative; z-index: 2; display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: max(24px, calc((100vw - 1200px) / 2)); padding: 34px max(24px, calc((100vw - 1200px) / 2)) 30px; scrollbar-width: none; }
-.bannieres::-webkit-scrollbar { display: none; }
-.banniere { flex: 0 0 250px; scroll-snap-align: start; position: relative; padding-top: 14px; }
-/* la hampe dorée qui porte la bannière */
-.banniere::before { content: ""; position: absolute; top: 0; left: -10px; right: -10px; height: 10px; border-radius: 6px; background: linear-gradient(180deg, var(--or-clair), var(--or) 50%, var(--or-fonce)); box-shadow: 0 4px 8px rgba(0, 0, 0, .4); z-index: 2; }
-.banniere::after { content: ""; position: absolute; top: -3px; left: -16px; right: -16px; height: 16px; background: radial-gradient(circle at 8px 8px, var(--or) 6px, transparent 7px), radial-gradient(circle at calc(100% - 8px) 8px, var(--or) 6px, transparent 7px); z-index: 2; pointer-events: none; }
-.banniere-face { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; min-height: 460px; padding: 22px 20px 64px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 34px), 0 100%);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 92%, #000) 0%, color-mix(in srgb, var(--c) 62%, #0D0B22) 100%);
-  backface-visibility: hidden; transition: transform .7s cubic-bezier(.3, .7, .2, 1), filter .3s; }
-/* liseré doré intérieur et motif tissé discret */
-.banniere-face::before { content: ""; position: absolute; inset: 8px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 30px), 0 100%); border: 2px solid rgba(255, 227, 160, .55); pointer-events: none;
-  background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 8px); }
-.banniere-face { position: relative; }
-.banniere-fenetre { width: 100%; border-width: 2px; border-radius: 16px; box-shadow: 0 0 0 4px rgba(13, 11, 34, .55), 0 18px 30px -12px rgba(0, 0, 0, .6), inset 0 0 40px rgba(0, 0, 0, .55); }
-.banniere-nom { font-family: var(--titre); font-size: 21px; line-height: 1.2; margin-top: 8px; text-shadow: .08em .08em 0 rgba(0, 0, 0, .4); }
-.banniere-terres { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, .25); color: rgba(255, 255, 255, .85); }
-.peuples-chap::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); pointer-events: none; }
-@media (max-width: 700px) {
-  .peuples-chap { padding: 100px 0 110px; }
-  .banniere { flex-basis: 74vw; max-width: 280px; }
-  .peuples-fleches { display: none; }
+/* ---------- III · les peuples : carrousel, un peuple par diapositive sur le décor de son biome ---------- */
+.peuples-chap { position: relative; height: 100svh; min-height: 680px; overflow: hidden; background: var(--nuit); }
+.peuples-piste { display: flex; height: 100%; transition: transform .8s cubic-bezier(.7, 0, .2, 1); }
+.peuple-diapo { position: relative; flex: 0 0 100%; height: 100%; display: flex; align-items: center; background: #1A2E24 center bottom / cover no-repeat; image-rendering: pixelated; }
+.peuple-diapo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13, 11, 34, .7) 0%, rgba(13, 11, 34, .35) 50%, rgba(13, 11, 34, .6) 100%), linear-gradient(180deg, rgba(13, 11, 34, .35), transparent 30%, transparent 70%, rgba(13, 11, 34, .5)); }
+.peuple-grille { position: relative; z-index: 1; width: min(1180px, calc(100% - 48px)); margin: 0 auto; padding-top: 90px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.peuple-terres { font-family: var(--titre); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--or-clair); text-shadow: 0 2px 0 rgba(0, 0, 0, .5); }
+.peuple-nom { font-family: var(--titre); font-weight: 700; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.05; margin: 6px 0 20px; text-shadow: .07em .07em 0 rgba(0, 0, 0, .45); }
+.peuple-nom::after { content: ""; display: block; width: 72px; height: 5px; margin-top: 12px; border-radius: 3px; background: var(--c); box-shadow: 0 0 16px var(--c); }
+.peuple-boss { display: grid; grid-template-columns: minmax(0, 380px); gap: 18px; }
+.peuple-boss.deux { grid-template-columns: repeat(2, minmax(0, 260px)); }
+.peuple-boss .fenetre-boss { --c: var(--c); border-radius: 20px; }
+.peuple-boss .fenetre-boss figcaption small { display: block; }
+.peuple-droite { padding: 22px; border-radius: 24px; background: rgba(13, 11, 34, .62); border: 1px solid var(--verre-bord); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.peuple-sous-titre { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .75); margin-bottom: 14px; }
+.peuple-creatures { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.peuple-creatures li { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 10px 12px; border-radius: 16px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); transition: transform .25s, border-color .25s; }
+.peuple-creatures li:hover { transform: translateY(-3px); border-color: var(--c); }
+.creature-image { width: 100%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 12px; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c) 45%, #241C44), #120F2A 75%); }
+.creature-image img { width: 90%; height: auto; }
+.creature-nom { font-family: var(--titre); font-size: 14px; text-align: center; }
+/* animation d'arrivée de la diapositive affichée */
+.peuple-diapo .peuple-gauche, .peuple-diapo .peuple-droite { opacity: 0; transform: translateY(24px); transition: opacity .6s .3s, transform .6s .3s; }
+.peuple-diapo .peuple-droite { transition-delay: .45s; }
+.peuple-diapo.actif .peuple-gauche, .peuple-diapo.actif .peuple-droite { opacity: 1; transform: none; }
+.peuples-entete { position: absolute; z-index: 5; top: 92px; left: clamp(24px, 6vw, 96px); padding: 12px 20px 14px; border-radius: 18px; background: rgba(13, 11, 34, .55); border: 1px solid var(--verre-bord); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); pointer-events: none; }
+.peuples-entete h2 { font-size: clamp(22px, 2.4vw, 32px); margin-top: 2px; }
+.peuples-commandes { position: absolute; z-index: 6; left: 50%; bottom: 60px; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; }
+.peuples-commandes .fleche-monde { position: static; margin: 0; width: 56px; height: 56px; }
+.peuples-commandes .points-biomes { position: static; transform: none; }
+.peuples-wiki { top: 104px; bottom: auto; right: clamp(76px, 7vw, 110px); }
+.peuples-chap::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 4; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); pointer-events: none; }
+@media (max-width: 900px) {
+  .peuples-chap { height: auto; min-height: 100svh; }
+  .peuples-piste { min-height: 100svh; }
+  .peuple-diapo { align-items: flex-start; }
+  .peuple-grille { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 170px 0 170px; }
+  .peuples-entete { top: 84px; left: 16px; padding: 8px 14px 10px; }
+  .peuple-nom { font-size: 32px; margin-bottom: 12px; }
+  .peuple-boss { grid-template-columns: minmax(0, 220px); justify-content: center; }
+  .peuple-boss.deux { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .peuple-gauche { text-align: center; } .peuple-nom::after { margin: 10px auto 0; }
+  .peuple-droite { padding: 14px; }
+  .peuple-creatures { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .peuple-creatures li { padding: 6px 4px 8px; }
+  .creature-nom { font-size: 10px; }
+  .peuples-commandes { bottom: 92px; }
+  .peuples-commandes .points-biomes { display: none; }
+  .peuples-wiki { display: none; }
 }
-@media (prefers-reduced-motion: reduce) {
-}
+@media (prefers-reduced-motion: reduce) { .peuples-piste, .peuple-diapo .peuple-gauche, .peuple-diapo .peuple-droite { transition: none; } }
 
 /* ---------- I · le monde : frise continue de biomes ---------- */
 #monde .frise { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
@@ -569,11 +589,6 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .monde::after { content: none; }
 
 /* peuples : en-tête centré, rangée de bannières centrée ; elle défile seulement si elle ne tient pas dans l'écran */
-.peuples-chap .galerie-entete { flex-direction: column; align-items: center; text-align: center; }
-.peuples-chap .sous-texte { margin-inline: auto; }
-.bannieres { justify-content: safe center; padding-inline: 24px; scroll-padding-inline: 24px; }
-.banniere { flex-basis: clamp(184px, calc((100vw - 48px - 8 * 20px - 24px) / 9), 250px); }
-.peuples-chap.tient .peuples-fleches { visibility: hidden; }
 
 /* ---------- VI · la Tour en pixel art ---------- */
 .tour-pin { background: #1E2A6E; }
@@ -645,39 +660,8 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .fiche-lieu { color: var(--or-clair) !important; }
 @media (max-width: 560px) { .mur { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 130px; gap: 10px; } .mur .brique:nth-child(n+7) { display: none; } .brique.grand, .brique.large { grid-column: 1 / -1; } }
 
-/* peuples v2 : boss en grand, troupes en dessous (plus de bannière à retourner) */
-.banniere { flex: 0 0 300px !important; }
-.banniere .banniere-face { cursor: default; gap: 10px; padding: 22px 18px 70px; transform: none !important; }
-.banniere:hover .banniere-face { filter: brightness(1.06); }
-.banniere-nom { margin: 0; font-weight: 400; }
-.banniere-terres { margin: -2px 0 4px; }
-.banniere-boss { width: 100%; display: grid; grid-template-columns: 1fr; gap: 10px; }
-.banniere-boss.deux { grid-template-columns: 1fr 1fr; }
-.banniere-boss .banniere-fenetre { position: relative; margin: 0; }
-.banniere-boss figcaption { position: absolute; left: 6px; right: 6px; bottom: 6px; padding: 4px 6px; border-radius: 8px; background: rgba(13, 11, 34, .82); font-family: var(--titre); font-size: 12px; line-height: 1.2; color: var(--or-clair); text-align: center; }
-.banniere-boss:not(.deux) figcaption { font-size: 14px; }
-.banniere-troupes-titre { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .7); }
-.banniere-troupes { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.banniere-troupes.peu { grid-template-columns: repeat(2, 1fr); }
-.banniere-troupes li { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px 7px; border-radius: 12px; background: rgba(13, 11, 34, .45); border: 1px solid rgba(255, 255, 255, .12); }
-.troupe-image { width: 100%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 9px; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c) 45%, #241C44), #120F2A 75%); }
-.troupe-image img { width: 92%; height: auto; transition: transform .25s; }
-.banniere-troupes li:hover .troupe-image img { transform: scale(1.08) translateY(-2px); }
-.troupe-nom { font-size: 12px; line-height: 1.2; text-align: center; color: rgba(255, 255, 255, .92); }
-@media (max-width: 700px) { .banniere { flex-basis: 82vw !important; max-width: 320px; } }
-.banniere-boss figcaption { transform: none !important; white-space: normal !important; display: block !important; }
-.bannieres { align-items: stretch; }
-.banniere { display: flex; flex-direction: column; }
-.banniere .banniere-face { flex: 1; }
 @media (max-width: 700px) {
-  .banniere-boss:not(.deux) .banniere-fenetre { width: 72%; margin: 0 auto; }
-  .banniere-troupes { grid-template-columns: repeat(4, 1fr) !important; gap: 6px; }
-  .banniere-troupes.peu { grid-template-columns: repeat(2, 1fr) !important; }
-  .banniere-troupes li { padding: 4px 3px 5px; }
-  .troupe-nom { font-size: 10px; }
 }
-.banniere .banniere-face { min-height: 0; padding-bottom: 56px; }
-.peuples-lien { margin-top: 26px; }
 .bulle-troupes { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .12); }
 .bulle-troupes span { margin-right: auto; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .65); }
 .bulle-troupes img { width: 54px; height: 54px; border-radius: 10px; background: radial-gradient(circle at 50% 45%, #3A3270, #17133A 75%); border: 1px solid rgba(255, 255, 255, .15); }
@@ -703,3 +687,17 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .prog-grille > *, .legendes-grille > *, .tour-grille > *, .faq-grille > * { min-width: 0; }
 .ouverture-contenu { max-width: 100%; box-sizing: border-box; }
 @media (max-width: 420px) { .ouverture-contenu { padding-left: 14px; padding-right: 14px; } }
+.peuple-droite { max-width: 470px; justify-self: end; width: 100%; }
+.peuple-grille { padding-top: 60px; padding-bottom: 70px; }
+.peuple-boss { grid-template-columns: minmax(0, 340px); }
+.peuple-boss .fenetre-boss figcaption { max-width: calc(100% - 16px); }
+.peuple-boss.deux .fenetre-boss figcaption { padding: 5px 10px 6px; }
+.peuple-boss.deux .fenetre-boss figcaption small { display: none; }
+.peuple-boss.deux .fenetre-boss figcaption b { font-size: 15px; white-space: normal; text-align: center; line-height: 1.15; }
+@media (max-width: 900px) {
+  .peuple-grille { padding: 160px 0 170px; }
+  .peuple-droite { max-width: none; justify-self: stretch; }
+  .peuple-boss .fenetre-boss figcaption { bottom: 6px; padding: 3px 8px 4px; }
+  .peuple-boss .fenetre-boss figcaption small { display: none; }
+  .peuple-boss .fenetre-boss figcaption b { font-size: 13px; }
+}

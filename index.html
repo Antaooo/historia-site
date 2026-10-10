@@ -119,19 +119,17 @@
 
 <!-- ================= III · LES PEUPLES ================= -->
 <section class="peuples-chap chap" id="peuples" data-chap="3" aria-roledescription="carrousel" aria-labelledby="peuples-h">
-  <div class="decor decor-voile" data-theme="contrees" aria-hidden="true"></div>
-  <div class="conteneur">
-    <div class="galerie-entete">
-      <div><p class="numero">Chapitre III</p><h2 id="peuples-h">Les peuples <em>du royaume</em></h2>
-        <p class="sous-texte">Neuf peuples se partagent les forêts, les mines et les mers. Voici leurs seigneurs, et les troupes que tu croiseras.</p></div>
-      <div class="peuples-fleches">
-        <button type="button" class="fleche" data-peuple="-1" aria-label="Peuples précédents"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button type="button" class="fleche" data-peuple="1" aria-label="Peuples suivants"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
+  <div class="peuples-piste" id="peuples-piste" aria-live="polite"></div>
+  <div class="peuples-entete">
+    <p class="numero">Chapitre III</p>
+    <h2 id="peuples-h">Les peuples <em>du royaume</em></h2>
   </div>
-  <div class="bannieres" id="bannieres" role="list"></div>
-  <p class="legendes-lien peuples-lien"><a href="bestiaire.html#creatures">Toutes les créatures du bestiaire →</a></p>
+  <div class="peuples-commandes">
+    <button type="button" class="fleche fleche-monde" data-peuple="-1" aria-label="Peuple précédent"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="points-biomes" id="peuples-points" role="group" aria-label="Choisir un peuple"></div>
+    <button type="button" class="fleche fleche-monde" data-peuple="1" aria-label="Peuple suivant"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <a class="monde-wiki peuples-wiki" href="bestiaire.html#creatures">Toutes les créatures du bestiaire →</a>
 </section>
 
 <!-- ================= IV · LES LÉGENDES ================= -->

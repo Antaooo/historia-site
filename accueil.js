@@ -144,26 +144,40 @@
   let attenteMonde;
   addEventListener("resize", () => { clearTimeout(attenteMonde); attenteMonde = setTimeout(() => { if (!R) return; if (Math.abs(monde.clientHeight - dims[1]) > 40 || Math.abs(vue() - dims[0]) > 40) construire(); else aller(off); }, 250); });
 
-  /* ---------- III · les peuples : leurs boss en grand, leurs troupes en dessous ---------- */
-  const PEUPLES = window.PEUPLES;
-  const bannieres = $("#bannieres");
-  bannieres.innerHTML = PEUPLES.map(([nom, c, terres, boss, troupes]) => `
-    <article class="banniere" role="listitem" style="--c:${c}" aria-label="${nom}">
-      <div class="banniere-face">
-        <h3 class="banniere-nom">${nom}</h3>
-        <p class="banniere-terres">${terres}</p>
-        <div class="banniere-boss${boss.length > 1 ? " deux" : ""}">${boss.map(([p, n]) => `<figure class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="320" height="320"><figcaption>${n}</figcaption></figure>`).join("")}</div>
-        <p class="banniere-troupes-titre">Leurs troupes</p>
-        <ul class="banniere-troupes${troupes.length < 3 ? " peu" : ""}">${troupes.map(([p, n]) => `<li><span class="troupe-image"><img src="img/sbires/${p}.webp" alt="" loading="lazy" width="160" height="160"></span><span class="troupe-nom">${n}</span></li>`).join("")}</ul>
+  /* ---------- III · les peuples : un peuple par diapositive, ses boss à gauche, ses créatures à droite ---------- */
+  const PEUPLES = window.PEUPLES, pPiste = $("#peuples-piste"), pPoints = $("#peuples-points"), pSection = $("#peuples");
+  pPiste.innerHTML = PEUPLES.map(([nom, c, terres, boss, troupes, theme], i) => `
+    <article class="peuple-diapo" style="--c:${c}" data-fond="img/peuples/fond-${theme}.webp" aria-roledescription="diapositive" aria-label="${i + 1} sur ${PEUPLES.length} : ${nom}">
+      <div class="peuple-grille">
+        <div class="peuple-gauche">
+          <p class="peuple-terres">${terres}</p>
+          <h3 class="peuple-nom">${nom}</h3>
+          <div class="peuple-boss${boss.length > 1 ? " deux" : ""}">${boss.map(([p, n]) => `<figure class="fenetre-boss"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="320" height="320"><figcaption><small>Boss</small><b>${n}</b></figcaption></figure>`).join("")}</div>
+        </div>
+        <div class="peuple-droite">
+          <p class="peuple-sous-titre">${troupes.some(([p]) => /^bear_/.test(p)) ? "Leurs troupes et la faune de leurs terres" : "Leurs troupes"}</p>
+          <ul class="peuple-creatures">${troupes.slice(0, 4).map(([p, n]) => `<li><span class="creature-image"><img src="img/sbires/${p}.webp" alt="" loading="lazy" width="160" height="160"></span><span class="creature-nom">${n}</span></li>`).join("")}</ul>
+        </div>
       </div>
     </article>`).join("");
-  // les flèches ne servent que si la rangée déborde de l'écran
-  const peuplesTient = () => $("#peuples").classList.toggle("tient", bannieres.scrollWidth <= bannieres.clientWidth + 2);
-  addEventListener("resize", peuplesTient); addEventListener("load", peuplesTient); peuplesTient();
-  $$("[data-peuple]").forEach(b => b.addEventListener("click", () => {
-    const pas = bannieres.firstElementChild.offsetWidth + 20;
-    bannieres.scrollBy({ left: Number(b.dataset.peuple) * pas * Math.max(1, Math.floor(bannieres.clientWidth / pas) - 1), behavior: calme ? "auto" : "smooth" });
-  }));
+  pPoints.innerHTML = PEUPLES.map(([nom], i) => `<button type="button" class="point-biome" aria-label="${nom}" aria-current="${i === 0}"><span>${nom}</span></button>`).join("");
+  const diapos = [...pPiste.children], pPts = [...pPoints.children];
+  let ip = 0;
+  function peuple(i) {
+    ip = (i + PEUPLES.length) % PEUPLES.length;
+    pPiste.style.transform = `translate3d(${-ip * 100}%,0,0)`;
+    // décors chargés à la demande : la diapositive affichée et ses deux voisines
+    for (const k of [ip - 1, ip, ip + 1]) { const el = diapos[(k + PEUPLES.length) % PEUPLES.length]; if (!el.style.backgroundImage) el.style.backgroundImage = `url(${el.dataset.fond})`; }
+    diapos.forEach((el, k) => { el.classList.toggle("actif", k === ip); el.setAttribute("aria-hidden", k !== ip); el.inert = k !== ip; });
+    pPts.forEach((p, k) => p.setAttribute("aria-current", k === ip));
+  }
+  pPts.forEach((p, k) => p.addEventListener("click", () => peuple(k)));
+  $$("[data-peuple]").forEach(b => b.addEventListener("click", () => peuple(ip + Number(b.dataset.peuple))));
+  let px0 = null;
+  pSection.addEventListener("pointerdown", e => { if (!e.target.closest("button, a")) px0 = e.clientX; });
+  pSection.addEventListener("pointerup", e => { if (px0 !== null && Math.abs(e.clientX - px0) > 50) peuple(ip + (e.clientX < px0 ? 1 : -1)); px0 = null; });
+  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { peuple(ip); o.disconnect(); } }, { rootMargin: "600px 0px" }).observe(pSection);
+  diapos.forEach((el, k) => { el.classList.toggle("actif", k === 0); el.inert = k !== 0; });
 
   /* ---------- II · mosaïque des créatures ---------- */
   const PORTRAITS = ["lr_minotaur", "medusa", "phoenix", "lr_yeti", "lr_anubis", "kraken", "cerberus", "tiamat", "azriel", "nightharrow_wendigo", "lr_gryffin", "wu", "flamental", "capra", "elven_druid", "mega_warden", "hana", "demon_of_chaos_gama05", "megalodon", "glume", "skog", "oblivion", "voras", "zahar", "mortos", "lillith", "wolfebersahd", "koboldassassin", "magnus", "kriger", "ent_king"];
@@ -295,9 +309,9 @@
 
   // chapitre actif
   const liens = $$(".chapitres a"), visibles = new Set();
-  new IntersectionObserver(es => es.forEach(e => {
+  const visiblesObs = new IntersectionObserver(es => es.forEach(e => {
     e.isIntersecting ? visibles.add(e.target.id) : visibles.delete(e.target.id);
-  }), { threshold: 0.35 }).observe(monde);
+  }), { threshold: 0.35 }); [monde, $("#peuples")].forEach(x => visiblesObs.observe(x));
   const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) liens.forEach(a => a.classList.toggle("actif", a.dataset.chap === e.target.dataset.chap)); }), { rootMargin: "-45% 0px -45% 0px" });
   $$(".chap").forEach(c => obs.observe(c));
 
@@ -305,6 +319,7 @@
   const chaps = $$(".chap");
   addEventListener("keydown", e => {
     if (e.target.closest("input, textarea, [role=tablist]")) return;
+    if (visibles.has("peuples") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { peuple(ip + (e.key === "ArrowRight" ? 1 : -1)); e.preventDefault(); return; }
     if (visibles.has("monde") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { cacher(); pas(e.key === "ArrowRight" ? 1 : -1); e.preventDefault(); return; }
     const sens = ["ArrowDown", "PageDown"].includes(e.key) ? 1 : ["ArrowUp", "PageUp"].includes(e.key) ? -1 : 0;
     if (!sens) return;
