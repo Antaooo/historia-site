@@ -682,3 +682,4 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .bulle-troupes span { margin-right: auto; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .65); }
 .bulle-troupes img { width: 54px; height: 54px; border-radius: 10px; background: radial-gradient(circle at 50% 45%, #3A3270, #17133A 75%); border: 1px solid rgba(255, 255, 255, .15); }
 @media (max-width: 900px) { .bulle-troupes img { width: 42px; height: 42px; } }
+@media (max-width: 700px) { .repere { top: 29% !important; } }
