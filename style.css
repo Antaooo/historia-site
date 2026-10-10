@@ -677,3 +677,4 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
   .troupe-nom { font-size: 10px; }
 }
 .banniere .banniere-face { min-height: 0; padding-bottom: 56px; }
+.peuples-lien { margin-top: 26px; }
