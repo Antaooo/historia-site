@@ -39,7 +39,7 @@
   dist.addEventListener("input", majZone); majZone();
 
   // spécialités
-  const SPE = [["Forgeron", "Armes"], ["Tanneur", "Armures"], ["Arcier", "Arcs (nom provisoire)"], ["Alchimiste", "Potions"], ["Mage", "Grimoires"]];
+  const SPE = [["Forgeron", "Armes"], ["Tanneur", "Armures"], ["Arcier", "Arcs"], ["Alchimiste", "Potions"], ["Mage", "Grimoires"]];
   const choisies = [];
   $("#specialites-liste").innerHTML = SPE.map(([n, d], i) => `<button type="button" class="spe carte-verre" aria-pressed="false" data-spe="${i}"><b>${n}</b><span>${d}</span></button>`).join("");
   $$("[data-spe]").forEach(b => b.addEventListener("click", () => {
