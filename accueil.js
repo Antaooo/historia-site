@@ -86,7 +86,7 @@
     bulle.style.setProperty("--c", teinte(b));
     bulle.innerHTML = `<figure class="fenetre-boss bulle-boss"><img src="img/boss/p_${b.portrait}.webp" alt="" width="320" height="320"></figure>
       <div class="bulle-texte"><p class="bulle-num">${String(i + 1).padStart(2, "0")} / ${String(NB).padStart(2, "0")}</p><h3>${b.nom}</h3>
-      <p>${b.texte}</p><p class="bulle-legende">Légende · <b>${b.boss}</b></p><p class="bulle-creatures">${b.creatures}</p></div>`;
+      <p>${b.texte}</p><p class="bulle-legende">Légende · <b>${b.boss}</b></p><p class="bulle-creatures">${b.creatures}</p></div>${b.troupes ? `<div class="bulle-troupes"><span>Tu y croiseras</span>${b.troupes.map(p => `<img src="img/sbires/${p}.webp" alt="" width="160" height="160">`).join("")}</div>` : ""}`;
   }
   // l'infobulle se pose sous le repère du biome, sans sortir de l'écran ni couvrir le fil des chapitres
   function placer(i) {
