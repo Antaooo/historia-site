@@ -1,0 +1,13 @@
+{
+  "name": "Historia, serveur Minecraft d'aventure",
+  "short_name": "Historia",
+  "lang": "fr",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#10241A",
+  "theme_color": "#10241A",
+  "icons": [
+    { "src": "img/icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icone-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
