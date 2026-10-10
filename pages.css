@@ -349,3 +349,8 @@
 .carte-creature .carte-image img { object-fit: contain; padding: 10px; }
 .vis-creature img { width: min(60vh, 90%); image-rendering: auto; }
 .carte-biome .carte-image img, .carte-paysage .carte-image img, .vis-biome img, .vis-paysage img { image-rendering: pixelated; object-fit: cover; }
+/* fil d'Ariane des pages intérieures */
+.fil { display: flex; align-items: center; gap: 10px; font-family: var(--titre); font-size: 14px; letter-spacing: .06em; color: var(--or-clair); text-shadow: 0 2px 0 rgba(13, 11, 34, .6); }
+.fil a { color: rgba(255, 255, 255, .85); text-decoration: none; }
+.fil a:hover { color: #fff; text-decoration: underline; }
+.fil-bientot { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(13, 11, 34, .6); border: 1px solid rgba(242, 193, 78, .5); }
