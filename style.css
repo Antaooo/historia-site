@@ -700,3 +700,6 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .burger span { transition: transform .25s; }
 .burger[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
 .burger[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
+.prog-grille > *, .legendes-grille > *, .tour-grille > *, .faq-grille > * { min-width: 0; }
+.ouverture-contenu { max-width: 100%; box-sizing: border-box; }
+@media (max-width: 420px) { .ouverture-contenu { padding-left: 14px; padding-right: 14px; } }
