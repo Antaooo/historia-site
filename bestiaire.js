@@ -71,13 +71,15 @@
   recherche.addEventListener("input", filtrer);
   // ---------- onglets : légendes / familiers et montures ----------
   const onglets = { legendes: $("#onglet-legendes"), creatures: $("#onglet-creatures"), compagnons: $("#onglet-compagnons") };
-  function ouvrir(nom) {
-    for (const [k, b] of Object.entries(onglets)) { b.setAttribute("aria-selected", k === nom); $("#panneau-" + k).hidden = k !== nom; }
+  function ouvrir(nom, focus) {
+    for (const [k, b] of Object.entries(onglets)) { b.setAttribute("aria-selected", k === nom); b.tabIndex = k === nom ? 0 : -1; $("#panneau-" + k).hidden = k !== nom; }
+    if (focus) onglets[nom].focus();
+    history.replaceState(null, "", nom === "legendes" ? location.pathname : "#" + nom);
     if (nom === "compagnons") chargerCompagnons();
   }
-  onglets.legendes.addEventListener("click", () => { ouvrir("legendes"); history.replaceState(null, "", location.pathname); });
-  onglets.compagnons.addEventListener("click", () => { ouvrir("compagnons"); history.replaceState(null, "", "#compagnons"); });
-  onglets.creatures.addEventListener("click", () => { ouvrir("creatures"); history.replaceState(null, "", "#creatures"); });
+  onglets.legendes.addEventListener("click", () => ouvrir("legendes"));
+  onglets.compagnons.addEventListener("click", () => ouvrir("compagnons"));
+  onglets.creatures.addEventListener("click", () => ouvrir("creatures"));
 
   // ---------- familiers et montures (données chargées à la première ouverture) ----------
   let compagnons = null;
@@ -109,8 +111,14 @@
       boutonsFamilles(); filtrerC();
     }).catch(() => { $("#compagnons").innerHTML = `<p class="bestiaire-aucun">Les compagnons n'ont pas pu être chargés.</p>`; compagnons = null; });
   }
-  if (location.hash === "#compagnons") ouvrir("compagnons");
-  if (location.hash === "#creatures") ouvrir("creatures");
+  // flèches gauche / droite, Début, Fin : passer d'un onglet à l'autre (motif des onglets accessibles)
+  const ordre = Object.keys(onglets);
+  onglets.legendes.parentElement.addEventListener("keydown", e => {
+    const i = ordre.findIndex(k => onglets[k] === document.activeElement); if (i < 0) return;
+    const j = e.key === "ArrowRight" ? (i + 1) % ordre.length : e.key === "ArrowLeft" ? (i - 1 + ordre.length) % ordre.length : e.key === "Home" ? 0 : e.key === "End" ? ordre.length - 1 : -1;
+    if (j >= 0) { e.preventDefault(); ouvrir(ordre[j], true); }
+  });
+  ouvrir(location.hash === "#compagnons" ? "compagnons" : location.hash === "#creatures" ? "creatures" : "legendes");
 
   // bestiaire.html#famille=Démons : ouvre directement une famille
   const voulu = decodeURIComponent((location.hash.match(/famille=([^&]+)/) || [])[1] || "");
