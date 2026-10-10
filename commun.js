@@ -79,3 +79,12 @@
   addEventListener("scroll", () => requestAnimationFrame(maj), { passive: true });
   s.addEventListener("focusin", () => s.classList.remove("range"));
 })();
+
+// menu mobile : se ferme avec Échap, au clic à l'extérieur ou sur un lien
+(() => {
+  const burger = document.querySelector(".burger"), nav = document.getElementById("nav"); if (!burger || !nav) return;
+  const fermer = (rendreFocus) => { if (!nav.classList.contains("ouvert")) return; nav.classList.remove("ouvert"); burger.setAttribute("aria-expanded", "false"); burger.setAttribute("aria-label", "Ouvrir le menu"); if (rendreFocus) burger.focus(); };
+  addEventListener("keydown", e => { if (e.key === "Escape") fermer(true); });
+  document.addEventListener("click", e => { if (!nav.contains(e.target) && !burger.contains(e.target)) fermer(false); });
+  nav.addEventListener("click", e => { if (e.target.closest("a")) fermer(false); });
+})();

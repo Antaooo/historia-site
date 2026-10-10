@@ -691,3 +691,12 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 /* le titre et l'accroche sont visibles dès le premier affichage : ils glissent seulement en place */
 .ouverture .titre-or.revele, .ouverture .accroche.revele { opacity: 1; animation-name: glisse-en-place; }
 @keyframes glisse-en-place { from { transform: translateY(18px); } to { transform: none; } }
+/* menu mobile : sous l'en-tête (bandeau d'annonce compris), page en cours en évidence */
+@media (max-width: 1180px) {
+  .nav { top: calc(var(--decalage, 0px) + 80px) !important; max-height: calc(100svh - var(--decalage, 0px) - 100px); overflow-y: auto; box-shadow: 0 24px 60px -12px rgba(0, 0, 0, .7); }
+  .nav a { padding: 12px 16px; }
+}
+.nav a[aria-current="page"] { color: var(--or-clair); background: rgba(242, 193, 78, .14); }
+.burger span { transition: transform .25s; }
+.burger[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
+.burger[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
