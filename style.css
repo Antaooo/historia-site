@@ -683,3 +683,8 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .bulle-troupes img { width: 54px; height: 54px; border-radius: 10px; background: radial-gradient(circle at 50% 45%, #3A3270, #17133A 75%); border: 1px solid rgba(255, 255, 255, .15); }
 @media (max-width: 900px) { .bulle-troupes img { width: 42px; height: 42px; } }
 @media (max-width: 700px) { .repere { top: 29% !important; } }
+/* ouverture : affiche fixe du paysage pendant que le décor animé se prépare */
+#decor-ouverture { background: url(img/affiche-royaume.webp) center bottom / cover no-repeat #5E9CE6; image-rendering: pixelated; }
+[data-affiche] .pixel-couche { animation: decor-arrive .5s ease-out both; }
+@keyframes decor-arrive { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { [data-affiche] .pixel-couche { animation: none; } }

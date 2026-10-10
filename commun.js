@@ -29,11 +29,12 @@
   const proche = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting || scenes.has(e.target)) return;
     const r = e.target.getBoundingClientRect();
-    if (r.bottom > 0 && r.top < innerHeight) monter(e.target);
+    // un décor qui a son affiche (image fixe déjà affichée) attend un temps mort, même à l'écran
+    if (r.bottom > 0 && r.top < innerHeight && !("affiche" in e.target.dataset)) monter(e.target);
     else if (!file.includes(e.target)) { file.push(e.target); if (!enCours) { enCours = true; auRepos(suivant); } }
   }), { rootMargin: "500px 0px" });
   // un fond qui arrive à l'écran avant son tour est dessiné aussitôt
-  const urgent = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting || scenes.has(e.target)) return; const i = file.indexOf(e.target); if (i >= 0) file.splice(i, 1); monter(e.target); }));
+  const urgent = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting || scenes.has(e.target) || "affiche" in e.target.dataset) return; const i = file.indexOf(e.target); if (i >= 0) file.splice(i, 1); monter(e.target); }));
   function monterTout() {
     for (const el of $$(".decor[data-theme]")) {
       if (!el.dataset.suivi) { el.dataset.suivi = "1"; vis.observe(el); if (!el.closest("[data-a-la-demande]")) { proche.observe(el); urgent.observe(el); } }
