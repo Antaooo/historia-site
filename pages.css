@@ -345,3 +345,6 @@
 .peuple-troupes .troupe-image img { width: 90%; height: auto; }
 .peuple-troupes .troupe-nom { font-family: var(--titre); font-size: 13px; text-align: center; }
 @media (max-width: 600px) { .peuple-troupes { grid-template-columns: repeat(2, 1fr); } }
+.carte-creature .carte-image { background: radial-gradient(circle at 50% 55%, #3A4A70, #17133A 72%); }
+.carte-creature .carte-image img { object-fit: contain; padding: 10px; }
+.vis-creature img { width: min(60vh, 90%); image-rendering: auto; }
