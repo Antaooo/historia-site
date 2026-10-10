@@ -89,9 +89,15 @@
   nav.addEventListener("click", e => { if (e.target.closest("a")) fermer(false); });
 })();
 
-// typographie française : espace insécable avant ? ! : ; » et après «, pour qu'aucun signe ne se retrouve seul à la ligne
+// typographie française : espace insécable avant ? ! : ; » et après «, pour qu'aucun signe ne se retrouve seul à la ligne ;
+// appliquée au chargement, puis à tout contenu ajouté ensuite (infobulles, onglets, journal chargé depuis les données)
 (() => {
-  const zone = document.body, tw = document.createTreeWalker(zone, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest("script, style, code, pre, textarea") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
   const corriger = t => t.replace(/ ([?!:;»])/g, " $1").replace(/« /g, "« ");
-  let n; while ((n = tw.nextNode())) { const v = corriger(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; }
+  const passer = racine => {
+    const tw = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement && n.parentElement.closest("script, style, code, pre, textarea") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    let n; while ((n = tw.nextNode())) { const v = corriger(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; }
+  };
+  passer(document.body);
+  new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) { if (n.nodeType === 1) passer(n); else if (n.nodeType === 3 && n.parentElement) passer(n.parentElement); } })
+    .observe(document.body, { childList: true, subtree: true });
 })();
