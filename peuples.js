@@ -16,5 +16,21 @@
     ["Esprits de la forêt", "#3F9D8F", "Forêts · Vallée des sakuras · Île aux champignons", [["skog", "Skog"], ["glume", "Glume"]], [["ent_warrior", "Ent guerrier"], ["ent_sorcerer", "Ent sorcier"], ["sakura_tree_ent", "Ent de cerisier"], ["oak_entling", "Pousse d'ent"]], "sakuras"],
     ["Golems", "#6AA7C7", "Grottes · Géodes", [["mega_warden", "Le Méga-Gardien"], ["amethystgolem", "Le Golem d'améthyste"]], [["diamondgolem", "Golem de diamant"], ["emeraldgolem", "Golem d'émeraude"], ["quartzgolem", "Golem de quartz"], ["rock_golem", "Golem de roche"]], "grottes"],
   ];
+  // les diapositives du chapitre III (accueil) : écrites dans la page par outils/seo.js, ou par accueil.js à défaut
+  const diapos = () => PEUPLES.map(([nom, c, terres, boss, troupes, theme], i) => `
+    <article class="peuple-diapo" style="--c:${c}" data-fond="img/peuples/fond-${theme}.webp" aria-roledescription="diapositive" aria-label="${i + 1} sur ${PEUPLES.length} : ${nom}">
+      <div class="peuple-grille">
+        <div class="peuple-gauche">
+          <p class="peuple-terres">${terres}</p>
+          <h3 class="peuple-nom">${nom}</h3>
+          <div class="peuple-boss${boss.length > 1 ? " deux" : ""}">${boss.map(([p, n]) => `<figure class="fenetre-boss"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="320" height="320"><figcaption><small>Boss</small><b>${n}</b></figcaption></figure>`).join("")}</div>
+        </div>
+        <div class="peuple-droite">
+          <p class="peuple-sous-titre">${troupes.some(([p]) => /^bear_/.test(p)) ? "Leurs troupes et la faune de leurs terres" : "Leurs troupes"}</p>
+          <ul class="peuple-creatures">${troupes.slice(0, 4).map(([p, n]) => `<li><span class="creature-image"><img src="img/sbires/${p}.webp" alt="" loading="lazy" width="160" height="160"></span><span class="creature-nom">${n}</span></li>`).join("")}</ul>
+        </div>
+      </div>
+    </article>`).join("");
+  PEUPLES.diapos = diapos;
   if (typeof module !== "undefined") module.exports = PEUPLES; else window.PEUPLES = PEUPLES;
 })();

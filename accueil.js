@@ -146,20 +146,7 @@
 
   /* ---------- III · les peuples : un peuple par diapositive, ses boss à gauche, ses créatures à droite ---------- */
   const PEUPLES = window.PEUPLES, pPiste = $("#peuples-piste"), pPoints = $("#peuples-points"), pSection = $("#peuples");
-  pPiste.innerHTML = PEUPLES.map(([nom, c, terres, boss, troupes, theme], i) => `
-    <article class="peuple-diapo" style="--c:${c}" data-fond="img/peuples/fond-${theme}.webp" aria-roledescription="diapositive" aria-label="${i + 1} sur ${PEUPLES.length} : ${nom}">
-      <div class="peuple-grille">
-        <div class="peuple-gauche">
-          <p class="peuple-terres">${terres}</p>
-          <h3 class="peuple-nom">${nom}</h3>
-          <div class="peuple-boss${boss.length > 1 ? " deux" : ""}">${boss.map(([p, n]) => `<figure class="fenetre-boss"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="320" height="320"><figcaption><small>Boss</small><b>${n}</b></figcaption></figure>`).join("")}</div>
-        </div>
-        <div class="peuple-droite">
-          <p class="peuple-sous-titre">${troupes.some(([p]) => /^bear_/.test(p)) ? "Leurs troupes et la faune de leurs terres" : "Leurs troupes"}</p>
-          <ul class="peuple-creatures">${troupes.slice(0, 4).map(([p, n]) => `<li><span class="creature-image"><img src="img/sbires/${p}.webp" alt="" loading="lazy" width="160" height="160"></span><span class="creature-nom">${n}</span></li>`).join("")}</ul>
-        </div>
-      </div>
-    </article>`).join("");
+  if (!pPiste.children.length) pPiste.innerHTML = PEUPLES.diapos(); // déjà écrites dans la page par outils/seo.js
   pPoints.innerHTML = PEUPLES.map(([nom], i) => `<button type="button" class="point-biome" aria-label="${nom}" aria-current="${i === 0}"><span>${nom}</span></button>`).join("");
   const diapos = [...pPiste.children], pPts = [...pPoints.children];
   let ip = 0;

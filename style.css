@@ -701,3 +701,4 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
   .peuple-boss .fenetre-boss figcaption small { display: none; }
   .peuple-boss .fenetre-boss figcaption b { font-size: 13px; }
 }
+.peuples-piste { touch-action: pan-y; user-select: none; }
