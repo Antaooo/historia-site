@@ -144,42 +144,30 @@
   let attenteMonde;
   addEventListener("resize", () => { clearTimeout(attenteMonde); attenteMonde = setTimeout(() => { if (!R) return; if (Math.abs(monde.clientHeight - dims[1]) > 40 || Math.abs(vue() - dims[0]) > 40) construire(); else aller(off); }, 250); });
 
-  /* ---------- III · les peuples : bannières à retourner ---------- */
+  /* ---------- III · les peuples : leurs boss en grand, leurs troupes en dessous ---------- */
+  // [nom, couleur, terres, boss [[portrait, nom]], troupes [[portrait, nom]]] : uniquement des créatures présentes en jeu
   const PEUPLES = [
-    ["Elfes", "elven_druid", "#8F6FC9", "Gardiens des clairières lunaires", "Forêt lunaire · Jardin des fées", "Leur village s'enroule autour d'un arbre-cœur, gardé par des portails de calcite et de quartz. Épéistes, rôdeurs, mages et druides veillent sur la forêt, et ne tolèrent pas qu'on y coupe un arbre sans raison."],
-    ["Nains", "dwarf_knight", "#8A8A96", "Maîtres des profondeurs", "Pics de granit · Grottes", "Sous les montagnes, des mines creusées pendant des siècles, des ponts jetés au-dessus des gouffres et une porte scellée que personne n'a jamais rouverte. Chevaliers, chasseurs, forgerons et prêtres gardent ce qui reste du royaume nain."],
-    ["Gobelins", "goblin_king", "#6F9A2A", "Pillards des plaines", "Plaines · Savane · Steppe", "Petits, verts et toujours en bande. Armés de poêles, de cuillères et de gourdins, ils sortent de leurs camps et de leurs champignonnières pour piller tout ce qui brille. Un chaman les galvanise, et leur roi les mène."],
-    ["Vikings", "viking", "#4C78A8", "Guerriers du grand nord", "Taïga · Forêt boréale", "Retranchés derrière leurs palissades et leurs longues maisons, ils ne craignent ni le froid ni la mort. Ils obéissent à Bjorn l'Exalté, et chaque raid qu'ils mènent devient un chant."],
-    ["Pirates et créatures marines", "pirate_captain", "#2F7FA5", "Écumeurs des côtes", "Côtes · Abysses", "Épaves échouées, criques de pirates, coffres enterrés. Le capitaine et son équipage pillent les rivages, des crabes géants gardent les plages, et au fond de l'eau, quelque chose de bien plus grand attend."],
-    ["Morts-vivants", "mortos", "#5F8F7A", "Ceux qui ne reposent pas", "Désert · Marais maudit · Forêts", "Le tombeau d'Anubis et ses momies, l'ossuaire, le cimetière où dort le dragon Mortos, l'église du gardien Kriger. Dans ce royaume, les morts ne restent pas toujours sous terre."],
-    ["Démons", "lillith", "#A23A3A", "Enfants des rituels", "Bois hanté · Steppe embrasée", "Invoqués par des rituels oubliés, ils obéissent à Lillith. Là où son cercle d'invocation s'allume, les diablotins ne sont jamais loin, et les faucheurs non plus."],
-    ["Esprits de la forêt", "skog", "#3F9D8F", "Âmes de la nature", "Forêts · Vallée des sakuras", "Skog, l'esprit des chênes et des bouleaux. Glume, gardien des champignons géants. Hana, dans la vallée des sakuras. Ils protègent la nature, et se souviennent de chaque arbre abattu."],
-    ["Golems", "amethystgolem", "#6AA7C7", "Colosses nés des géodes", "Grottes · Géodes", "Améthyste, diamant, émeraude, quartz, redstone : chaque gemme a son colosse. Ils dorment dans la pierre, jusqu'au jour où un mineur creuse un peu trop près."],
+    ["Elfes", "#8F6FC9", "Forêt lunaire · Jardin des fées", [["elven_druid", "La Druidesse elfe"]], [["elven_swordsman", "Épéiste elfe"], ["elven_ranger", "Rôdeur elfe"], ["elven_mage", "Mage elfe"], ["elven_runebear", "Ours runique"]]],
+    ["Nains", "#8A8A96", "Pics de granit · Mines", [["dwarf_blacksmith", "Le Forgeron nain"]], [["dwarf_knight", "Chevalier nain"], ["dwarf_huntsman", "Chasseur nain"], ["dwarf_cleric", "Clerc nain"], ["koboldassassin", "Assassin kobold"]]],
+    ["Gobelins", "#6F9A2A", "Plaines · Savane · Steppe", [["goblin_king", "Le Roi gobelin"], ["kur", "Kur"]], [["gp2_goblin_archer", "Guerrier gobelin"], ["gp2_goblin_shaman", "Chaman gobelin"]]],
+    ["Vikings", "#4C78A8", "Taïga · Forêt boréale", [["viking", "Bjorn l'Exalté"]], [["viking_npc", "Guerrier viking"]]],
+    ["Pirates", "#2F7FA5", "Côtes · Abysses", [["pirate_captain", "Capitaine DeadBeard"], ["kraken", "Le Kraken"]], [["piratepack_crewmate", "Pirate de l'équipage"], ["pirate_swordsman", "Pirate sabreur"], ["pirate_gunner", "Pirate tireur"], ["piratepack_crab", "Crabe pirate"]]],
+    ["Morts-vivants", "#5F8F7A", "Désert · Marais maudit · Forêts", [["lr_anubis", "Anubis"], ["mortos", "Mortos"]], [["lr_anubis_mummy", "Momie d'Anubis"], ["tower_skeleton", "Squelette de la tour"], ["azriel_minion", "Sbire d'Azriel"], ["modelfoundry_mutant_zombie_strong", "Zombie mutant"]]],
+    ["Démons", "#A23A3A", "Bois hanté · Caldeira", [["lillith", "Lillith"], ["demon_of_chaos_gama05", "Démon du chaos"]], [["halloweenpackvol3_imp", "Diablotin"], ["piglin_mage", "Piglin mage"], ["piglin_marauder", "Piglin maraudeur"], ["demon_reaper", "Faucheur démoniaque"]]],
+    ["Esprits de la forêt", "#3F9D8F", "Forêts · Vallée des sakuras", [["ent_king", "Le Roi des ents"], ["hana", "Hana"]], [["ent_warrior", "Ent guerrier"], ["ent_sorcerer", "Ent sorcier"], ["sakura_tree_ent", "Ent de cerisier"], ["oak_entling", "Pousse d'ent"]]],
+    ["Golems", "#6AA7C7", "Grottes · Géodes", [["mega_warden", "Le Méga-Gardien"], ["amethystgolem", "Golem d'améthyste"]], [["diamondgolem", "Golem de diamant"], ["emeraldgolem", "Golem d'émeraude"], ["quartzgolem", "Golem de quartz"], ["rock_golem", "Golem de roche"]]],
   ];
   const bannieres = $("#bannieres");
-  bannieres.innerHTML = PEUPLES.map(([nom, portrait, c, devise, terres, legende]) => `
-    <div class="banniere" role="listitem" style="--c:${c}">
-      <button type="button" class="banniere-carte" aria-pressed="false">
-        <span class="banniere-face">
-          <span class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${portrait}.webp" alt="" loading="lazy" width="320" height="320"></span>
-          <span class="banniere-nom">${nom}</span>
-          <span class="banniere-devise">${devise}</span>
-          <span class="banniere-terres">${terres}</span>
-          <span class="banniere-indice" aria-hidden="true">Lire la légende ↻</span>
-        </span>
-        <span class="banniere-dos" aria-hidden="true">
-          <span class="banniere-nom">${nom}</span>
-          <span class="banniere-legende">${legende}</span>
-          <span class="banniere-indice">Retourner ↻</span>
-        </span>
-      </button>
-    </div>`).join("");
-  // une bannière se retourne pour montrer la légende du peuple ; la face cachée sort de l'arbre d'accessibilité
-  $$(".banniere-carte").forEach(b => b.addEventListener("click", () => {
-    const dos = b.getAttribute("aria-pressed") !== "true";
-    b.setAttribute("aria-pressed", dos); 
-    b.querySelector(".banniere-face").setAttribute("aria-hidden", dos); b.querySelector(".banniere-dos").setAttribute("aria-hidden", !dos);
-  }));
+  bannieres.innerHTML = PEUPLES.map(([nom, c, terres, boss, troupes]) => `
+    <article class="banniere" role="listitem" style="--c:${c}" aria-label="${nom}">
+      <div class="banniere-face">
+        <h3 class="banniere-nom">${nom}</h3>
+        <p class="banniere-terres">${terres}</p>
+        <div class="banniere-boss${boss.length > 1 ? " deux" : ""}">${boss.map(([p, n]) => `<figure class="fenetre-boss banniere-fenetre"><img src="img/boss/p_${p}.webp" alt="" loading="lazy" width="320" height="320"><figcaption>${n}</figcaption></figure>`).join("")}</div>
+        <p class="banniere-troupes-titre">Leurs troupes</p>
+        <ul class="banniere-troupes${troupes.length < 3 ? " peu" : ""}">${troupes.map(([p, n]) => `<li><span class="troupe-image"><img src="img/sbires/${p}.webp" alt="" loading="lazy" width="160" height="160"></span><span class="troupe-nom">${n}</span></li>`).join("")}</ul>
+      </div>
+    </article>`).join("");
   // les flèches ne servent que si la rangée déborde de l'écran
   const peuplesTient = () => $("#peuples").classList.toggle("tient", bannieres.scrollWidth <= bannieres.clientWidth + 2);
   addEventListener("resize", peuplesTient); addEventListener("load", peuplesTient); peuplesTient();

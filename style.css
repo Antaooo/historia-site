@@ -494,27 +494,17 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 /* la hampe dorée qui porte la bannière */
 .banniere::before { content: ""; position: absolute; top: 0; left: -10px; right: -10px; height: 10px; border-radius: 6px; background: linear-gradient(180deg, var(--or-clair), var(--or) 50%, var(--or-fonce)); box-shadow: 0 4px 8px rgba(0, 0, 0, .4); z-index: 2; }
 .banniere::after { content: ""; position: absolute; top: -3px; left: -16px; right: -16px; height: 16px; background: radial-gradient(circle at 8px 8px, var(--or) 6px, transparent 7px), radial-gradient(circle at calc(100% - 8px) 8px, var(--or) 6px, transparent 7px); z-index: 2; pointer-events: none; }
-.banniere-carte { all: unset; box-sizing: border-box; display: grid; width: 100%; cursor: pointer; perspective: 1200px; color: #fff; }
-.banniere-carte:focus-visible { outline: 3px solid var(--or); outline-offset: 6px; border-radius: 8px; }
-.banniere-face, .banniere-dos { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; min-height: 460px; padding: 22px 20px 64px;
+.banniere-face { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; min-height: 460px; padding: 22px 20px 64px;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 34px), 0 100%);
   background: linear-gradient(180deg, color-mix(in srgb, var(--c) 92%, #000) 0%, color-mix(in srgb, var(--c) 62%, #0D0B22) 100%);
   backface-visibility: hidden; transition: transform .7s cubic-bezier(.3, .7, .2, 1), filter .3s; }
 /* liseré doré intérieur et motif tissé discret */
-.banniere-face::before, .banniere-dos::before { content: ""; position: absolute; inset: 8px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 30px), 0 100%); border: 2px solid rgba(255, 227, 160, .55); pointer-events: none;
+.banniere-face::before { content: ""; position: absolute; inset: 8px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 30px), 0 100%); border: 2px solid rgba(255, 227, 160, .55); pointer-events: none;
   background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 8px); }
-.banniere-face, .banniere-dos { position: relative; }
-.banniere-dos { transform: rotateY(180deg); justify-content: center; }
-.banniere-carte[aria-pressed="true"] .banniere-face { transform: rotateY(-180deg); }
-.banniere-carte[aria-pressed="true"] .banniere-dos { transform: rotateY(0); }
-.banniere-carte:hover .banniere-face, .banniere-carte:hover .banniere-dos { filter: brightness(1.08); }
+.banniere-face { position: relative; }
 .banniere-fenetre { width: 100%; border-width: 2px; border-radius: 16px; box-shadow: 0 0 0 4px rgba(13, 11, 34, .55), 0 18px 30px -12px rgba(0, 0, 0, .6), inset 0 0 40px rgba(0, 0, 0, .55); }
 .banniere-nom { font-family: var(--titre); font-size: 21px; line-height: 1.2; margin-top: 8px; text-shadow: .08em .08em 0 rgba(0, 0, 0, .4); }
-.banniere-devise { font-size: 15px; font-style: italic; color: var(--or-clair); }
 .banniere-terres { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, .25); color: rgba(255, 255, 255, .85); }
-.banniere-legende { font-size: 15.5px; line-height: 1.55; color: rgba(255, 255, 255, .92); }
-.banniere-indice { margin-top: auto; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .7); }
-.banniere-dos .banniere-indice { margin-top: 10px; }
 .peuples-chap::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); pointer-events: none; }
 @media (max-width: 700px) {
   .peuples-chap { padding: 100px 0 110px; }
@@ -522,10 +512,6 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
   .peuples-fleches { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .banniere-face, .banniere-dos { transition: opacity .2s; }
-  .banniere-dos { transform: none; opacity: 0; }
-  .banniere-carte[aria-pressed="true"] .banniere-face { transform: none; opacity: 0; }
-  .banniere-carte[aria-pressed="true"] .banniere-dos { opacity: 1; }
 }
 
 /* ---------- I · le monde : frise continue de biomes ---------- */
@@ -658,3 +644,36 @@ h2 { font-weight: 700; font-size: clamp(32px, 4.2vw, 58px); line-height: 1.12; t
 .legendes .fiche { background: rgba(13, 11, 34, .72); border-color: rgba(242, 193, 78, .35); }
 .fiche-lieu { color: var(--or-clair) !important; }
 @media (max-width: 560px) { .mur { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 130px; gap: 10px; } .mur .brique:nth-child(n+7) { display: none; } .brique.grand, .brique.large { grid-column: 1 / -1; } }
+
+/* peuples v2 : boss en grand, troupes en dessous (plus de bannière à retourner) */
+.banniere { flex: 0 0 300px !important; }
+.banniere .banniere-face { cursor: default; gap: 10px; padding: 22px 18px 70px; transform: none !important; }
+.banniere:hover .banniere-face { filter: brightness(1.06); }
+.banniere-nom { margin: 0; font-weight: 400; }
+.banniere-terres { margin: -2px 0 4px; }
+.banniere-boss { width: 100%; display: grid; grid-template-columns: 1fr; gap: 10px; }
+.banniere-boss.deux { grid-template-columns: 1fr 1fr; }
+.banniere-boss .banniere-fenetre { position: relative; margin: 0; }
+.banniere-boss figcaption { position: absolute; left: 6px; right: 6px; bottom: 6px; padding: 4px 6px; border-radius: 8px; background: rgba(13, 11, 34, .82); font-family: var(--titre); font-size: 12px; line-height: 1.2; color: var(--or-clair); text-align: center; }
+.banniere-boss:not(.deux) figcaption { font-size: 14px; }
+.banniere-troupes-titre { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .7); }
+.banniere-troupes { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.banniere-troupes.peu { grid-template-columns: repeat(2, 1fr); }
+.banniere-troupes li { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px 7px; border-radius: 12px; background: rgba(13, 11, 34, .45); border: 1px solid rgba(255, 255, 255, .12); }
+.troupe-image { width: 100%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 9px; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c) 45%, #241C44), #120F2A 75%); }
+.troupe-image img { width: 92%; height: auto; transition: transform .25s; }
+.banniere-troupes li:hover .troupe-image img { transform: scale(1.08) translateY(-2px); }
+.troupe-nom { font-size: 12px; line-height: 1.2; text-align: center; color: rgba(255, 255, 255, .92); }
+@media (max-width: 700px) { .banniere { flex-basis: 82vw !important; max-width: 320px; } }
+.banniere-boss figcaption { transform: none !important; white-space: normal !important; display: block !important; }
+.bannieres { align-items: stretch; }
+.banniere { display: flex; flex-direction: column; }
+.banniere .banniere-face { flex: 1; }
+@media (max-width: 700px) {
+  .banniere-boss:not(.deux) .banniere-fenetre { width: 72%; margin: 0 auto; }
+  .banniere-troupes { grid-template-columns: repeat(4, 1fr) !important; gap: 6px; }
+  .banniere-troupes.peu { grid-template-columns: repeat(2, 1fr) !important; }
+  .banniere-troupes li { padding: 4px 3px 5px; }
+  .troupe-nom { font-size: 10px; }
+}
+.banniere .banniere-face { min-height: 0; padding-bottom: 56px; }
