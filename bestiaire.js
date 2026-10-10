@@ -15,6 +15,8 @@
     ["goblin_king", "Le Roi gobelin", "Chef des pillards verts", "Gobelins", "Plaines, Savane", "Camp gobelin", "Au milieu de son camp de bric et de broc, le roi gobelin commande une horde armée de poêles et de fourches. Là où il trône, sa bande n'est jamais loin."],
     ["hana", "Hana", "Gardienne des sakuras", "Esprits et féerique", "Vallée des sakuras, Jardin des fées", "Sakura colossal", "Au pied du cerisier géant, sur un tapis de pétales roses, une jeune fille aux bois de cerf attend, une lame à la main. La beauté du lieu ne doit pas te faire baisser ta garde."],
     ["kraken", "Le Kraken", "Terreur des épaves englouties", "Créatures marines", "Abysses, Récif des merveilles", "Épaves", "Les navires coulés ne sont pas abandonnés : des tentacules immenses s'enroulent autour de leurs coques. Plonge vers un trésor englouti à tes risques et périls."],
+    ["dwarf_blacksmith", "Le Forgeron nain", "Gardien de la porte scellée", "Nains", "Pics de granit, Falaises blanches", "Porte scellée", "Devant une porte que personne n'a rouverte depuis des siècles, le dernier forgeron du royaume nain monte la garde, marteau au poing. Ses enclumes chauffent encore."],
+    ["kur", "Kur", "Le seigneur gobelin corrompu", "Gobelins", "Plaines, Forêt lunaire", "Camp gobelin, Faille corrompue", "Plus grand, plus fort et plus cruel que ses congénères, Kur surgit parfois dans les camps gobelins. On le dit né de la faille corrompue qui ronge la forêt lunaire."],
     ["kriger", "Kriger", "Le gardien enchaîné", "Morts-vivants", "Plaines, Forêt", "Église du gardien", "Dans une église en ruine, un guerrier drapé et chargé de chaînes dort d'un sommeil de pierre. Approche-toi trop, et il se réveille."],
     ["lillith", "Lillith", "La démone du cercle", "Démons", "Bois hanté", "Cercle d'invocation", "Au cœur du bois hanté, une clairière de cendres s'ouvre autour d'un cercle de pierres calcinées. Le rituel inachevé n'attend qu'un imprudent pour faire surgir la démone."],
     ["lr_anubis", "Anubis", "Seigneur du tombeau ensablé", "Morts-vivants", "Désert", "Tombeau d'Anubis", "Une pyramide à demi enfouie sous le sable garde son maître à tête de chacal. Il dort sur son trône, entouré de momies, jusqu'à ce qu'un pilleur ose s'approcher."],
@@ -38,7 +40,7 @@
     ["wu", "Wu, maître d'encre", "Le maître du pavillon", "Esprits et féerique", "Bambouseraie brumeuse", "Pavillon de l'encre", "Derrière une porte de lune, au bord d'un étang à lotus, un pavillon abrite la table du calligraphe. Qui touche à ses pinceaux réveille le maître d'encre."],
     ["zahar", "Zahar", "L'alchimiste fou du marais", "Sorciers et alchimistes", "Marais maudit", "Laboratoire interdit", "Dans une cabane sur pilotis noyée de vapeurs, un alchimiste poursuit des expériences que nul n'aurait dû tenter. Ce qu'il a créé rôde encore autour du laboratoire."],
   ];
-  const TEINTE = { "Bêtes et monstres": "#C08A4B", "Morts-vivants": "#5F8F7A", "Démons": "#C0453A", "Esprits et féerique": "#3F9D8F", "Golems et êtres minéraux": "#6AA7C7", "Créatures marines": "#2F7FA5", "Elfes": "#8F6FC9", "Gobelins": "#6F9A2A", "Vikings": "#4C78A8", "Pirates": "#2F7FA5", "Humains": "#C08A4B", "Sorciers et alchimistes": "#9A6FB0" };
+  const TEINTE = { "Bêtes et monstres": "#C08A4B", "Morts-vivants": "#5F8F7A", "Démons": "#C0453A", "Esprits et féerique": "#3F9D8F", "Golems et êtres minéraux": "#6AA7C7", "Créatures marines": "#2F7FA5", "Elfes": "#8F6FC9", "Gobelins": "#6F9A2A", "Vikings": "#4C78A8", "Nains": "#8A8A96", "Pirates": "#2F7FA5", "Humains": "#C08A4B", "Sorciers et alchimistes": "#9A6FB0" };
   const tri = (a, b) => a.localeCompare(b, "fr");
   const familles = [...new Set(LEGENDES.map(l => l[3]))].sort(tri);
   const liste = [...LEGENDES].sort((a, b) => tri(a[1].replace(/^(Le |La |L')/, ""), b[1].replace(/^(Le |La |L')/, "")));
@@ -68,13 +70,14 @@
   $$("#familles .filtre").forEach(b => b.addEventListener("click", () => { famille = b.dataset.famille; $$("#familles .filtre").forEach(x => x.setAttribute("aria-pressed", x === b)); filtrer(); }));
   recherche.addEventListener("input", filtrer);
   // ---------- onglets : légendes / familiers et montures ----------
-  const onglets = { legendes: $("#onglet-legendes"), compagnons: $("#onglet-compagnons") };
+  const onglets = { legendes: $("#onglet-legendes"), creatures: $("#onglet-creatures"), compagnons: $("#onglet-compagnons") };
   function ouvrir(nom) {
     for (const [k, b] of Object.entries(onglets)) { b.setAttribute("aria-selected", k === nom); $("#panneau-" + k).hidden = k !== nom; }
     if (nom === "compagnons") chargerCompagnons();
   }
   onglets.legendes.addEventListener("click", () => { ouvrir("legendes"); history.replaceState(null, "", location.pathname); });
   onglets.compagnons.addEventListener("click", () => { ouvrir("compagnons"); history.replaceState(null, "", "#compagnons"); });
+  onglets.creatures.addEventListener("click", () => { ouvrir("creatures"); history.replaceState(null, "", "#creatures"); });
 
   // ---------- familiers et montures (données chargées à la première ouverture) ----------
   let compagnons = null;
@@ -107,6 +110,7 @@
     }).catch(() => { $("#compagnons").innerHTML = `<p class="bestiaire-aucun">Les compagnons n'ont pas pu être chargés.</p>`; compagnons = null; });
   }
   if (location.hash === "#compagnons") ouvrir("compagnons");
+  if (location.hash === "#creatures") ouvrir("creatures");
 
   // bestiaire.html#famille=Démons : ouvre directement une famille
   const voulu = decodeURIComponent((location.hash.match(/famille=([^&]+)/) || [])[1] || "");

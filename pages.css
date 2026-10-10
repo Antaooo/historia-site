@@ -332,3 +332,16 @@
 .bandeau-haut::before { content: ""; position: absolute; top: auto; left: 0; right: 0; bottom: 0; height: 48px; z-index: 3; background: url(img/coupe.png) 0 0 / 64px 48px repeat-x; image-rendering: pixelated; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); pointer-events: none; }
 .bandeau-contenu { padding-bottom: 72px !important; }
 .bandeau .numero, .bandeau .sous-texte { text-shadow: 0 2px 0 rgba(13, 11, 34, .6), 0 0 18px rgba(13, 11, 34, .55); }
+
+/* bestiaire : onglet Créatures, les troupes peuple par peuple */
+.peuple-bloc { margin-bottom: 22px; padding: 18px 20px 20px; border-radius: 20px; background: rgba(16, 36, 26, .55); border: 1px solid var(--verre-bord); border-left: 5px solid var(--c); }
+.peuple-entete { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 14px; }
+.peuple-entete .h2-petit { font-size: 24px; }
+.peuple-entete span { font-size: 14px; color: var(--texte-doux); }
+.peuple-chefs { color: var(--or-clair) !important; font-style: italic; }
+.peuple-troupes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.peuple-troupes li { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border-radius: 14px; background: rgba(13, 11, 34, .45); border: 1px solid rgba(255, 255, 255, .1); }
+.peuple-troupes .troupe-image { width: 100%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c) 45%, #241C44), #120F2A 75%); }
+.peuple-troupes .troupe-image img { width: 90%; height: auto; }
+.peuple-troupes .troupe-nom { font-family: var(--titre); font-size: 13px; text-align: center; }
+@media (max-width: 600px) { .peuple-troupes { grid-template-columns: repeat(2, 1fr); } }
