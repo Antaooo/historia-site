@@ -168,7 +168,9 @@
   /* ---------- II · mosaïque des créatures ---------- */
   const PORTRAITS = ["lr_minotaur", "medusa", "phoenix", "lr_yeti", "lr_anubis", "kraken", "cerberus", "tiamat", "azriel", "nightharrow_wendigo", "lr_gryffin", "wu", "flamental", "capra", "elven_druid", "mega_warden", "hana", "demon_of_chaos_gama05", "megalodon", "glume", "skog", "oblivion", "voras", "zahar", "mortos", "lillith", "wolfebersahd", "koboldassassin", "magnus", "kriger", "ent_king"];
   const mosaique = $("#mosaique");
-  mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % PORTRAITS.length, p = PORTRAITS[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="img/boss/mini/p_${p}.webp" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
+  // boss et troupes mêlés : chaque tuile est une créature du jeu
+  const TUILES = PORTRAITS.map(p => `img/boss/mini/p_${p}.webp`).concat(window.PEUPLES.flatMap(x => x[4]).map(([p]) => `img/sbires/${p}.webp`));
+  mosaique.innerHTML = Array.from({ length: 60 }, (_, i) => { const k = (i * 7) % TUILES.length, src = TUILES[k], cache = k % 3 !== 0; return `<span class="tuile${cache ? " cachee" : ""}" style="--d:${((i * 37) % 60) / 60}"><img src="${src}" alt="" loading="lazy" width="120" height="120"></span>`; }).join("");
   const compteur = $("#compteur");
 
   /* ---------- IV · légendes (carrousel manuel) ---------- */
