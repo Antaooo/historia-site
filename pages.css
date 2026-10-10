@@ -348,3 +348,4 @@
 .carte-creature .carte-image { background: radial-gradient(circle at 50% 55%, #3A4A70, #17133A 72%); }
 .carte-creature .carte-image img { object-fit: contain; padding: 10px; }
 .vis-creature img { width: min(60vh, 90%); image-rendering: auto; }
+.carte-biome .carte-image img, .carte-paysage .carte-image img, .vis-biome img, .vis-paysage img { image-rendering: pixelated; object-fit: cover; }
