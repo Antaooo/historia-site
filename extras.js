@@ -89,6 +89,12 @@
     remplacer(ADRESSE, c.adresse); remplacer("Java 26.2", c.version);
   }).catch(() => {});
 
+  // tant que le vrai lien d'invitation n'est pas renseigné (back-office), un bouton Discord n'envoie pas vers une page d'erreur
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href^="https://discord.gg/"]'); if (!a) return;
+    if (/^https:\/\/discord\.gg\/?$/.test(a.getAttribute("href"))) { e.preventDefault(); Historia.annoncer("Le Discord ouvre très bientôt : le lien d'invitation arrive ici."); }
+  });
+
   // crédit de la musique (licence CC BY 4.0)
   const pied = document.querySelector(".pied-in");
   if (pied) { const p = document.createElement("p"); p.className = "credit"; p.innerHTML = `Musique : « Majestic Hills », Kevin MacLeod (<a href="https://incompetech.com">incompetech.com</a>), licence <a href="https://creativecommons.org/licenses/by/4.0/deed.fr">CC BY 4.0</a>. Polices : Monocraft (Idrees Hassan) et Figtree (The Figtree Project Authors), licence SIL OFL 1.1.`; pied.appendChild(p); }
