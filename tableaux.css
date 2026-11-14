@@ -1,0 +1,24 @@
+/* Tableaux vivants : les écrans d'attente du jeu, rejoués en couches (ciel, nuages qui glissent, reliefs, brume, terre, ombres, rayons).
+   Toutes les couches font 320 x 180 ; la scène couvre son cadre en gardant le 16:9, pixels nets. */
+.tableau-vivant { container-type: size; overflow: hidden; background: #0c0a10; }
+.tv-scene { position: absolute; left: 50%; top: 50%; width: max(100cqw, 100cqh * 16 / 9); height: max(100cqh, 100cqw * 9 / 16); transform: translate(-50%, -50%); overflow: hidden; }
+.tv-scene img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; max-width: none; image-rendering: pixelated; display: block; }
+.tv-scene img.tv-bande { width: 200%; animation: tv-glisse linear infinite; }
+@keyframes tv-glisse { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .tv-scene img.tv-bande { animation: none; } }
+
+/* page des tableaux */
+.tv-cadre { position: relative; aspect-ratio: 16 / 9; width: 100%; border-radius: 14px; border: 1px solid var(--verre-bord); box-shadow: 0 18px 50px rgba(0, 0, 0, .45); }
+.tv-barre { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; margin: 16px 0 34px; }
+.tv-quoi { display: flex; flex-direction: column; min-width: 0; }
+.tv-quoi b { font-family: var(--titre); font-size: clamp(20px, 2.6vw, 28px); }
+.tv-quoi span { color: var(--texte-doux); font-size: 15px; }
+.tv-boutons { display: flex; gap: 10px; }
+.tv-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 22px; }
+.tv-vignette { padding: 0; border: 1px solid var(--verre-bord); border-radius: 12px; overflow: hidden; background: var(--verre); color: inherit; font: inherit; text-align: left; cursor: pointer; display: flex; flex-direction: column; transition: transform .15s ease, border-color .15s ease; }
+.tv-vignette:hover { transform: translateY(-2px); border-color: var(--or); }
+.tv-vignette[aria-current="true"] { border-color: var(--or); box-shadow: 0 0 0 2px var(--or); }
+.tv-vignette img { width: 100%; aspect-ratio: 16 / 9; image-rendering: pixelated; display: block; }
+.tv-vignette span { padding: 9px 12px 11px; font-weight: 700; line-height: 1.25; display: flex; flex-direction: column; }
+.tv-vignette small { font-weight: 500; color: var(--texte-doux); font-size: 13px; }
+@media (max-width: 520px) { .tv-grille { grid-template-columns: repeat(2, 1fr); gap: 10px; } .tv-vignette span { padding: 7px 9px 9px; font-size: 14px; } }

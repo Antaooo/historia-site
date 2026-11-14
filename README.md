@@ -20,6 +20,7 @@ Puis ouvrir http://localhost:4321.
 | Fichier | Rôle |
 |---|---|
 | `index.html`, `accueil.js` | Accueil : présentation en chapitres (monde, créatures, légendes, progression, Tour, galerie, FAQ) |
+| `tableaux.html`, `tableaux.js`, `tableaux.css` | Tableaux animés : les écrans d'attente du jeu rejoués en couches (`img/tableaux/`, `donnees/tableaux.json`, produits par le générateur du serveur) ; aussi le décor de l'ouverture de l'accueil |
 | `galerie.html`, `galerie.js` | Galerie : biomes en pixel art, légendes, captures en jeu, visionneuse |
 | `progression.html`, `progression.js` | Progression : métiers, statistiques, zones, spécialités, rangs, passe |
 | `pixel.js` | Moteur des fonds en pixel art (paysages des biomes, particules), générés dans la page |
@@ -32,5 +33,6 @@ Puis ouvrir http://localhost:4321.
 - **Musique** : « Majestic Hills », Kevin MacLeod (incompetech.com), CC BY 4.0, créditée dans le pied de page.
 - **Portraits des boss** (`img/boss/`) : rendus des modèles des packs de créatures utilisés sur le serveur, montrés pour présenter le serveur. Ils ne sont pas sous licence libre : merci de ne pas les réutiliser.
 - Paysages, textures, logo et icônes : dessinés pour Historia.
+- **Tableaux animés** (`img/tableaux/`) : dessinés pour Historia ; les petites créatures qui y figurent viennent des rendus des packs cités ci-dessus, aux mêmes conditions.
 
 Historia est un serveur non officiel, ni approuvé par Mojang ou Microsoft, ni associé à eux.
